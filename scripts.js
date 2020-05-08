@@ -314,9 +314,9 @@ function calcScore () {
   if (inputs["cntnArea"]==0){
     sg_cafeteria = "No cafeteria/pantry/kitchen area on premises";
   } else if (score_cafeteria_scaled<70){
-    sg_cafeteria = "Increase the cafeteria area to accomodate more people or encourage work from home";
+    sg_cafeteria = "You have overcrowding in your cafeteria/pantry. <br>Consider staggered cafeteria/pantry timings. <br>Encourage employees to work from home.";
   } else if (nOutside/nEmp > 0.5 && score_cafeteria_scaled<60){
-    sg_cafeteria = "Encourage bringing lunch from home or provide lunch on premise"
+    sg_cafeteria = "You have too many outside contacts during lunch time. Encourage employees to bring lunch from home or provide lunch on premises."
   }
 
   // Mobility
@@ -476,7 +476,7 @@ function calcScore () {
       score_adv_outrch + score_mobility + score_meetings +  score_outside + score_cafeteria_scaled + score_sanitation + score_total_transport_scaled
   var general_sg = "<br>General suggestions: Work in progress<br><br>"
 
-  var overall_report = "<div class='overall_report'><b>Your overall COVID-19 readiness score is ";
+  var overall_report = "<div class='overall_report p-3'><b>Your overall COVID-19 readiness score is ";
   overall_report += score_total  
   overall_report += "<br>Your percentile score among your type of establishment is "
   overall_report +=  score_total/10;
@@ -536,5 +536,21 @@ function handleFormSubmit(formObject) {
 
 function reEnter() {
 	openPage('Qn', document.getElementById("QnTab"), '#2c4268')
+}
+
+function printPage(){
+  $("#header").hide()
+  $(".tablink").hide()
+  $(".sub-btn").hide()
+  $(".prnt-btn").hide()
+  $("#footer").hide()
+  $(".tabcontent").css('color','black');
+  window.print()
+  $("#header").show()
+  $(".tablink").show()
+  $(".sub-btn").show()
+  $(".prnt-btn").show()
+  $("#footer").show()
+  $(".tabcontent").css('color','white');
 }
 

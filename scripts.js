@@ -28,19 +28,21 @@ function getValues(){
   dict["NOE"] = parseInt(document.getElementById("NOE").value); // Nature of Establishment
   
   // Employee Information
-  dict["nM"] = parseInt(document.getElementById("nM").value); // Number of male employees
-  dict["nF"] = parseInt(document.getElementById("nF").value); // Number of female employees
-  dict["nOth"] = parseInt(document.getElementById("nOth").value); // Number of other employees
-  dict["rAddrKn"] = parseInt(document.getElementById("rAddrKn").value); // Number of employees with address records
-  dict["pCS"] = parseInt(document.getElementById("pCS").value); // Percentage of casual labour and security
   dict["nShifts"] = parseInt(document.getElementById("nShifts").value); // Number of shifts
+  for (var i=0; i<dict["nShifts"]; ++i){
+    dict["nM_"+(i+1).toString()] = parseInt(document.getElementById("nM_"+(i+1).toString()).value); // Number of male employees in shift i
+    dict["nF_"+(i+1).toString()] = parseInt(document.getElementById("nF_"+(i+1).toString()).value); // Number of female employees in shift i
+    dict["nOth_"+(i+1).toString()] = parseInt(document.getElementById("nOth_"+(i+1).toString()).value); // Number of other employees in shift i
+    dict["pCS_"+(i+1).toString()] = parseInt(document.getElementById("pCS_"+(i+1).toString()).value); // Percentage of casual labour and security in shift i
+  }
+
   dict["tGapShift"] = parseFloat(document.getElementById("tGapShift").value); // Time gap between shifts in hours
   dict["informCZEmp"] = parseInt(document.querySelector('input[name="informCZEmp"]:checked').value); // Inform containment zone employee not to come
   dict["informWFH"] = parseInt(document.querySelector('input[name="informWFH"]:checked').value); // Encourage work from home 
   dict["n29"] = parseInt(document.getElementById("n29").value); // Number of employees with age betwwen 15 and 29
   dict["n49"] = parseInt(document.getElementById("n49").value); // Number of employees with age betwwen 30 and 49
-  dict["n59"] = parseInt(document.getElementById("n59").value); // Number of employees with age betwwen 50 and 59
-  dict["n60plus"] = parseInt(document.getElementById("n60plus").value); // Number of employees with age more than 60
+  dict["n64"] = parseInt(document.getElementById("n64").value); // Number of employees with age betwwen 50 and 64
+  dict["n65plus"] = parseInt(document.getElementById("n65plus").value); // Number of employees with age more than 65
 
   // Office Infrastructure Information
   dict["nBldng"] = parseInt(document.getElementById("nBldng").value); // Number of buildings 
@@ -61,6 +63,7 @@ function getValues(){
   dict["nCub"] = parseInt(document.getElementById("nCub").value); // Number of office seats with cubicle separation
   dict["nRem"] = parseInt(document.getElementById("nRem").value); // Number of remaining office seats
   dict["percAc"] = parseInt(document.getElementById("percAC").value); // Percentage of air conditioned premise
+  dict["centralAC"] = parseInt(document.querySelector('input[name="centralAC"]:checked').value); // centralised A/C
   dict["tempAC"] = parseInt(document.getElementById("tempAC").value); // Temperature setting
   dict["hepaFltr"] = parseInt(document.querySelector('input[name="hepaFltr"]:checked').value); // HEPA filter
 
@@ -97,6 +100,7 @@ function getValues(){
   dict["alrg"] = parseInt(document.querySelector('input[name="alrg"]:checked').value); // Employee allergy list
   dict["imdtFM"] = parseInt(document.querySelector('input[name="imdtFM"]:checked').value); // Immediate family members list
   dict["lstUpdtTime"] = parseInt(document.getElementById("lstUpdtTime").value); // Last information update time
+  dict["medInsurance"] = parseInt(document.querySelector('input[name="medInsurance"]:checked').value); // Do all employees have medical insurance
 
   // Advertisement and Outreach
   dict["covidPage"] = parseInt(document.querySelector('input[name="covidPage"]:checked').value); // Covid Awareness Page
@@ -133,9 +137,6 @@ function getValues(){
   dict["dLnch"] = parseInt(document.getElementById("dLnch").value); // Duration for which lunch is served
   dict["dSnck"] = parseInt(document.getElementById("dSnck").value); // Duration for which coffee/snacks is served
   dict["nEmpHL"] = parseInt(document.getElementById("nEmpHL").value); // Number of employees who bring lunch from home
-  dict["brkfst"] = parseInt(document.querySelector('input[name="brkfst"]:checked').value); // Breakfast served
-  dict["lnch"] = parseInt(document.querySelector('input[name="lnch"]:checked').value); // Lunch served
-  dict["cff"] = parseInt(document.querySelector('input[name="cff"]:checked').value); // Coffee/snacks served
   dict["mlStggrd"] = parseInt(document.querySelector('input[name="mlStggrd"]:checked').value); // Meals staggered
   dict["utnslShrd"] = parseInt(document.querySelector('input[name="utnslShrd"]:checked').value); // Utensils shared
   dict["cntnArea"] = parseInt(document.getElementById("cntnArea").value); // Canteen area in sq.ft
@@ -147,9 +148,9 @@ function getValues(){
   dict["nLdsT"] = parseInt(document.getElementById("nLdsT").value); // Number of ladies toilet
   dict["tClnFreq"] = parseInt(document.getElementById("tClnFreq").value); // Frequency of toilet cleaning
   dict["spPrsnt"] = parseInt(document.querySelector('input[name="spPrsnt"]:checked').value); // Soap dispensed in toilet
+  dict["typeSanitation"] = parseInt(document.querySelector('input[name="typeSanitation"]:checked').value); //  Type of sanitation
 
   // Company Provided Transport
-  dict["cmpnTrnsprtUsrs"] = parseInt(document.getElementById("cmpnTrnsprtUsrs").value); // Company transport users
   dict["bsCpctAct"] = parseInt(document.getElementById("bsCpctAct").value); // Actual Bus capacity
   dict["bsCpctCur"] = parseInt(document.getElementById("bsCpctCur").value); // Current Bus capacity
   dict["mnBsCpctAct"] = parseInt(document.getElementById("mnBsCpctAct").value); // Actual Mini bus capacity 
@@ -171,7 +172,6 @@ function getValues(){
   dict["trvlr10Kplus"] = parseInt(document.getElementById("trvlr10Kplus").value); // Numbers travelling >10 km
 
   // Self-owned vehicle transport
-  dict["slfTrnsprtUsrs"] = parseInt(document.getElementById("slfTrnsprtUsrs").value); // Self-owned transport users
   dict["noPlnR"] = parseInt(document.querySelector('input[name="noPlnR"]:checked').value); // No pillion riders
   dict["no2plusTrvl"] = parseInt(document.querySelector('input[name="no2plusTrvl"]:checked').value); // No 2 plus travel in car
   dict["hsLbb"] = parseInt(document.querySelector('input[name="hsLbb"]:checked').value); // Hand sanitiser in the lobby
@@ -185,15 +185,15 @@ function getValues(){
   dict["mskWlk"] = parseInt(document.querySelector('input[name="mskWlk"]:checked').value); // Mask while walking
 
   // Public Transport
-  dict["nPubTrvl"] = parseInt(document.getElementById("nPubTrvl").value); // Number of employees travelling in public transport
   dict["mskPub"] = parseInt(document.querySelector('input[name="mskPub"]:checked').value); // Mask while in public transport
   dict["trvlr5Kpub"] = parseInt(document.getElementById("trvlr5Kpub").value); // Numbers travelling 0-5 km private vehicle
   dict["trvlr10Kpub"] = parseInt(document.getElementById("trvlr10Kpub").value); // Numbers travelling 5-10 km private vehicle
   dict["trvlr10Kpluspub"] = parseInt(document.getElementById("trvlr10Kpluspub").value); // Numbers travelling >10 km private vehicle
 
   // Time to reach office
+  dict["n30Min"] = parseInt(document.getElementById("n30Min").value); // Number of employees taking 0-30 minutes
   dict["n60Min"] = parseInt(document.getElementById("n60Min").value); // Number of employees taking 30-60 minutes
-  dict["n60plusMin"] = parseInt(document.getElementById("n60plusMin").value); // Number of employees taking >60 minutes
+  //dict["n60plusMin"] = parseInt(document.getElementById("n60plusMin").value); // Number of employees taking >60 minutes
 
   return dict;
 }
@@ -213,20 +213,26 @@ function calcScore () {
   console.log(inputs);
 
   // Office Infrastructure
-  var nEmp = inputs["nM"] + inputs["nF"] + inputs["nOth"];
+  var nEmp = inputs["nM_1"] + inputs["nF_1"] + inputs["nOth_1"];
   var nMeets = 4;
-  var cFactor = Math.max( ((inputs["nCub"] + inputs["nRem"])*40 / inputs["opnCubArea"]), 1 ); 
+  var cFactor = 1;
+  if(inputs["opnCubArea"]>0){
+    cFactor = Math.max( ((inputs["nCub"] + inputs["nRem"])*40 / inputs["opnCubArea"]), 1 ); 
+  }
   var crowding = 2*inputs["n2pOfcRm"] * nMeets + 3*inputs["n2pPlusOfcRm"] * nMeets * 1.2 +
-      (inputs["nCub"] + inputs["nRem"] * 1.2)* nMeets * cFactor;
+      (inputs["nCub"] + inputs["nRem"] * 1.2) * nMeets * cFactor;
   var stairsElev = 0.5 * inputs["nFloors"] * (1 + inputs["eleCpct"]/2 * (1-0.1*inputs["advSclDis"]))/2 * 4 * Math.max( (1 - 0.1*Math.min( inputs["nStrCln"], inputs["nEleDinf"] )), 0.5);
   var bmFlag = ((inputs["baDoor"] >= 1) ? 1 : 0);
   var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"]) ) * bmFlag;
   var shiftDelta = ( (inputs["tGapShift"] > 8) ? 0 : (8 - inputs["tGapShift"]));
   var premisesContacts = (accessContacts + stairsElev + crowding/ nEmp ) * (1 + (shiftDelta/8.0)) * (1-0.4*inputs["msk"]);
 
+  var nominal_office_infra_raw_score = 31;
+  var nominal_office_infra_scaled_score = 800;
+
   // Other meeting spaces
   var score_other_spaces = 0.5 * inputs["oMtngSpts"] * Math.max(1-0.1*(inputs["freqCln"]*Math.min(1, inputs["nHskpngStff"])), 0.5) * (1-0.4*inputs["msk"]);
-  var score_office_infra = 800*31/(premisesContacts + score_other_spaces);
+  var score_office_infra = nominal_office_infra_raw_score*nominal_office_infra_scaled_score/(premisesContacts + score_other_spaces);
   score_office_infra = clipAndRound_bounds(score_office_infra);
 
   var sg_office_infra = "Well done!"
@@ -237,16 +243,18 @@ function calcScore () {
   }
 
   // Toilet scores
-  var nGntsTlt = inputs["nM"] + inputs["nOth"]/2.0; 
-  var nLdsTlt = inputs["nF"] + inputs["nOth"]/2.0; 
+  var nGntsTlt = inputs["nM_1"] + inputs["nOth_1"]/2.0; 
+  var nLdsTlt = inputs["nF_1"] + inputs["nOth_1"]/2.0; 
   var avgTltVstsPrDy = 5; 
   var avgTltDrtn = 4;
   var tltCnctrtnHrs = 4; 
 
+  var nominal_raw_aggrToiletSc = 800;
+  var nominal_scaled_aggrToiletSc = 1;
+
   var cRateGentsToilet = nGntsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nGntsT"]);
   var cRateLadiesToilet = nLdsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nLdsT"]);
-  //var aggrToiletSc = 800*nEmp/(cRateLadiesToilet + cRateGentsToilet);
-  var aggrToiletSc = 800/(Math.max(cRateLadiesToilet, cRateGentsToilet)+0.001);
+  var aggrToiletSc = nominal_raw_aggrToiletSc*nominal_scaled_aggrToiletSc/(Math.max(cRateLadiesToilet, cRateGentsToilet)+0.001);
   var score_sanitation = clipAndRound_bounds(aggrToiletSc);
 
   var sg_sanitation = "Well done!";
@@ -285,19 +293,27 @@ function calcScore () {
   var pvtl_hrs = 4;
   var nOutside = nEmp - inputs["nLnch"] - inputs["nEmpHL"];
 
-  var mtng_brkfst = (inputs["nBrkfst"] * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
-  var mtng_lnch = (inputs["nLnch"] * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
-  var mntg_snck = (inputs["nSnck"] * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
-  var mntg_wtr = (nEmp * time_wtr * num_wtr_sought * prsnl_area) / (inputs["nWS"] * inputs["cntnArea"] * pvtl_hrs *  60);
-  
-  var score_cafeteria = (mtng_brkfst*(inputs["nBrkfst"]/nEmp) + mtng_lnch*(inputs["nLnch"]/nEmp) + mntg_snck*(inputs["nSnck"]/nEmp) + mntg_wtr + (inputs["nEmpHL"]*0.25/nEmp) + (nOutside*2/nEmp) + (nOutside*0.5*(inputs["extFSP"])/nEmp));
-  score_cafeteria = score_cafeteria * Math.max((1 - 0.1*( inputs["mlStggrd"] + inputs["freqCln"] - inputs["utnslShrd"])), 1/2);
+  var score_cafeteria_scaled = 1000;
+  var nominal_raw_cafeteria_score = 2;
+  var nominal_scaled_cafeteria_score = 700;
 
-  // We prefer the score_cafeteria to be less than 2
-  var score_cafeteria_scaled = 700*2/score_cafeteria;
+  if (inputs["cntnArea"]>0){
+    var mtng_brkfst = (inputs["nBrkfst"] * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
+    var mtng_lnch = (inputs["nLnch"] * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
+    var mntg_snck = (inputs["nSnck"] * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
+    var mntg_wtr = (nEmp * time_wtr * num_wtr_sought * prsnl_area) / (inputs["nWS"] * inputs["cntnArea"] * pvtl_hrs *  60);
+
+    var score_cafeteria = (mtng_brkfst*(inputs["nBrkfst"]/nEmp) + mtng_lnch*(inputs["nLnch"]/nEmp) + mntg_snck*(inputs["nSnck"]/nEmp) + mntg_wtr + (inputs["nEmpHL"]*0.25/nEmp) + (nOutside*2/nEmp) + (nOutside*0.5*(inputs["extFSP"])/nEmp));
+    score_cafeteria = score_cafeteria * Math.max((1 - 0.1*( inputs["mlStggrd"] + inputs["freqCln"] - inputs["utnslShrd"])), 1/2);
+    // We prefer the score_cafeteria to be less than 2
+    score_cafeteria_scaled = nominal_scaled_cafeteria_score*nominal_raw_cafeteria_score/score_cafeteria;
+  }
+
   var score_cafeteria_scaled = clipAndRound_bounds(score_cafeteria_scaled);
   var sg_cafeteria = "Well done!";
-  if (score_cafeteria_scaled<70){
+  if (inputs["cntnArea"]==0){
+    sg_cafeteria = "No cafeteria/pantry/kitchen area on premises";
+  } else if (score_cafeteria_scaled<70){
     sg_cafeteria = "Increase the cafeteria area to accomodate more people or encourage work from home";
   } else if (nOutside/nEmp > 0.5 && score_cafeteria_scaled<60){
     sg_cafeteria = "Encourage bringing lunch from home or provide lunch on premise"
@@ -306,7 +322,9 @@ function calcScore () {
   // Mobility
   var nLM = nEmp - inputs["nHM"] - inputs["nMM"]
   var score_mobility = ((0.25*nLM + 0.5*inputs["nMM"] + inputs["nHM"])/(nLM+inputs["nMM"]+inputs["nHM"])) * (1-0.4*inputs["msk"]);
-  score_mobility = (1-score_mobility)*1000/0.85;
+  var nominal_raw_score_mobility = 0.85;
+  var nominal_scaled_score_mobility = 1000;
+  score_mobility = (1-score_mobility)*nominal_scaled_score_mobility/nominal_raw_score_mobility;
   score_mobility = clipAndRound_bounds(score_mobility);
 
   var sg_mobility = "Well done!";
@@ -356,7 +374,7 @@ function calcScore () {
   // Epidemic related precautions
   var meets_shift_requirement = 1;
   if (0<inputs["NOE"] && inputs["NOE"]<=4){
-    meets_shift_requirement = ((inputs["n29"]+inputs["n49"]+inputs["n59"]+inputs["n60plus"])*0.33>=nEmp) ? 1:0; 
+    meets_shift_requirement = ((inputs["n29"]+inputs["n49"]+inputs["n64"]+inputs["n65plus"])*0.33>=nEmp) ? 1:0; 
   }
 
   var score_epidemic = 100*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] +
@@ -386,7 +404,7 @@ function calcScore () {
   }
 
   // Advertisement and outreach
-  var score_adv_outrch = (inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0))*1000/10 ;
+  var score_adv_outrch = 100*(inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0));
   score_adv_outrch = clipAndRound_bounds(score_adv_outrch);
 
   var sg_adv_outrch = "Well done!";
@@ -401,45 +419,50 @@ function calcScore () {
   }
 
   // Company Transport
-  var F = Math.max(inputs["bsCpctCur"]/inputs["bsCpctAct"], inputs["mnBsCpctCur"]/inputs["mnBsCpctAct"], inputs["vnCpctCur"]/inputs["vnCpctAct"],
-                   inputs["svCpctCur"]/inputs["svCpctAct"], inputs["crCpctCur"]/inputs["crCpctAct"]);
-  var ttl_cmpn_trnsprt_mtchs = (inputs["cmpnTrnsprtUsrs"]<=inputs["trvlr5K"]+inputs["trvlr10K"]) ? 1 : 0;
-  var score_company_transport = 0;
-  if (ttl_cmpn_trnsprt_mtchs){
-    score_company_transport = F * (1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])) * (1-0.4*inputs["mskMndt"])
+  var cmpnTrnsprtUsrs = inputs["trvlr5K"]+inputs["trvlr10K"]+inputs["trvlr10Kplus"];
+  var F = Math.max( (inputs["bsCpctAct"]) ? inputs["bsCpctCur"]/inputs["bsCpctAct"] : 0, (inputs["mnBsCpctAct"]) ? inputs["mnBsCpctCur"]/inputs["mnBsCpctAct"] : 0, 
+                    (inputs["vnCpctAct"]) ? inputs["vnCpctCur"]/inputs["vnCpctAct"] : 0, (inputs["svCpctAct"]) ? inputs["svCpctCur"]/inputs["svCpctAct"] : 0,
+                    (inputs["crCpctAct"]) ? inputs["crCpctCur"]/inputs["crCpctAct"] : 0);
+  var score_company_transport = F * (1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])) * (1-0.4*inputs["mskMndt"])
                                 * (inputs["trvlr5K"]*5 + inputs["trvlr10K"]*(10/1.25) + inputs["trvlr10Kplus"]*(15/1.5));
-  }
 
   // Self-owned Vehicles
-  var ttl_slf_trnsprt_mtchs = (inputs["slfTrnsprtUsrs"]<=inputs["trvlr5Kslf"]+inputs["trvlr10Kslf"]) ? 1 : 0;
-  var score_self_transport = 0;
+  var slfTrnsprtUsrs = inputs["trvlr5Kslf"]+inputs["trvlr10Kslf"]+inputs["trvlr10Kplusslf"];
   var F_slf = 1
   if (inputs["noPlnR"] && inputs["no2plusTrvl"]){
     F_slf = 1/2;
   }
-  if (ttl_slf_trnsprt_mtchs){
-    score_self_transport = F_slf * (1-0.1*inputs["hsLbb"]) * (1-0.4*inputs["mskCar"])
+  
+  var score_self_transport = F_slf * (1-0.1*inputs["hsLbb"]) * (1-0.4*inputs["mskCar"])
                              * (inputs["trvlr5Kslf"]*5 + inputs["trvlr10Kslf"]*(10/1.25) + inputs["trvlr10Kplusslf"]*(15/1.5));
-  }
 
   // Walking
   var score_walk = inputs["nWlk"] * ((1-inputs["hsLbb"])*0.2 + inputs["hsLbb"]*0.1)*(1-0.4*inputs["mskWlk"]);
 
   // Public Transport
-  var ttl_pblc_trnsprt_mtchs = (inputs["slfTrnsprtUsrs"]<=inputs["trvlr5Kslf"]+inputs["trvlr10Kslf"]) ? 1 : 0;
-  var score_public_transport = 0;
-  if (ttl_pblc_trnsprt_mtchs){
-    var score_public_transport = (1-0.1*inputs["hsLbb"]) * (1-0.1*inputs["mskPub"]) *
+  var pubTrnsprtUsrs = inputs["trvlr5Kpub"]+inputs["trvlr10Kpub"]+inputs["trvlr10Kpluspub"];
+  
+  var score_public_transport = (1-0.1*inputs["hsLbb"]) * (1-0.4*inputs["mskPub"]) *
                                  (inputs["trvlr5Kpub"]*5 + inputs["trvlr10Kpub"]*(10/1.25) + inputs["trvlr10Kpluspub"]*(15/1.5));
+  
+  var score_total_transport = 1;
+  var score_total_transport_scaled = 1000;
+  var nominal_scaled_score_total_transport = 800;
+  var nominal_raw_score_total_transport = 3.5;
+
+  if (cmpnTrnsprtUsrs + slfTrnsprtUsrs + inputs["nWlk"] + pubTrnsprtUsrs > 0){
+    score_total_transport = (score_company_transport + score_self_transport + score_walk + score_public_transport)/
+                            (cmpnTrnsprtUsrs + slfTrnsprtUsrs + inputs["nWlk"] + pubTrnsprtUsrs);
+
+    score_total_transport_scaled = nominal_scaled_score_total_transport*nominal_raw_score_total_transport/score_total_transport;
   }
-  var score_total_transport = (score_company_transport + score_self_transport + score_walk + score_public_transport)/
-                              (inputs["cmpnTrnsprtUsrs"] + inputs["slfTrnsprtUsrs"] + inputs["nWlk"] + inputs["nPubTrvl"]);
-  // Average is more appropriate for large companies.
-  var score_total_transport_scaled = 800*3.5/score_total_transport;
+  
   score_total_transport_scaled = clipAndRound_bounds(score_total_transport_scaled);
 
   var sg_transport = "Well done!";
-  if ((inputs["mskMndt"]+inputs["mskCar"]+inputs["mskWlk"]+inputs["mskPub"])<3){
+  if (cmpnTrnsprtUsrs + slfTrnsprtUsrs + inputs["nWlk"] + pubTrnsprtUsrs == 0){
+    sg_transport = "High score. But do you really have no one traveling to your workplace?";
+  } else if ((inputs["mskMndt"]+inputs["mskCar"]+inputs["mskWlk"]+inputs["mskPub"])<3){
     sg_transport = "Consider using mask while travelling";
   } else if (F>0.5){
     sg_transport = "Consider reducing numbers per journey";
@@ -447,7 +470,7 @@ function calcScore () {
       sg_transport = "Consider more use of hand sanitiser etc.";
   }
 
-  onSuccess("Check you workplace ratings!");
+  onSuccess("Successfully generated workplace readiness score!");
 
 	var resTable = "";
 	resTable += "<table class='table table-bordered'><thead class='bg-dark'>";

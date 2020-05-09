@@ -25,6 +25,8 @@ function getValues(){
   var dict = new Object();
   
   // Nature of Establishment
+  dict["cmpName"] = document.getElementById("cmpName").value; // Company Name
+  dict["emailAddr"] = document.getElementById("emailAddr").value; // Company Address
   dict["NOE"] = parseInt(document.getElementById("NOE").value); // Nature of Establishment
   
   // Employee Information
@@ -217,7 +219,6 @@ function sg_update(msg_count, current_sg, msg){
 
 function calcScore () {
   inputs = getValues(); //Read values from html page...
-  console.log(inputs);
 
   var number_of_suggestions = 3;
   var suggestion = "";
@@ -634,6 +635,7 @@ function calcScore () {
   var score_total = score_office_infra + score_epidemic +  score_isolation + 
       score_adv_outrch + score_mobility + score_meetings +  score_outside + score_cafeteria_scaled + score_sanitation + score_total_transport_scaled
   
+  var greeting = "<b>Company name:  " + inputs['cmpName'] + "</b><br><br>"; 
   var overall_report = "<div class='overall_report p-3'><b>Your overall COVID-19 readiness score is ";
   overall_report += score_total  
   overall_report += "<br>Your percentile score among your type of establishment is "
@@ -657,7 +659,23 @@ function calcScore () {
   resTable += "<tr><td>Transportation</td><td>" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
   resTable += "<tr><td>Total</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
-	document.getElementById("scoreTable").innerHTML = overall_report + resTable;
+  document.getElementById("scoreTable").innerHTML = greeting + overall_report + resTable;
+  
+  var outputs = new Object();
+  outputs["Infrastructure"] = score_office_infra;
+  outputs["Epidemic related: Precautions"] = score_epidemic;
+  outputs["Epidemic related: Awareness and readiness"] = score_isolation;
+  outputs["Epidemic related: Advertisement and outreach"] = score_adv_outrch;
+  outputs["Employee interactions: Mobility"] = score_mobility;
+  outputs["Employee interactions: Meetings"] = score_meetings;
+  outputs["Employee interactions: Outside contacts"] = score_outside;
+  outputs["Cafeteria/pantry"] = score_cafeteria_scaled;
+  outputs["Hygiene and sanitation"] = score_sanitation;
+  outputs["Transportation"] = score_total_transport_scaled;
+  outputs["Total"] = score_total;
+  
+  log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs});
+  console.log(log_json);
 }
     
 function openPage(pageName, elmnt, color) {

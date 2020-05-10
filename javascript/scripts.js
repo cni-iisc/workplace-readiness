@@ -747,13 +747,11 @@ function calcScore () {
 function post_function(log_json)
 {   
   //console.log(log_json);
-  /*    
   $.ajax({
     type: "POST",
     url: "https://workplacereadinesscalculator.xyz/data",
     data: "data="+log_json
   });
-  */
 }
 
 

@@ -705,7 +705,8 @@ function calcScore () {
   outputs["Total"] = score_total;
   
   log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs});
-  post_function(log_json);
+  //disable log posting for now
+  //post_function(log_json);
 }
 
 function post_function(log_json)

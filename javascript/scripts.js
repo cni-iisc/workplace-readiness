@@ -75,6 +75,7 @@ function getValues(){
   dict["nEleDinf"] = parseInt(document.getElementById("nEleDinf").value); // Frequency of elevetor disinfection process
   dict["nStrCln"] = parseInt(document.getElementById("nStrCln").value); // Frequency of stairway cleaning
   dict["nStrHrDinf"] = parseInt(document.getElementById("nStrHrDinf").value); // Frequency of stairway handrails disinfection process
+  dict["mtngSpts"] = parseInt(document.getElementById("mtngSpts").value); // meeting rooms
   dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value); // Other meeting spaces
   dict["freqCln"] = parseInt(document.getElementById("freqCln").value); // Frequency of cleaning
   dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value); // Number of housekeeping staff
@@ -87,7 +88,6 @@ function getValues(){
   dict["advAvdLPM"] = parseInt(document.querySelector('input[name="advAvdLPM"]:checked').value); // Avoid large physical meetings
   dict["nHsS"] = parseInt(document.getElementById("nHsS").value); // Number of hand-sanitiser stations
   dict["tchFree"] = parseInt(document.querySelector('input[name="tchFree"]:checked').value); // Hand sanitisers touch free
-  dict["nDinf"] = parseInt(document.getElementById("nDinf").value); // Number of disinfection activity per day
   dict["smkZS"] = parseInt(document.querySelector('input[name="smkZS"]:checked').value); // Smoking zone sealed
   dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
   dict["nWsB"] = parseInt(document.getElementById("nWsB").value); // Number of warning sign boards
@@ -151,6 +151,8 @@ function getValues(){
   dict["tClnFreq"] = parseInt(document.getElementById("tClnFreq").value); // Frequency of toilet cleaning
   dict["spPrsnt"] = parseInt(document.querySelector('input[name="spPrsnt"]:checked').value); // Soap dispensed in toilet
   dict["typeSanitation"] = parseInt(document.querySelector('input[name="typeSanitation"]:checked').value); //  Type of sanitation
+  dict["nDinf"] = parseInt(document.getElementById("nDinf").value); // Number of disinfection activity per week
+  dict["typeDisinfect"] = parseInt(document.querySelector('input[name="typeDisinfect"]:checked').value); //  Type of disinfection activity
 
   // Company Provided Transport
   dict["bsCpctAct"] = parseInt(document.getElementById("bsCpctAct").value); // Actual Bus capacity
@@ -260,7 +262,8 @@ function calcScore () {
   var nominal_office_infra_scaled_score = 800;
 
   // Other meeting spaces
-  var score_other_spaces = 0.5 * inputs["oMtngSpts"] * Math.max(1-0.1*(inputs["freqCln"]*Math.min(1, inputs["nHskpngStff"])), 0.5) * (1-0.4*inputs["msk"]);
+  var total_meeting_spaces = inputs["mtngSpts"] + inputs["oMtngSpts"];
+  var score_other_spaces = 0.5 * total_meeting_spaces * Math.max(1-0.1*(inputs["freqCln"]*Math.min(1, inputs["nHskpngStff"])), 0.5) * (1-0.4*inputs["msk"]);
   var score_office_infra = 0;
   if (premisesContacts+score_other_spaces>0 && !isNaN(premisesContacts+score_other_spaces)){
     score_office_infra = nominal_office_infra_raw_score*nominal_office_infra_scaled_score/(premisesContacts + score_other_spaces);
@@ -470,7 +473,7 @@ function calcScore () {
   if (meets_shift_requirement){
   score_epidemic = 100*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] +
                         (inputs["tchFree"]? 1:0.5)*((inputs["nHsS"] > (inputs["tArea"]/1000)) ? 1 : 0) + 
-                        Math.min(inputs["nDinf"], 2)/2 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1))/2 + meets_shift_requirement + 
+                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1))/2 + meets_shift_requirement + 
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0))/2 + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
   }
   score_epidemic = clipAndRound_bounds(score_epidemic);
@@ -506,10 +509,10 @@ function calcScore () {
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
     sg_epidemic += "Consider increasing hand sanitiser dispensing stations.";
   }
-  if (inputs["nDinf"]<2 && count<number_of_suggestions){
+  if (inputs["nDinf"]<=5 && count<number_of_suggestions){
     count += 1;
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
-    sg_epidemic += "Consider disinfecting the office at least 2 times a day.";
+    sg_epidemic += "Consider disinfecting the office more often.";
   }
   if (!inputs["smkZS"] && count<number_of_suggestions){
     count += 1;

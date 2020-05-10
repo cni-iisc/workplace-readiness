@@ -140,19 +140,23 @@ SPDX-License-Identifier: Apache-2.0-->
                                         <div class="card-body">
                                              <div class="form-row">
                                                   <div class="form-group col-md-12">
-                                                       <label for="nBldng">Total number of standalone buildings</label>
+                                                       <label for="nBldng">Total number of buildings in your premises</label>
                                                        <input class="form-control" type="number" name="nBldng" id="nBldng" min="1" value="1">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="tArea">Total built-up area (sq.ft) including common spaces</label>
+                                                       <label for="nCW">Number of companies sharing common facilities (lifts, staircases, toilets, cafeteria, parking etc.) across all buildings in your premises, including your company. </label>
+                                                       <input class="form-control" type="number" name="nCW" id="nCW" min="1" value="1">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="tArea">Total built-up area (sq. ft) including common spaces (operated by your company across all buildings in this premises)</label>
                                                        <input class="form-control" type="number" name="tArea" id="tArea" min="0" value="5000">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="nFloors">Total number of floors (across all buildings)</label>
+                                                       <label for="nFloors">Total number of floors (operated by your company across all buildings in this premises)</label>
                                                        <input class="form-control" type="number" name="nFloors" id="nFloors" min="1" value="2">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="opnCubArea">Total approximate area of open and cubicle working space (sq. ft)</label>
+                                                       <label for="opnCubArea">Total approximate area of cubicle desk working space and open desk working space (sq. ft) (operated by your company across all buildings in this premises)</label>
                                                        <input class="form-control" type="number" name="opnCubArea" id="opnCubArea" min="0" value="2000">
                                                   </div>
                                                   <div class="form-group col-md-12">
@@ -196,10 +200,6 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="sntBio_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nCW">Number of companies sharing office space, if co-work space, including your company</label>
-                                                       <input class="form-control" type="number" name="nCW" id="nCW" min="1" value="1">
-                                                  </div>
                                              </div>
 
                                              <p class="h5 sh5 mb-2 text-left pt-2">Office Composition</p>
@@ -225,7 +225,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                             <td class="px-1"><input class="form-control" type="number" id="n2pPlusOfcRm" min="0" value="9"></td>
                                                        </tr>
                                                        <tr>
-                                                            <td>open cubicle office desks</td>
+                                                            <td>Open cubicle office desks</td>
                                                             <td class="px-1"><input class="form-control" type="number" id="nCub" min="0" value="40"></td>
                                                        </tr>
                                                        <tr>
@@ -256,7 +256,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="tempAC" id="tempAC" min="15" value="21">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="hepaFltr">Is the air-conditioning system HEPA filter enabled?</label>
+                                                       <label for="hepaFltr">Is the air-conditioning system High-Efficiency Particulate Air (HEPA) filter enabled?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="hepaFltr" id="hepaFltr_0" value="0" checked>
                                                        <label class="form-check-label" for="hepaFltr_0">No</label>
@@ -295,8 +295,12 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="nStrHrDinf" id="nStrHrDinf" min="0" value="0">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="oMtngSpts">Number of other meeting spaces (gym, lockers and storage, ATMs, on-premise shops, libraries, lounges, meeting rooms, halls, etc.)</label>
-                                                       <input class="form-control" type="number" name="oMtngSpts" id="oMtngSpts" min="0" value="5">
+                                                       <label for="mtngSpts">Number of meeting rooms, conference rooms, lounges, interviews and waiting areas.</label>
+                                                       <input class="form-control" type="number" name="mtngSpts" id="mtngSpts" min="0" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="oMtngSpts">Number of other meeting spaces (gym, lockers and storage, ATMs, on-premise shops, libraries, lobbies, etc.)</label>
+                                                       <input class="form-control" type="number" name="oMtngSpts" id="oMtngSpts" min="0" value="3">
                                                   </div>
                                              </div>
                                         </div>
@@ -486,10 +490,6 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <input class="form-check-input" type="radio" name="tchFree" id="tchFree_1" value="1">
                                                   <label class="form-check-label" for="tchFree_1">Yes</label>
                                                   </div>
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nDinf">Number of times disinfection activity is performed per day (common facilities and points of human contact - door handles, knobs, biometric access points, etc.)</label>
-                                                  <input class="form-control" type="number" name="nDinf" id="nDinf" min="0" value="1">
                                              </div>
                                              <div class="form-group col-md-12">
                                                   <label for="smkZS">Are smoking zones sealed? Put yes if you don't have any.</label>
@@ -817,7 +817,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                         <div class="card-body">
                                              <div class="form-row">
                                                   <div class="form-group col-md-12">
-                                                       <label for="extFSP_flag">Is there an external food shop selling food in the premises?</label>
+                                                       <label for="extFSP_flag">Is there an external food shop that sells food and beverages in the premises?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="extFSP" id="extFSP_0" value="0">
                                                        <label class="form-check-label" for="extFSP_0">No</label>
@@ -849,6 +849,13 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="cntnACOp_1">Yes</label>
                                                        </div>
                                                   </div>
+
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nEmpHL">Number of people that bring food from home / tiffin provider / own caterer</label>
+                                                       <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
+                                                  </div>
+                                                  
+                                                  <p>Number of people taking meals in the cafeteria. The calculator will assume others step outside the premises for lunch.</p>
                                                   <table style="width: 100%;">
                                                        <thead>
                                                        <tr>
@@ -872,11 +879,6 @@ SPDX-License-Identifier: Apache-2.0-->
                                                             <td>Coffee / Snacks</td>
                                                             <td class="px-1"><input class="form-control" type="number" id="nSnck" min="0" value="15"></td>
                                                             <td class="px-1"><input class="form-control" type="number" id="dSnck" min="0" value="60"></td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td>Home Lunch</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nEmpHL" min="0" value="2"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" min="0" value="20" readonly></td>
                                                        </tr>
                                                        </tbody>
                                                   </table>
@@ -973,13 +975,20 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_1" value="1" >
                                                        <label class="form-check-label" for="typeSanitation_1">Mopping</label>
                                                        </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nDinf">Number of times <b>disinfection activity</b> is performed per week in common facilities and points of human contact (door handles, knobs, biometric access points, etc.)</label>
+                                                       <input class="form-control" type="number" name="nDinf" id="nDinf" min="0" value="1">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="typeDisinfect">Type of disinfection activity</label>
                                                        <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_2" value="2">
-                                                       <label class="form-check-label" for="typeSanitation_2">Wiping floors and all human contact surfaces with a chemical disinfectant</label>
+                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_0" value="0">
+                                                       <label class="form-check-label" for="typeDisinfect_0">Wiping floors and all human contact surfaces with a chemical disinfectant</label>
                                                        </div>
                                                        <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_3" value="3">
-                                                       <label class="form-check-label" for="typeSanitation_3">Spraying entire premises with a chemical disinfectant</label>
+                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_1" value="1">
+                                                       <label class="form-check-label" for="typeDisinfect_1">Spraying entire premises with a chemical disinfectant</label>
                                                        </div>
                                                   </div>
                                              </div>

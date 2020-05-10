@@ -211,6 +211,14 @@ function clipAndRound_bounds (score) {
   return score_out;
 }
 
+function scoreColor (score) {
+  var color = "";
+  if (score < 50) { color = "#d62828"; }
+  else if (score >= 70) { color = "#2e933c"; }
+  else { color = "#fcbf49"; }
+  return color;
+}
+
 function sg_update(msg_count, current_sg, msg){
   msg_count += 1;
   current_sg = (current_sg=="") ? "" : current_sg + "<br>";
@@ -662,19 +670,19 @@ function calcScore () {
   overall_report += "</div><br><br>"
 
 	var resTable = "";
-	resTable += "<table class='table table-bordered'><thead class='bg-dark'>";
+	resTable += "<table class='table table-bordered'><thead class='rTableHead'>";
 	resTable += "<th>Readiness category</th><th>Score (Max. 100)</th>";
   resTable += "<th>Specific suggestions for each readiness category</th></thead>";
-  resTable += "<tr><td>Infrastructure</td><td>" + score_office_infra + "</td><td>" + sg_office_infra + "</td></tr>"
-  resTable += "<tr><td>Epidemic related: Precautions</td><td>" + score_epidemic + "</td><td>" + sg_epidemic + "</td></tr>"
-  resTable += "<tr><td>Epidemic related: Awareness and readiness</td><td>" + score_isolation + "</td><td>" + sg_isolation + "</td></tr>"
-  resTable += "<tr><td>Epidemic related: Advertisement and outreach</td><td>" + score_adv_outrch + "</td><td>" + sg_adv_outrch + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Mobility</td><td>" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
-  resTable += "<tr><td>Employee interactions: Meetings</td><td>" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Outside contacts</td><td>" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
-  resTable += "<tr><td>Cafeteria/pantry</td><td>" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
-	resTable += "<tr><td>Hygiene and sanitation</td><td>" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
-  resTable += "<tr><td>Transportation</td><td>" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
+  resTable += "<tr><td>Infrastructure</td><td bgcolor=" + scoreColor(score_office_infra) + ">" + score_office_infra + "</td><td>" + sg_office_infra + "</td></tr>"
+  resTable += "<tr><td>Epidemic related: Precautions</td><td bgcolor=" + scoreColor(score_epidemic) + ">" + score_epidemic + "</td><td>" + sg_epidemic + "</td></tr>"
+  resTable += "<tr><td>Epidemic related: Awareness and readiness</td><td bgcolor=" + scoreColor(score_isolation) + ">" + score_isolation + "</td><td>" + sg_isolation + "</td></tr>"
+  resTable += "<tr><td>Epidemic related: Advertisement and outreach</td><td bgcolor=" + scoreColor(score_adv_outrch) + ">" + score_adv_outrch + "</td><td>" + sg_adv_outrch + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Mobility</td><td bgcolor=" + scoreColor(score_mobility) + ">" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
+  resTable += "<tr><td>Employee interactions: Meetings</td><td bgcolor=" + scoreColor(score_meetings) + ">" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Outside contacts</td><td bgcolor=" + scoreColor(score_outside) + ">" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
+  resTable += "<tr><td>Cafeteria/pantry</td><td bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
+	resTable += "<tr><td>Hygiene and sanitation</td><td bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
+  resTable += "<tr><td>Transportation</td><td bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
   if (inputs["cmpName"]!=""){
@@ -702,15 +710,14 @@ function calcScore () {
 
 function post_function(log_json)
 {   
-    console.log(log_json);
-    /*
-    $.ajax({
-      type: "POST",
-      url: "",
-      data: "data="+log_json
+  //console.log(log_json);    
+  $.ajax({
+    type: "POST",
+    url: "https://workplacereadinesscalculator.xyz/data",
+    data: "data="+log_json
   });
-  */
 }
+
 
 function openPage(pageName, elmnt, color) {
   // Hide all elements with class="tabcontent" by default */
@@ -741,7 +748,7 @@ function handleFormSubmit(formObject) {
   /* google.script.run.withSuccessHandler(onSuccess).processForm(formObject); */
   /* document.getElementById("myForm").reset(); */
         calcScore();
-	openPage('Scores', document.getElementById("ScoresTab"), '#26734d')
+	openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
 }
 
 function reEnter() {
@@ -756,7 +763,7 @@ function printPage(){
   $("#footer").hide()
   $(".tabcontent").css('color','black');
   $("#Scores").css('background-color','white');
-  /* $(".bg-dark").css('background-color','white'); */
+  $(".rTableHead").css('background-color','white');
   window.print()
   $("#header").show()
   $(".tablink").show()
@@ -764,7 +771,7 @@ function printPage(){
   $(".prnt-btn").show()
   $("#footer").show()
   $(".tabcontent").css('color','white');
-  $("#Scores").css('background-color','#26734d');
-  /* $(".bg-dark").css('background-color','#212529'); */
+  $("#Scores").css('background-color','#774c60');
+  $(".rTableHead").css('background-color','#2c4268');
 }
 

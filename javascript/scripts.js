@@ -79,6 +79,10 @@ function getValues(){
   dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value); // Other meeting spaces
   dict["freqCln"] = parseInt(document.getElementById("freqCln").value); // Frequency of cleaning
   dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value); // Number of housekeeping staff
+  if (dict["NOE"]==5 || dict["NOE"]==6){
+    dict["sfRsrtPlnt"] = parseInt(document.querySelector('input[name="sfRsrtPlnt"]:checked').value); // Safe restart plant flag for manufacturing
+    dict["onstDsMngt"] = parseInt(document.querySelector('input[name="onstDsMngt"]:checked').value); // On-site disaster management flag for manufacturing
+  }
 
   // Epidemic related precautions
   dict["tempScreening"] = parseInt(document.querySelector('input[name="tempScreening"]:checked').value); // Temperature screening of employee
@@ -86,12 +90,17 @@ function getValues(){
   dict["adqFaceCover"] = parseInt(document.querySelector('input[name="adqFaceCover"]:checked').value); // Adequate Facecover quantity
   dict["newShfts"] = parseInt(document.querySelector('input[name="newShfts"]:checked').value); // New shifts/staggered work timings
   dict["advAvdLPM"] = parseInt(document.querySelector('input[name="advAvdLPM"]:checked').value); // Avoid large physical meetings
+  dict["encrgStrws"] = parseInt(document.querySelector('input[name="encrgStrws"]:checked').value); // Encourage to use stairways
   dict["nHsS"] = parseInt(document.getElementById("nHsS").value); // Number of hand-sanitiser stations
   dict["tchFree"] = parseInt(document.querySelector('input[name="tchFree"]:checked').value); // Hand sanitisers touch free
   dict["smkZS"] = parseInt(document.querySelector('input[name="smkZS"]:checked').value); // Smoking zone sealed
   dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
   dict["nWsB"] = parseInt(document.getElementById("nWsB").value); // Number of warning sign boards
   dict["nASapp"] = parseInt(document.getElementById("nASapp").value); // Number of employees with Aarogya Setu app
+  if (dict["NOE"]==5 || dict["NOE"]==6){
+    dict["strlzBxs"] = parseInt(document.querySelector('input[name="strlzBxs"]:checked').value); // sterilise manufacturing box
+    dict["mskPPE"] = parseInt(document.querySelector('input[name="mskPPE"]:checked').value); // PPE mask for manufacturing workers
+  }
 
   // Isolation room
   dict["hl"] = parseInt(document.querySelector('input[name="hl"]:checked').value); // Company helpline
@@ -313,11 +322,37 @@ function calcScore () {
   }
 
   // Sick Rooms/Isolation Ward
+  var manufacturing_plant = (inputs["NOE"]==5 || inputs["NOE"]==6);
   var score_sickRoom = 100*(inputs["iQS"]*2 + inputs["amblnc"] + inputs["lHsptl"]*2 + inputs["emrgncResp"] + inputs["hl"] + 
                             inputs["imdtFM"] + inputs["alrg"] * Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60))*2);
+  if (manufacturing_plant){
+    score_sickRoom *= 8/10;
+    score_sickRoom += (inputs["sfRsrtPlnt"] ? 50:0) + (inputs["onstDsMngt"] ? 50:0) + (inputs["strlzBxs"] ? 50:0) + (inputs["mskPPE"] ? 50:0);
+  }
+
   var score_isolation = clipAndRound_bounds(score_sickRoom);
   var count = 0;
   var sg_isolation = "";
+  if (!inputs["sfRsrtPlnt"] && manufacturing_plant){
+    count += 1;
+    sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
+    sg_isolation += "You do not have a standard operating procedure for safe restarting of your plant. You must comply with this requirement.";
+  }
+  if (!inputs["onstDsMngt"] && manufacturing_plant && count<number_of_suggestions){
+    count += 1;
+    sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
+    sg_isolation += "You do not have an industrial on-site disaster management plan. You must comply with this requirement.";
+  }
+  if (!inputs["strlzBxs"] && manufacturing_plant && count<number_of_suggestions){
+    count += 1;
+    sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
+    sg_isolation += "Sterilise boxes and wrapping brought into factory premises.";
+  }
+  if (!inputs["mskPPE"] && manufacturing_plant && count<number_of_suggestions){
+    count += 1;
+    sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
+    sg_isolation += "Provide face protection shields along with masks and PPEs.";
+  }
   if (!inputs["iQS"]){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
@@ -484,6 +519,7 @@ function calcScore () {
                         Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1))/2 + meets_shift_requirement + 
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0))/2 + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
   }
+
   score_epidemic = clipAndRound_bounds(score_epidemic);
                                 
   var sg_epidemic = "";
@@ -552,7 +588,7 @@ function calcScore () {
 
   var sg_adv_outrch = "";
   count = 0;
-  if (!inputs["covidPage"]){
+  if (!inputs["covidPage"] && count<number_of_suggestions){
     count += 1;
     sg_adv_outrch += "Prepare a COVID-19 awareness page.";
   }
@@ -705,18 +741,19 @@ function calcScore () {
   outputs["Total"] = score_total;
   
   log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs});
-  //disable log posting for now
-  //post_function(log_json);
+  post_function(log_json);
 }
 
 function post_function(log_json)
 {   
-  //console.log(log_json);    
+  //console.log(log_json);
+  /*    
   $.ajax({
     type: "POST",
     url: "https://workplacereadinesscalculator.xyz/data",
     data: "data="+log_json
   });
+  */
 }
 
 

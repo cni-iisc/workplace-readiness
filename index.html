@@ -121,7 +121,8 @@ SPDX-License-Identifier: Apache-2.0-->
                                                             <option value="7">Bank / Financial</option>
                                                             <option value="8">Automobile sales and service</option>
                                                             <option value="9">Government office</option>
-                                                            <option value="10">Other</option>
+                                                            <option value="10">Research and Development</option>
+                                                            <option value="11">Other</option>
                                                        </select>
                                                   </div>
                                              </div>
@@ -303,6 +304,32 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="oMtngSpts" id="oMtngSpts" min="0" value="3">
                                                   </div>
                                              </div>
+
+                                             <p class="h5 sh5 mb-2 text-left" id="mnfctHead" style="display: none;">Special Questions for Restarting Manufacturing Industries</p>
+                                             <div class="form-row" id="mnfctQstns" style="display: none;">
+                                                  <div class="form-group col-md-12">
+                                                       <label for="sfRsrtPlnt">Do you have a standard operating procedure for safe restarting of your plant during and after the lockdown?</label>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="sfRsrtPlnt" id="sfRsrtPlnt_0" value="0" checked>
+                                                            <label class="form-check-label" for="sfRsrtPlnt_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="sfRsrtPlnt" id="sfRsrtPlnt_1" value="1">
+                                                            <label class="form-check-label" for="sfRsrtPlnt_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="onstDsMngt">Have you instituted an industrial on-site disaster management plan?</label>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="onstDsMngt" id="onstDsMngt_0" value="0" checked>
+                                                            <label class="form-check-label" for="onstDsMngt_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="onstDsMngt" id="onstDsMngt_1" value="1">
+                                                            <label class="form-check-label" for="onstDsMngt_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                             </div>
                                         </div>
                                    </div>
                               </div>
@@ -320,7 +347,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                              <p class="h5 sh5 mb-2 text-left">Work-from-home policy</p>
                                              <div class="form-row">
                                                   <div class="form-group col-md-12">
-                                                       <label for="informCZEmp">Has the organisation informed those in containment zones not to come to office?</label>
+                                                       <label for="informCZEmp">Has the organisation informed those in containment zones not to come to office and has the organisation asked those who have returned from travel to quarantine themselves for 14 days?</label>
                                                        <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="informCZEmp" id="informCZEmp_0" value="0" checked>
                                                             <label class="form-check-label" for="informCZEmp_0">No</label>
@@ -477,6 +504,17 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   </div>
                                              </div>
                                              <div class="form-group col-md-12">
+                                                  <label for="encrgStrws_flag">Have employees been encouraged to take stairways?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="encrgStrws" id="encrgStrws_0" value="0">
+                                                  <label class="form-check-label" for="encrgStrws_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="encrgStrws" id="encrgStrws_1" value="1" checked>
+                                                  <label class="form-check-label" for="encrgStrws_1">Yes</label>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group col-md-12">
                                                   <label for="nHsS">Number of hand-sanitiser dispensing stations</label>
                                                   <input class="form-control" type="number" name="nHsS" id="nHsS" min="0" value="6">
                                              </div>
@@ -513,6 +551,32 @@ SPDX-License-Identifier: Apache-2.0-->
                                              <div class="form-group col-md-12">
                                                   <label for="nASapp">Total employees with Aarogya Setu App</label>
                                                   <input class="form-control" type="number" name="nASapp" id="nASapp" min="0" value="30">
+                                             </div>
+
+                                             <p class="h5 sh5 mb-2 text-left" id="mnfctHead_epi" style="display: none;">Special Questions for Manufacturing Industries</p>
+                                             <div class="form-row" id="mnfctQstns_epi" style="display: none;">
+                                                  <div class="form-group col-md-12">
+                                                       <label for="strlzBxs">Have proper sanitisation measures been taken for supply and storage of manufactured goods? (Sterlisation of boxes and wrapping, procured from elsewhere, isolation and sanitisation of of finished goods, delivery of goods in shifts).</label>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="strlzBxs" id="strlzBxs_0" value="0" checked>
+                                                            <label class="form-check-label" for="strlzBxs_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="strlzBxs" id="strlzBxs_1" value="1">
+                                                            <label class="form-check-label" for="strlzBxs_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="mskPPE">Do you provide face protection shields along with face masks and PPEs?</label>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="mskPPE" id="mskPPE_0" value="0" checked>
+                                                            <label class="form-check-label" for="mskPPE_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="mskPPE" id="mskPPE_1" value="1">
+                                                            <label class="form-check-label" for="mskPPE_1">Yes</label>
+                                                       </div>
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>
@@ -739,268 +803,11 @@ SPDX-License-Identifier: Apache-2.0-->
                                    </div>
                               </div> 
 
-                              <p style="margin-bottom:0.1cm;"> </p>
-                              <div class="card"> 
-                                   <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseFive">7. Employee Interactions</button>									
-                                        </h2>
-                                   </div>
-                                   <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                             <div class="form-group col-md-12">
-                                                  <label for="nVstrs">Number of outside visitors or customers expected in a day in the premises</label>
-                                                  <input class="form-control" type="number" name="nVstrs" id="nVstrs" min="0" value="10">
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nEmpCstmr">Number of employees that meet these customers</label>
-                                                  <input class="form-control" type="number" name="nEmpCstmr" id="nEmpCstmr" min="0" value="3">
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nDlvrHndlng">Number of employees handling deliveries and receipts</label>
-                                                  <input class="form-control" type="number" name="nDlvrHndlng" id="nDlvrHndlng" min="0" value="3">
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="msk_flag">Do employees meeting customers and handling deliveries/receipts wear masks?</label>
-                                                  <div class="form-check">
-                                                  <input class="form-check-input" type="radio" name="msk" id="msk_0" value="0">
-                                                  <label class="form-check-label" for="msk_0">No</label>
-                                                  </div>
-                                                  <div class="form-check">
-                                                  <input class="form-check-input" type="radio" name="msk" id="msk_1" value="1" checked>
-                                                  <label class="form-check-label" for="msk_1">Yes</label>
-                                                  </div>
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="glvs_flag">Do employees meeting customers and handling deliveries/receipts wear gloves?</label>
-                                                  <div class="form-check">
-                                                  <input class="form-check-input" type="radio" name="glvs" id="glvs_0" value="0">
-                                                  <label class="form-check-label" for="glvs_0">No</label>
-                                                  </div>
-                                                  <div class="form-check">
-                                                  <input class="form-check-input" type="radio" name="glvs" id="glvs_1" value="1" checked>
-                                                  <label class="form-check-label" for="glvs_1">Yes</label>
-                                                  </div>
-                                             </div>
-
-                                             <p class="h5 sh5 mb-2 text-left">Mobility Within Premises</p>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nHM">Number of employees that are more than 2 hrs away from assigned work area during the day (high mobility)</label>
-                                                  <input class="form-control" type="number" name="nHM" id="nHM" min="0" value="2">
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nMM">Number of employees that are more than 1 hr away from assigned work area during a day (mild mobility)</label>
-                                                  <input class="form-control" type="number" name="nMM" id="nMM" min="0" value="2">
-                                             </div>
-                                             
-                                             <p class="h5 sh5 mb-2 text-left">Work Related Interactions</p>
-                                             <div class="form-group col-md-12">
-                                                  <label for="nMPD">Number of in-person meetings per day</label>
-                                                  <input class="form-control" type="number" name="nMPD" id="nMPD" min="0" value="50">
-                                             </div>
-                                             <div class="form-group col-md-12">
-                                                  <label for="avgMS">Average number of members in a typical in-person meeting</label>
-                                                  <input class="form-control" type="number" name="avgMS" id="avgMS" min="2" value="3">
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-
-                              <p style="margin-bottom:0.1cm;"> </p>
-                              <div class="card"> 
-                                   <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSix">8. Cafeteria / Pantry / Kitchen</button>									
-                                        </h2>
-                                   </div>
-                                   <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                             <div class="form-row">
-                                                  <div class="form-group col-md-12">
-                                                       <label for="extFSP_flag">Is there an external food shop that sells food and beverages in the premises?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="extFSP" id="extFSP_0" value="0">
-                                                       <label class="form-check-label" for="extFSP_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="extFSP" id="extFSP_1" value="1" checked>
-                                                       <label class="form-check-label" for="extFSP_1">Yes</label>
-                                                       </div>
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="cntn_flag">Will canteen or pantry / kitchen or both be functional?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="cntn" id="cntn_0" value="0">
-                                                       <label class="form-check-label" for="cntn_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="cntn" id="cntn_1" value="1" checked>
-                                                       <label class="form-check-label" for="cntn_1">Yes</label>
-                                                       </div>
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="cntnACOp_flag">Will air conditioner be operational in the canteen / pantry / kitchen?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="cntnACOp" id="cntnACOp_0" value="0">
-                                                       <label class="form-check-label" for="cntnACOp_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="cntnACOp" id="cntnACOp_1" value="1" checked>
-                                                       <label class="form-check-label" for="cntnACOp_1">Yes</label>
-                                                       </div>
-                                                  </div>
-
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nEmpHL">Number of people that bring food from home / tiffin provider / own caterer</label>
-                                                       <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
-                                                  </div>
-                                                  
-                                                  <p>Number of people taking meals in the cafeteria. The calculator will assume others step outside the premises for lunch.</p>
-                                                  <table style="width: 100%;">
-                                                       <thead>
-                                                       <tr>
-                                                            <th class="px-1" style="width: 20%;">Meal</th>
-                                                            <th class="px-1" style="text-align: center; width:40%">Number of employees availing the facility </th>
-                                                            <th class="px-1" style="text-align: center; width:40%">Duration for which cafeteria is open (minutes)</th>
-                                                       </tr>
-                                                       </thead>
-                                                       <tbody>
-                                                       <tr>
-                                                            <td>Breakfast</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nBrkfst" min="0" value="20"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dBrkfst" min="0" value="60"></td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td>Lunch</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nLnch" min="0" value="35"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dLnch" min="0" value="90"></td>
-                                                       </tr>
-                                                       <tr>
-                                                            <td>Coffee / Snacks</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nSnck" min="0" value="15"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dSnck" min="0" value="60"></td>
-                                                       </tr>
-                                                       </tbody>
-                                                  </table>
-
-                                                  <div class="form-group col-md-5 pt-3">
-                                                       <label for="mlStggrd_flag">Is the meal time staggered?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="mlStggrd" id="mlStggrd_0" value="0">
-                                                       <label class="form-check-label" for="mlStggrd_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="mlStggrd" id="mlStggrd_1" value="1" checked>
-                                                       <label class="form-check-label" for="mlStggrd_1">Yes</label>
-                                                       </div>
-                                                  </div>
-                                                  <div class="form-group col-md-7 pt-3">
-                                                       <label for="utnslShrd_flag">Are utensils in canteen and pantry shared?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="utnslShrd" id="utnslShrd_0" value="0">
-                                                       <label class="form-check-label" for="utnslShrd_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="utnslShrd" id="utnslShrd_1" value="1" checked>
-                                                       <label class="form-check-label" for="utnslShrd_1">Yes</label>
-                                                       </div>
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="cntnArea">Total area of canteen/pantry in Sq.ft. (In case of multiple cafeterias, add all of them)</label>
-                                                       <input class="form-control" type="number" name="cntnArea" id="cntnArea" min="0" value="100">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="mxCntnPpl">Maximum number permitted at each time. (In case of multiple cafeterias, add all of them)</label>
-                                                       <input class="form-control" type="number" name="mxCntnPpl" id="mxCntnPpl" min="1" value="2">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nWS">Number of water dispensing stations, coffee machines, vending machines</label>
-                                                       <input class="form-control" type="number" name="nWS" id="nWS" min="0" value="2">
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-
-                              <p style="margin-bottom:0.1cm;"> </p>
-                              <div class="card"> 
-                                   <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSeven">9. Hygiene and Sanitation</button>									
-                                        </h2>
-                                   </div>
-                                   <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                             <p class="h5 sh5">Toilets</p>
-                                             <div class="form-row">
-                                                  <div class="form-group col-md-6">
-                                                       <label for="nGntsT">Number of gents toilets</label>
-                                                       <input class="form-control" type="number" name="nGntsT" id="nGntsT" min="0" value="2">
-                                                  </div>
-                                                  <div class="form-group col-md-6">
-                                                       <label for="nLdsT">Number of ladies toilets</label>
-                                                       <input class="form-control" type="number" name="nLdsT" id="nLdsT" min="0" value="2">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="tClnFreq">Number of times each toilet is cleaned in a day</label>
-                                                       <input class="form-control" type="number" name="tClnFreq" id="tClnFreq" min="0" value="1">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="spPrsnt_flag">Is soap dispensed in each of the toilets and in each of the wash basins?</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="spPrsnt" id="spPrsnt_0" value="0">
-                                                       <label class="form-check-label" for="spPrsnt_0">No</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="spPrsnt" id="spPrsnt_1" value="1" checked>
-                                                       <label class="form-check-label" for="spPrsnt_1">Yes</label>
-                                                       </div>
-                                                  </div>
-                                                  <p class="h5 sh5">House-keeping of premises</p>
-                                                  <div class="form-group col-md-12">
-                                                    <label for="freqCln">Number of times house-keeping staff clean the <b>entire premises</b> in a day</label>
-                                                       <input class="form-control" type="number" name="freqCln" id="freqCln" min="0" value="1">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                    <label for="nHskpngStff">Number of house-keeping staff cleaning the <b>entire premises</b> each day</label>
-                                                       <input class="form-control" type="number" name="nHskpngStff" id="nHskpngStff" min="0" value="2">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="typeSanitation">Type of cleaning</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_0" value="0" checked>
-                                                       <label class="form-check-label" for="typeSanitation_0">Sweep / Vacuum cleaning</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_1" value="1" >
-                                                       <label class="form-check-label" for="typeSanitation_1">Mopping</label>
-                                                       </div>
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nDinf">Number of times <b>disinfection activity</b> is performed per week in common facilities and points of human contact (door handles, knobs, biometric access points, etc.)</label>
-                                                       <input class="form-control" type="number" name="nDinf" id="nDinf" min="0" value="1">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="typeDisinfect">Type of disinfection activity</label>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_0" value="0" checked>
-                                                       <label class="form-check-label" for="typeDisinfect_0">Wiping floors and all human contact surfaces with a chemical disinfectant</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_1" value="1">
-                                                       <label class="form-check-label" for="typeDisinfect_1">Spraying entire premises with a chemical disinfectant</label>
-                                                       </div>
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>
-
                               <p style="margin-bottom:0.1cm;"></p>
                               <div class="card"> 
                                    <div class="card-header" id="headingOne">
                                         <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseEight">10. Transport</button>									
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseEight">7. Transport</button>									
                                         </h2>
                                    </div>
                                    <div id="collapseEight" class="collapse" aria-labelledby="headingEight" data-parent="#accordionExample">
@@ -1029,6 +836,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <div class="d-flex pt-3">
                                                   <p class="h5 sh5 mb-2 text-left">Commute distance matrix</p>
                                                   </div>
+                                                  <p class="h6 mb-2 text-left">Provide information on how people commute to work and transportation arrangement made. Walkers include those for whom arrangements for stay has been made within your premises or adjacent buildings.</p>
                                                   <table style="width: 100%;">
                                                        <thead>
                                                             <th></th>
@@ -1248,6 +1056,263 @@ SPDX-License-Identifier: Apache-2.0-->
                                         </div>
                                    </div>
                               </div>
+
+                              <p style="margin-bottom:0.1cm;"> </p>
+                              <div class="card"> 
+                                   <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseFive">8. Employee Interactions</button>									
+                                        </h2>
+                                   </div>
+                                   <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                             <div class="form-group col-md-12">
+                                                  <label for="nVstrs">Number of outside visitors or customers expected in a day in the premises</label>
+                                                  <input class="form-control" type="number" name="nVstrs" id="nVstrs" min="0" value="10">
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nEmpCstmr">Number of employees that meet these customers</label>
+                                                  <input class="form-control" type="number" name="nEmpCstmr" id="nEmpCstmr" min="0" value="3">
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nDlvrHndlng">Number of employees handling deliveries and receipts</label>
+                                                  <input class="form-control" type="number" name="nDlvrHndlng" id="nDlvrHndlng" min="0" value="3">
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="msk_flag">Do employees meeting customers and handling deliveries/receipts wear masks?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="msk" id="msk_0" value="0">
+                                                  <label class="form-check-label" for="msk_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="msk" id="msk_1" value="1" checked>
+                                                  <label class="form-check-label" for="msk_1">Yes</label>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="glvs_flag">Do employees meeting customers and handling deliveries/receipts wear gloves?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="glvs" id="glvs_0" value="0">
+                                                  <label class="form-check-label" for="glvs_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="glvs" id="glvs_1" value="1" checked>
+                                                  <label class="form-check-label" for="glvs_1">Yes</label>
+                                                  </div>
+                                             </div>
+
+                                             <p class="h5 sh5 mb-2 text-left">Mobility Within Premises</p>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nHM">Number of employees that are more than 2 hrs away from assigned work area during the day (high mobility)</label>
+                                                  <input class="form-control" type="number" name="nHM" id="nHM" min="0" value="2">
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nMM">Number of employees that are more than 1 hr away from assigned work area during a day (mild mobility)</label>
+                                                  <input class="form-control" type="number" name="nMM" id="nMM" min="0" value="2">
+                                             </div>
+                                             
+                                             <p class="h5 sh5 mb-2 text-left">Work Related Interactions</p>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nMPD">Number of in-person meetings per day</label>
+                                                  <input class="form-control" type="number" name="nMPD" id="nMPD" min="0" value="50">
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="avgMS">Average number of members in a typical in-person meeting</label>
+                                                  <input class="form-control" type="number" name="avgMS" id="avgMS" min="2" value="3">
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <p style="margin-bottom:0.1cm;"> </p>
+                              <div class="card"> 
+                                   <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSix">9. Cafeteria / Pantry / Kitchen</button>									
+                                        </h2>
+                                   </div>
+                                   <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                             <div class="form-row">
+                                                  <div class="form-group col-md-12">
+                                                       <label for="extFSP_flag">Is there an external food shop that sells food and beverages in the premises?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="extFSP" id="extFSP_0" value="0">
+                                                       <label class="form-check-label" for="extFSP_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="extFSP" id="extFSP_1" value="1" checked>
+                                                       <label class="form-check-label" for="extFSP_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="cntn_flag">Will canteen or pantry / kitchen or both be functional?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="cntn" id="cntn_0" value="0">
+                                                       <label class="form-check-label" for="cntn_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="cntn" id="cntn_1" value="1" checked>
+                                                       <label class="form-check-label" for="cntn_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="cntnACOp_flag">Will air conditioner be operational in the canteen / pantry / kitchen?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="cntnACOp" id="cntnACOp_0" value="0">
+                                                       <label class="form-check-label" for="cntnACOp_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="cntnACOp" id="cntnACOp_1" value="1" checked>
+                                                       <label class="form-check-label" for="cntnACOp_1">Yes</label>
+                                                       </div>
+                                                  </div>
+
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nEmpHL">Number of people that bring food from home / tiffin provider / own caterer</label>
+                                                       <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
+                                                  </div>
+                                                  
+                                                  <p>Number of people taking meals in the cafeteria. The calculator will assume others step outside the premises for lunch.</p>
+                                                  <table style="width: 100%;">
+                                                       <thead>
+                                                       <tr>
+                                                            <th class="px-1" style="width: 20%;">Meal</th>
+                                                            <th class="px-1" style="text-align: center; width:40%">Number of employees availing the facility </th>
+                                                            <th class="px-1" style="text-align: center; width:40%">Duration for which cafeteria is open (minutes)</th>
+                                                       </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                       <tr>
+                                                            <td>Breakfast</td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="nBrkfst" min="0" value="20"></td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="dBrkfst" min="0" value="60"></td>
+                                                       </tr>
+                                                       <tr>
+                                                            <td>Lunch</td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="nLnch" min="0" value="35"></td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="dLnch" min="0" value="90"></td>
+                                                       </tr>
+                                                       <tr>
+                                                            <td>Coffee / Snacks</td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="nSnck" min="0" value="15"></td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="dSnck" min="0" value="60"></td>
+                                                       </tr>
+                                                       </tbody>
+                                                  </table>
+
+                                                  <div class="form-group col-md-5 pt-3">
+                                                       <label for="mlStggrd_flag">Is the meal time staggered?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="mlStggrd" id="mlStggrd_0" value="0">
+                                                       <label class="form-check-label" for="mlStggrd_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="mlStggrd" id="mlStggrd_1" value="1" checked>
+                                                       <label class="form-check-label" for="mlStggrd_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-7 pt-3">
+                                                       <label for="utnslShrd_flag">Are utensils in canteen and pantry shared?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="utnslShrd" id="utnslShrd_0" value="0">
+                                                       <label class="form-check-label" for="utnslShrd_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="utnslShrd" id="utnslShrd_1" value="1" checked>
+                                                       <label class="form-check-label" for="utnslShrd_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="cntnArea">Total area of canteen/pantry in Sq.ft. (In case of multiple cafeterias, add all of them)</label>
+                                                       <input class="form-control" type="number" name="cntnArea" id="cntnArea" min="0" value="100">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="mxCntnPpl">Maximum number permitted at each time. (In case of multiple cafeterias, add all of them)</label>
+                                                       <input class="form-control" type="number" name="mxCntnPpl" id="mxCntnPpl" min="1" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nWS">Number of water dispensing stations, coffee machines, vending machines</label>
+                                                       <input class="form-control" type="number" name="nWS" id="nWS" min="0" value="2">
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <p style="margin-bottom:0.1cm;"> </p>
+                              <div class="card"> 
+                                   <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSeven">10. Hygiene and Sanitation</button>									
+                                        </h2>
+                                   </div>
+                                   <div id="collapseSeven" class="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                             <p class="h5 sh5">Toilets</p>
+                                             <div class="form-row">
+                                                  <div class="form-group col-md-6">
+                                                       <label for="nGntsT">Number of gents toilets</label>
+                                                       <input class="form-control" type="number" name="nGntsT" id="nGntsT" min="0" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-6">
+                                                       <label for="nLdsT">Number of ladies toilets</label>
+                                                       <input class="form-control" type="number" name="nLdsT" id="nLdsT" min="0" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="tClnFreq">Number of times each toilet and wash basin is cleaned and disinfected in a day</label>
+                                                       <input class="form-control" type="number" name="tClnFreq" id="tClnFreq" min="0" value="1">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="spPrsnt_flag">Is soap dispensed in each of the toilets and in each of the wash basins?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="spPrsnt" id="spPrsnt_0" value="0">
+                                                       <label class="form-check-label" for="spPrsnt_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="spPrsnt" id="spPrsnt_1" value="1" checked>
+                                                       <label class="form-check-label" for="spPrsnt_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <p class="h5 sh5">House-keeping of premises</p>
+                                                  <div class="form-group col-md-12">
+                                                    <label for="freqCln">Number of times house-keeping staff clean the <b>entire premises</b> in a day (including temporary accommodation given to the workers)</label>
+                                                       <input class="form-control" type="number" name="freqCln" id="freqCln" min="0" value="1">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                    <label for="nHskpngStff">Number of house-keeping staff cleaning the <b>entire premises</b> each day</label>
+                                                       <input class="form-control" type="number" name="nHskpngStff" id="nHskpngStff" min="0" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="typeSanitation">Type of cleaning</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_0" value="0" checked>
+                                                       <label class="form-check-label" for="typeSanitation_0">Sweep / Vacuum cleaning</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="typeSanitation" id="typeSanitation_1" value="1" >
+                                                       <label class="form-check-label" for="typeSanitation_1">Mopping</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nDinf">Number of times <b>disinfection activity</b> is performed per week in common facilities and points of human contact (entrances, door handles, knobs, biometric access points, etc.)</label>
+                                                       <input class="form-control" type="number" name="nDinf" id="nDinf" min="0" value="1">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="typeDisinfect">Type of disinfection activity</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_0" value="0" checked>
+                                                       <label class="form-check-label" for="typeDisinfect_0">Wiping floors and all human contact surfaces with a chemical disinfectant</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_1" value="1">
+                                                       <label class="form-check-label" for="typeDisinfect_1">Spraying entire premises with a chemical disinfectant</label>
+                                                       </div>
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>                              
                          </div>
                          <p style="margin-bottom:0.5cm;"> </p>
                          <button type="submit" class="sub-btn btn-primary btn-block">Submit</button>
@@ -1399,6 +1464,22 @@ SPDX-License-Identifier: Apache-2.0-->
                if(window.innerHeight > window.innerWidth){ 
                     alert("Please use this website in landscape mode for better experience or use a computer to fill the form.");
                }
+
+               // Enable special questions for Manufacturing...
+               $("#NOE").on("input", function() {
+                    var selected_value = $("#NOE").val();
+                    if (selected_value==5 || selected_value==6){
+                         $("#mnfctHead").show();
+                         $("#mnfctQstns").show();
+                         $("#mnfctHead_epi").show();
+                         $("#mnfctQstns_epi").show();
+                    } else {
+                         $("#mnfctHead").hide();
+                         $("#mnfctQstns").hide();
+                         $("#mnfctHead_epi").hide();
+                         $("#mnfctQstns_epi").hide();
+                    }
+               });
 
                // Dynamic gender table for shifts...
                $("#nShifts").on("input", function() {

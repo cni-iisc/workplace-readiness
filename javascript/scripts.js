@@ -35,7 +35,7 @@ function getValues(){
     dict["nM_"+(i+1).toString()] = parseInt(document.getElementById("nM_"+(i+1).toString()).value); // Number of male employees in shift i
     dict["nF_"+(i+1).toString()] = parseInt(document.getElementById("nF_"+(i+1).toString()).value); // Number of female employees in shift i
     dict["nOth_"+(i+1).toString()] = parseInt(document.getElementById("nOth_"+(i+1).toString()).value); // Number of other employees in shift i
-    dict["pCS_"+(i+1).toString()] = parseInt(document.getElementById("pCS_"+(i+1).toString()).value); // Percentage of casual labour and security in shift i
+    dict["pCS_"+(i+1).toString()] = parseInt(document.getElementById("pCS_"+(i+1).toString()).value); // Number of casual labour and security in shift i
   }
 
   dict["tGapShift"] = parseFloat(document.getElementById("tGapShift").value); // Time gap between shifts in hours
@@ -47,12 +47,12 @@ function getValues(){
   dict["n65plus"] = parseInt(document.getElementById("n65plus").value); // Number of employees with age more than 65
 
   // Office Infrastructure Information
-  dict["nBldng"] = parseInt(document.getElementById("nBldng").value); // Number of buildings 
+  dict["nBldng"] = parseInt(document.getElementById("nBldng").value); // Number of buildings // Not used in calculations
   dict["tArea"] = parseInt(document.getElementById("tArea").value); // Total office area in sq.ft
   dict["nFloors"] = parseInt(document.getElementById("nFloors").value); // Number of floors in office
   dict["opnCubArea"] = parseInt(document.getElementById("opnCubArea").value); // Total open cubicle area in sq.ft
   dict["mntrCCTV"] = parseInt(document.querySelector('input[name="mntrCCTV"]:checked').value); // CCTV monitoring
-  dict["acsCntrl"] = parseInt(document.querySelector('input[name="acsCntrl"]:checked').value); // Access controlled
+  dict["acsCntrl"] = parseInt(document.querySelector('input[name="acsCntrl"]:checked').value); // Access controlled // Not used in calculations
   dict["baDoor"] = parseInt(document.getElementById("baDoor").value); // Number of biometric based access doors
   dict["rfidDoor"] = parseInt(document.getElementById("rfidDoor").value); // Number of RFID based access doors
   dict["sntBio"] = parseInt(document.querySelector('input[name="sntBio"]:checked').value); // Sanitiser at Biometric access doors
@@ -77,9 +77,7 @@ function getValues(){
   dict["nStrHrDinf"] = parseInt(document.getElementById("nStrHrDinf").value); // Frequency of stairway handrails disinfection process
   dict["mtngSpts"] = parseInt(document.getElementById("mtngSpts").value); // meeting rooms
   dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value); // Other meeting spaces
-  dict["freqCln"] = parseInt(document.getElementById("freqCln").value); // Frequency of cleaning
-  dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value); // Number of housekeeping staff
-  if (dict["NOE"]==5 || dict["NOE"]==6){
+  if (dict["NOE"]==5){
     dict["sfRsrtPlnt"] = parseInt(document.querySelector('input[name="sfRsrtPlnt"]:checked').value); // Safe restart plant flag for manufacturing
     dict["onstDsMngt"] = parseInt(document.querySelector('input[name="onstDsMngt"]:checked').value); // On-site disaster management flag for manufacturing
   }
@@ -97,7 +95,7 @@ function getValues(){
   dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
   dict["nWsB"] = parseInt(document.getElementById("nWsB").value); // Number of warning sign boards
   dict["nASapp"] = parseInt(document.getElementById("nASapp").value); // Number of employees with Aarogya Setu app
-  if (dict["NOE"]==5 || dict["NOE"]==6){
+  if (dict["NOE"]==5){
     dict["strlzBxs"] = parseInt(document.querySelector('input[name="strlzBxs"]:checked').value); // sterilise manufacturing box
     dict["mskPPE"] = parseInt(document.querySelector('input[name="mskPPE"]:checked').value); // PPE mask for manufacturing workers
   }
@@ -159,6 +157,8 @@ function getValues(){
   dict["nLdsT"] = parseInt(document.getElementById("nLdsT").value); // Number of ladies toilet
   dict["tClnFreq"] = parseInt(document.getElementById("tClnFreq").value); // Frequency of toilet cleaning
   dict["spPrsnt"] = parseInt(document.querySelector('input[name="spPrsnt"]:checked').value); // Soap dispensed in toilet
+  dict["freqCln"] = parseInt(document.getElementById("freqCln").value); // Frequency of cleaning
+  dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value); // Number of housekeeping staff
   dict["typeSanitation"] = parseInt(document.querySelector('input[name="typeSanitation"]:checked').value); //  Type of sanitation
   dict["nDinf"] = parseInt(document.getElementById("nDinf").value); // Number of disinfection activity per week
   dict["typeDisinfect"] = parseInt(document.querySelector('input[name="typeDisinfect"]:checked').value); //  Type of disinfection activity
@@ -206,6 +206,7 @@ function getValues(){
   // Time to reach office
   dict["n30Min"] = parseInt(document.getElementById("n30Min").value); // Number of employees taking 0-30 minutes
   dict["n60Min"] = parseInt(document.getElementById("n60Min").value); // Number of employees taking 30-60 minutes
+  dict["n60plusMin"] = parseInt(document.getElementById("n60plusMin").value); // Number of employees taking >60 minutes
 
   return dict;
 }
@@ -215,6 +216,7 @@ function clipAndRound_bounds (score) {
   if (score_out < 0 ) {
     score_out = 0;
   } else if (score_out > 100 ) {
+    console.log('Raw score: ' + score.toString());
     score_out = 100;
   }
   return score_out;
@@ -240,6 +242,8 @@ function calcScore () {
 
   var number_of_suggestions = 3;
   var suggestion = "";
+
+  //TODO: Make 0.4 * mask factor a variable.
 
   var nM = inputs["nM_1"];
   var nF = inputs["nF_1"];
@@ -268,11 +272,13 @@ function calcScore () {
       (inputs["nCub"] + inputs["nRem"] * 1.2) * nMeets * cFactor;
   var stairsElev = 0.5 * inputs["nFloors"] * (1 + inputs["eleCpct"]/2 * (1-0.1*inputs["advSclDis"]))/2 * 4 * Math.max( (1 - 0.1*Math.min( inputs["nStrCln"], inputs["nEleDinf"] )), 0.5);
   var bmFlag = ((inputs["baDoor"] >= 1) ? 1 : 0);
-  var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"]) ) * bmFlag;
-  var shiftDelta = ( (inputs["tGapShift"] > 8) ? 0 : (8 - inputs["tGapShift"]));
+  var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"] + ((inputs["rfidDoor"]>0) ? 1 : 0) ) ) * bmFlag;
+  var shiftDelta = ( (inputs["tGapShift"] < 1) ? 1 : 0);
+  var ac_factor = (inputs["percAc"]/100) * (inputs["centralAC"]? 2:1) * (inputs["hepaFltr"] ? 0.5:1);
   var premisesContacts = 0;
   if (nEmp>0){
-    premisesContacts = (accessContacts + stairsElev + crowding / nEmp ) * (1 + (shiftDelta/8.0)) * (1-0.4*inputs["msk"]);
+    premisesContacts = ((accessContacts + stairsElev + crowding) / nEmp ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-0.4*inputs["msk"]);
+    premisesContacts *= (1+0.1*ac_factor);
   }
 
   var nominal_office_infra_raw_score = 31;
@@ -287,14 +293,23 @@ function calcScore () {
   }
   score_office_infra = clipAndRound_bounds(score_office_infra);
 
-  var sg_office_infra = "Well done!"
+  var sg_office_infra = "";
+  var count = 0;
+  var give_suggestion = (score_office_infra!=100);
   if (nEmp==0){
     sg_office_infra = "You have entered the total number of employees in a shift to be zero. This is invalid. Please go back and re-enter the correct number of employees for each shift.";
-  } else if (score_office_infra<70){
-    sg_office_infra = "Consider encouraging more employees to work from home or shifts";
-  } else if (inputs["nEleDinf"]<2) {
-    sg_office_infra = "Consider cleaning the lifts more often";
-  }
+  } else if (shiftDelta && sg_office_infra<number_of_suggestions && give_suggestion) {
+    count += 1;
+    sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
+    sg_office_infra += "Minimum gap of 1 hours between consecutive shifts is recommended.";
+  } else if (score_office_infra<70 && sg_office_infra<number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
+    sg_office_infra += "Consider encouraging more employees to work from home or shifts";
+  } else if (inputs["nEleDinf"]<2 && sg_office_infra<number_of_suggestions && give_suggestion) {
+    sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
+    sg_office_infra += "Consider cleaning the lifts more often";
+  } 
 
   // Toilet scores
   var nGntsTlt = nM + nOth/2.0; 
@@ -307,24 +322,34 @@ function calcScore () {
   var nominal_scaled_aggrToiletSc = 1;
 
   var aggrToiletSc = 1000;
-  if (inputs["nGntsT"] || inputs["nLdsT"]){
-  var cRateGentsToilet = nGntsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nGntsT"]);
-  var cRateLadiesToilet = nLdsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nLdsT"]);
-  aggrToiletSc = nominal_raw_aggrToiletSc*nominal_scaled_aggrToiletSc/(Math.max(cRateLadiesToilet, cRateGentsToilet)+0.001);
+  if (inputs["nGntsT"]>0 || inputs["nLdsT"]>0){
+    var cRateGentsToilet = nGntsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nGntsT"]);
+    var cRateLadiesToilet = nLdsTlt * avgTltVstsPrDy * avgTltDrtn * (Math.max(0.5, (1.0 - 0.1*inputs["tClnFreq"]))) * (1.0 - 0.1*inputs["spPrsnt"]) / (tltCnctrtnHrs*60*inputs["nLdsT"]);
+    aggrToiletSc = nominal_raw_aggrToiletSc*nominal_scaled_aggrToiletSc/(Math.max(cRateLadiesToilet, cRateGentsToilet)+0.001);
   }
-  var score_sanitation = clipAndRound_bounds(aggrToiletSc);
+  var effctvnss_factor_dinf = (Math.min(inputs["nDinf"], 10)/10)*((inputs["typeDisinfect"])? 1.5 : 1);
+  var effctvnss_factor_sntn = (Math.min(inputs["freqCln"], 2)/2)*((inputs["typeSanitation"])? 1.5 : 1);
 
-  var sg_sanitation = "Well done!";
+  var score_sanitation = Math.min(aggrToiletSc, 1000)*0.7 + 100*(effctvnss_factor_dinf+effctvnss_factor_sntn);
+  score_sanitation = clipAndRound_bounds(score_sanitation);
+
+  var sg_sanitation = "";
   if (!inputs["nGntsT"] && !inputs["nLdsT"]){
     sg_sanitation = "High score. But do you really have no toilets in your workplace?";
-  } else if (score_sanitation < 70) {
-      sg_sanitation = "Disinfect toilets more often or consider reducing the employees per shift";
+  } else if (score_sanitation < 85 && effctvnss_factor_dinf<0.75){
+    sg_sanitation = "Disinfect the premises more often.";
+  } else if (score_sanitation < 85 && effctvnss_factor_sntn<0.75){
+    sg_sanitation = "Clean the premises more often.";
+  } else if (score_sanitation < 70 && aggrToiletSc<700) {
+    sg_sanitation = "Disinfect toilets more often or consider reducing the employees per shift";
+  } else if (score_sanitation > 90) {
+    sg_sanitation = "Well done!";
   }
 
   // Sick Rooms/Isolation Ward
-  var manufacturing_plant = (inputs["NOE"]==5 || inputs["NOE"]==6);
+  var manufacturing_plant = (inputs["NOE"]==5);
   var score_sickRoom = 100*(inputs["iQS"]*2 + inputs["amblnc"] + inputs["lHsptl"]*2 + inputs["emrgncResp"] + inputs["hl"] + 
-                            inputs["imdtFM"] + inputs["alrg"] * Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60))*2);
+                            inputs["imdtFM"] + inputs["alrg"] * Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60)) * inputs["medInsurance"]);
   if (manufacturing_plant){
     score_sickRoom *= 8/10;
     score_sickRoom += (inputs["sfRsrtPlnt"] ? 50:0) + (inputs["onstDsMngt"] ? 50:0) + (inputs["strlzBxs"] ? 50:0) + (inputs["mskPPE"] ? 50:0);
@@ -417,9 +442,9 @@ function calcScore () {
 
   if (inputs["cntnArea"]>0 && inputs["cntn"]){
     nOutside = nEmp - inputs["nLnch"] - inputs["nEmpHL"];
-    mtng_brkfst = (inputs["nBrkfst"] * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
-    mtng_lnch = (inputs["nLnch"] * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
-    mntg_snck = (inputs["nSnck"] * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
+    mtng_brkfst = (Math.min(inputs["nBrkfst"], inputs["mxCntnPpl"]) * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
+    mtng_lnch = (Math.min(inputs["nLnch"], inputs["mxCntnPpl"]) * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
+    mntg_snck = (Math.min(inputs["nSnck"], inputs["mxCntnPpl"]) * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
     if (inputs["nWS"]>0){
       mntg_wtr = (nEmp * time_wtr * num_wtr_sought * prsnl_area) / (inputs["nWS"] * inputs["cntnArea"] * pvtl_hrs *  60);
     }
@@ -432,7 +457,8 @@ function calcScore () {
 
   var score_cafeteria_scaled = 0;
   if (nEmp>0){
-    var score_cafeteria = (mtng_brkfst*(inputs["nBrkfst"]/nEmp) + mtng_lnch*(inputs["nLnch"]/nEmp) + mntg_snck*(inputs["nSnck"]/nEmp) + mntg_wtr + (inputs["nEmpHL"]*0.25/nEmp) + (nOutside*2/nEmp) + (nOutside*0.5*(inputs["extFSP"])/nEmp));
+    var ac_factor_canteen = 1+0.1*(inputs["cntnACOp"]);
+    var score_cafeteria = ((mtng_brkfst*(inputs["nBrkfst"]/nEmp) + mtng_lnch*(inputs["nLnch"]/nEmp) + mntg_snck*(inputs["nSnck"]/nEmp) + mntg_wtr)*(ac_factor_canteen) + (inputs["nEmpHL"]*0.25/nEmp) + (nOutside*2/nEmp) + (nOutside*0.5*(inputs["extFSP"])/nEmp));
     score_cafeteria = score_cafeteria * Math.max((1 - 0.1*( inputs["mlStggrd"] + inputs["freqCln"] - inputs["utnslShrd"])), 1/2);
     score_cafeteria_scaled = nominal_scaled_cafeteria_score*nominal_raw_cafeteria_score/score_cafeteria;
     // We prefer the score_cafeteria to be less than 2
@@ -487,7 +513,7 @@ function calcScore () {
   var score_outside = 1000;
   var sg_outside = "";
   if (inputs["nVstrs"] && inputs["nEmpCstmr"]){
-    score_outside =  100*nEmp/(inputs["nVstrs"] * Math.pow(inputs["nEmpCstmr"], 0.1) * (1-0.4*inputs["msk"]) * (1-0.1*inputs["glvs"]));
+    score_outside =  100*nEmp/(inputs["nVstrs"] * Math.pow(inputs["nEmpCstmr"]+inputs["nDlvrHndlng"], 0.1) * (1-0.4*inputs["msk"]) * (1-0.1*inputs["glvs"]));
     if (score_outside >= 900) {
      sg_outside = "Well done!";
     }
@@ -514,10 +540,10 @@ function calcScore () {
 
   var score_epidemic = 0;
   if (meets_shift_requirement){
-  score_epidemic = 100*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] +
-                        (inputs["tchFree"]? 1:0.5)*((inputs["nHsS"] > (inputs["tArea"]/1000)) ? 1 : 0) + 
-                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1))/2 + meets_shift_requirement + 
-                        ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0))/2 + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
+  score_epidemic = (1000/15)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
+                        (inputs["tchFree"]? 1:0.5)*((inputs["nHsS"] > (inputs["tArea"]/1000)) ? 1 : 0) + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] +
+                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1)) + meets_shift_requirement + 
+                        ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0)) + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
   }
 
   score_epidemic = clipAndRound_bounds(score_epidemic);
@@ -683,13 +709,14 @@ function calcScore () {
   score_total_transport_scaled = clipAndRound_bounds(score_total_transport_scaled);
 
   var sg_transport = "Well done!";
-  if (cmpnTrnsprtUsrs + slfTrnsprtUsrs + inputs["nWlk"] + pubTrnsprtUsrs == 0){
+  give_suggestion = (score_total_transport_scaled!=100);
+  if (cmpnTrnsprtUsrs + slfTrnsprtUsrs + inputs["nWlk"] + pubTrnsprtUsrs == 0 && give_suggestion){
     sg_transport = "High score. But do you really have no one traveling to your workplace?";
-  } else if ((inputs["mskMndt"]+inputs["mskCar"]+inputs["mskWlk"]+inputs["mskPub"])<3){
+  } else if ((inputs["mskMndt"]+inputs["mskCar"]+inputs["mskWlk"]+inputs["mskPub"])<3 && give_suggestion){
     sg_transport = "Consider using mask while travelling";
-  } else if (F>0.5){
+  } else if (F>0.5 && give_suggestion){
     sg_transport = "Consider reducing numbers per journey";
-  } else if ((inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])<3 && inputs["cmpnTrnsprtUsrs"]>0){
+  } else if ((inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])<3 && inputs["cmpnTrnsprtUsrs"]>0 && give_suggestion){
       sg_transport = "Consider more use of hand sanitiser etc.";
   }
 
@@ -713,12 +740,12 @@ function calcScore () {
   resTable += "<tr><td>Epidemic related: Precautions</td><td bgcolor=" + scoreColor(score_epidemic) + ">" + score_epidemic + "</td><td>" + sg_epidemic + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Awareness and readiness</td><td bgcolor=" + scoreColor(score_isolation) + ">" + score_isolation + "</td><td>" + sg_isolation + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Advertisement and outreach</td><td bgcolor=" + scoreColor(score_adv_outrch) + ">" + score_adv_outrch + "</td><td>" + sg_adv_outrch + "</td></tr>"
+  resTable += "<tr><td>Transportation</td><td bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
   resTable += "<tr><td>Employee interactions: Mobility</td><td bgcolor=" + scoreColor(score_mobility) + ">" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
   resTable += "<tr><td>Employee interactions: Meetings</td><td bgcolor=" + scoreColor(score_meetings) + ">" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
   resTable += "<tr><td>Employee interactions: Outside contacts</td><td bgcolor=" + scoreColor(score_outside) + ">" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
   resTable += "<tr><td>Cafeteria/pantry</td><td bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
 	resTable += "<tr><td>Hygiene and sanitation</td><td bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
-  resTable += "<tr><td>Transportation</td><td bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
   if (inputs["cmpName"]!=""){

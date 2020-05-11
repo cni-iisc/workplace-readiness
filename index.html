@@ -402,12 +402,12 @@ SPDX-License-Identifier: Apache-2.0-->
 
                                              <p class="h5 sh5 mb-2 text-left pt-3">Shifts</p>
                                              <div class="form-row">
-                                                  <div class="form-group col-md-4">
+                                                  <div class="form-group col-md-12">
                                                        <label for="nShifts">Number of <b>shifts</b></label>
                                                        <input class="form-control" type="number" name="nShifts" id="nShifts" min="1" max="5" value="1">
                                                   </div>
-                                                  <div class="form-group col-md-8">
-                                                       <label for="tGapShift">Minimum time gap between shifts (hours)</label>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="tGapShift">Minimum time gap between end and start of two consecutive shifts (hours). If there is overlap between two shifts enter 0.</label>
                                                        <input class="form-control" type="number" name="tGapShift" id="tGapShift" min="0" value="0">
                                                   </div>
                                              </div>
@@ -1468,7 +1468,7 @@ SPDX-License-Identifier: Apache-2.0-->
                // Enable special questions for Manufacturing...
                $("#NOE").on("input", function() {
                     var selected_value = $("#NOE").val();
-                    if (selected_value==5 || selected_value==6){
+                    if (selected_value==5){
                          $("#mnfctHead").show();
                          $("#mnfctQstns").show();
                          $("#mnfctHead_epi").show();

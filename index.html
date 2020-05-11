@@ -16,6 +16,8 @@ SPDX-License-Identifier: Apache-2.0-->
         
           gtag('config', 'UA-164131064-2');
         </script>
+        <script src="javascript/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="javascript/dynamicUI.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	   <title>COVID-19 Workplace Readiness Assessment</title>
 	   <link rel="stylesheet" href="css/style.css">
@@ -100,15 +102,6 @@ SPDX-License-Identifier: Apache-2.0-->
                                    <div id="collapseOne" class="collapse w-100" aria-labelledby="headingOne" data-parent="#accordionExample">
                                         <div class="card-body">
                                              <div class="form-row">
-                                                  <div class="form-group col-md-12">
-                                                       <label for="cmpName">Company Name:</label>
-                                                       <input type="text" class="form-control" name="cmpName" id="cmpName" minlength="4" maxlength="60" placeholder="Company Name">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="emailAddr">Email Address:</label>
-                                                       <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4"  maxlength="60" placeholder="Email Address">
-                                                  </div>
-
                                                   <p class="h6 mb-2 text-left">Nature of Establishment</p>
                                                   <div class="form-group col-md-12 mb-3">
                                                        <select class="col-md-12" id="NOE" name="NOE">
@@ -141,24 +134,12 @@ SPDX-License-Identifier: Apache-2.0-->
                                         <div class="card-body">
                                              <div class="form-row">
                                                   <div class="form-group col-md-12">
-                                                       <label for="nBldng">Total number of buildings in your premises</label>
+                                                       <label for="nBldng">Total number of buildings you own or rent in this location / premises</label>
                                                        <input class="form-control" type="number" name="nBldng" id="nBldng" min="1" value="1">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="nCW">Number of companies sharing common facilities (lifts, staircases, toilets, cafeteria, parking etc.) across all buildings in your premises, including your company. </label>
+                                                       <label for="nCW">Number of companies sharing common facilities (lifts, staircases, toilets, canteen, parking etc.) across all buildings in your premises, including your company. </label>
                                                        <input class="form-control" type="number" name="nCW" id="nCW" min="1" value="1">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="tArea">Total built-up area (sq. ft) including common spaces (operated by your company across all buildings in this premises)</label>
-                                                       <input class="form-control" type="number" name="tArea" id="tArea" min="0" value="5000">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nFloors">Total number of floors (operated by your company across all buildings in this premises)</label>
-                                                       <input class="form-control" type="number" name="nFloors" id="nFloors" min="1" value="2">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="opnCubArea">Total approximate area of cubicle desk working space and open desk working space (sq. ft) (operated by your company across all buildings in this premises)</label>
-                                                       <input class="form-control" type="number" name="opnCubArea" id="opnCubArea" min="0" value="2000">
                                                   </div>
                                                   <div class="form-group col-md-12">
                                                        <label for="mntrCCTV">Do you have security staff monitoring CCTV footage during working hours?</label>
@@ -182,15 +163,15 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="acsCntrl_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-6 acsCntrl_info">
                                                        <label for="baDoor">Number of biometric based access doors</label>
                                                        <input class="form-control" type="number" name="baDoor" id="baDoor" min="0" value="3">
                                                   </div>
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-6 acsCntrl_info">
                                                        <label for="rfidDoor">Number of RFID tag based doors </label>
                                                        <input class="form-control" type="number" name="rfidDoor" id="rfidDoor" min="0" value="3">
                                                   </div>
-                                                  <div class="form-group col-md-12">
+                                                  <div class="form-group col-md-12 acsCntrl_info">
                                                        <label for="sntBio">If biometric based, is sanitiser available at biometric location?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="sntBio" id="sntBio_0" value="0" checked>
@@ -200,6 +181,18 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-check-input" type="radio" name="sntBio" id="sntBio_1" value="1">
                                                        <label class="form-check-label" for="sntBio_1">Yes</label>
                                                        </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="tArea">Total built-up area (sq. ft) including common spaces (operated by your company across all buildings in this premises)</label>
+                                                       <input class="form-control" type="number" name="tArea" id="tArea" min="0" value="5000">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="nFloors">Total number of floors (operated by your company across all buildings in this premises)</label>
+                                                       <input class="form-control" type="number" name="nFloors" id="nFloors" min="1" value="2">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="opnCubArea">Total approximate area of cubicle / open desk or working space (sq. ft) (operated by your company across all buildings in this premises)</label>
+                                                       <input class="form-control" type="number" name="opnCubArea" id="opnCubArea" min="0" value="2000">
                                                   </div>
                                              </div>
 
@@ -226,7 +219,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                             <td class="px-1"><input class="form-control" type="number" id="n2pPlusOfcRm" min="0" value="9"></td>
                                                        </tr>
                                                        <tr>
-                                                            <td>Open cubicle office desks</td>
+                                                            <td>Open cubicle / open desks or working space</td>
                                                             <td class="px-1"><input class="form-control" type="number" id="nCub" min="0" value="40"></td>
                                                        </tr>
                                                        <tr>
@@ -241,7 +234,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label for="percAC">Percentage of the premises with air-conditioning</label>
                                                        <input class="form-control" type="number" name="percAC" id="percAC" min="0" max="100" value="100">
                                                   </div>
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-6" id="centralAC_Q">
                                                        <label for="centralAC">Is the air-conditioning centralised?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="centralAC" id="centralAC_0" value="0">
@@ -252,47 +245,54 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="centralAC_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-6" id="tempAC_Q">
                                                        <label for="tempAC">Temperature setting</label>
                                                        <input class="form-control" type="number" name="tempAC" id="tempAC" min="15" value="21">
                                                   </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="hepaFltr">Is the air-conditioning system High-Efficiency Particulate Air (HEPA) filter enabled?</label>
+                                                  <div class="form-group col-md-12" id="centralAC_Q">
+                                                       <label for="ntrlSlAr">Do you have openable windows that provide access to natural sun light and fresh air?</label>
                                                        <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="hepaFltr" id="hepaFltr_0" value="0" checked>
-                                                       <label class="form-check-label" for="hepaFltr_0">No</label>
+                                                       <input class="form-check-input" type="radio" name="ntrlSlAr" id="ntrlSlAr_0" value="0">
+                                                       <label class="form-check-label" for="ntrlSlAr_0">No</label>
                                                        </div>
                                                        <div class="form-check">
-                                                       <input class="form-check-input" type="radio" name="hepaFltr" id="hepaFltr_1" value="1">
-                                                       <label class="form-check-label" for="hepaFltr_1">Yes</label>
-                                                       </div>
-                                                       <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="hepaFltr" id="hepaFltr_2" value="2">
-                                                            <label class="form-check-label" for="hepaFltr_2">Not applicable</label>
+                                                       <input class="form-check-input" type="radio" name="ntrlSlAr" id="ntrlSlAr_1" value="1" checked>
+                                                       <label class="form-check-label" for="ntrlSlAr_1">Yes</label>
                                                        </div>
                                                   </div>
                                              </div>
 
                                              <p class="h5 sh5 mb-2 text-left">Common Usage Areas</p>
                                              <div class="form-row">
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-12">
                                                        <label for="nEle">Number of lifts</label>
                                                        <input class="form-control" type="number" name="nEle" id="nEle" min="0" value="1">
                                                   </div>
-                                                  <div class="form-group col-md-6">
+                                                  <div class="form-group col-md-12" id="eleCpct_vsbl">
                                                        <label for="eleCpct">Average capacity of lifts</label>
                                                        <input class="form-control" type="number" name="eleCpct" id="eleCpct" min="3" value="8">
                                                   </div>
-                                                  <div class="form-group col-md-12">
+                                                  <div class="form-group col-md-12" id="nEleDinf_vsbl">
                                                        <label for="nEleDinf">Number of times a day each lift is disinfected</label>
                                                        <input class="form-control" type="number" name="nEleDinf" id="nEleDinf" min="0" value="0">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="nStrCln">Number of times a day each stairway and each escalator is cleaned</label>
+                                                       <label for="strAvlbl">Is stairway or escalator or both present in your premises?</label>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="strAvlbl" id="strAvlbl_0" value="0">
+                                                            <label class="form-check-label" for="strAvlbl_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="strAvlbl" id="strAvlbl_1" value="1" checked>
+                                                            <label class="form-check-label" for="strAvlbl_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12 strAvlbl_info">
+                                                       <label for="nStrCln">Number of times a day each stairway and each escalator is cleaned.</label>
                                                        <input class="form-control" type="number" name="nStrCln" id="nStrCln" min="0" value="1">
                                                   </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nStrHrDinf">Number of times a day stairway and escalator handrails are disinfected</label>
+                                                  <div class="form-group col-md-12 strAvlbl_info">
+                                                       <label for="nStrHrDinf">Number of times a day stairway and escalator handrails are disinfected.</label>
                                                        <input class="form-control" type="number" name="nStrHrDinf" id="nStrHrDinf" min="0" value="0">
                                                   </div>
                                                   <div class="form-group col-md-12">
@@ -411,8 +411,8 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="tGapShift" id="tGapShift" min="0" value="0">
                                                   </div>
                                              </div>
-                                             <p class="h6 mb-2 text-left">Number of employees in a <b>shift</b> (including security staff, casual labourers). 
-                                                  Also indicate the number of casual labourers / security staff separately.</p>
+                                             <p class="h6 mb-2 text-left">Number of employees in a <b>shift</b> (including security staff). 
+                                                  Also indicate the number of security staff separately.</p>
                                              <div class="form-row">
                                                   <table style="width: 100%;" id="shiftsTable">
                                                        <thead>
@@ -421,7 +421,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                             <th class="px-1" style="text-align: center; width:23%">Men</th>
                                                             <th class="px-1" style="text-align: center; width:23%">Women</th>
                                                             <th class="px-1" style="text-align: center; width:23%">Others</th>
-                                                            <th class="px-1" style="text-align: center; width:23%">Casual Labourers / Security</th>
+                                                            <th class="px-1" style="text-align: center; width:23%">Security staff</th>
                                                        </tr>
                                                        </thead>
                                                        <tbody>
@@ -615,7 +615,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   </div>
                                              </div>
                                              <div class="form-group col-md-12">
-                                                  <label for="amblnc_flag">Is there an ambulance facility?</label>
+                                                  <label for="amblnc_flag">Is there an ambulance facility or has an arrangement made with a local hospital?</label>
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="amblnc" id="amblnc_0" value="0">
                                                   <label class="form-check-label" for="amblnc_0">No</label>
@@ -754,7 +754,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="hkTrn_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-7">
+                                                  <div class="form-group col-md-12">
                                                        <label for="covidPage_flag">Does your company have a COVID-19 awareness webpage?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="covidPage" id="covidPage_0" value="0">
@@ -765,8 +765,8 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="covidPage_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-5">
-                                                       <label for="faq_flag">Is there a COVID-19 FAQ?</label>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="faq_flag">Is there a COVID-19 Frequently Asked Questions webpage (FAQ)?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="faq" id="faq_0" value="0">
                                                        <label class="form-check-label" for="faq_0">No</label>
@@ -853,27 +853,27 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <tbody>
                                                        <tr>
                                                             <td>Company owned / contracted</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr5K" min="0" value="10"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10K" min="0" value="45"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10Kplus" min="0" value="15"></td>
+                                                            <td class="px-1"><input class="form-control cmpOwnd" type="number" id="trvlr5K" min="0" value="10"></td>
+                                                            <td class="px-1"><input class="form-control cmpOwnd" type="number" id="trvlr10K" min="0" value="45"></td>
+                                                            <td class="px-1"><input class="form-control cmpOwnd" type="number" id="trvlr10Kplus" min="0" value="15"></td>
                                                        </tr>
                                                        <tr>
                                                             <td>Self owned</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr5Kslf" min="0" value="10"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10Kslf" min="0" value="45"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10Kplusslf" min="0" value="15"></td>
+                                                            <td class="px-1"><input class="form-control slfOwnd" type="number" id="trvlr5Kslf" min="0" value="10"></td>
+                                                            <td class="px-1"><input class="form-control slfOwnd" type="number" id="trvlr10Kslf" min="0" value="45"></td>
+                                                            <td class="px-1"><input class="form-control slfOwnd" type="number" id="trvlr10Kplusslf" min="0" value="15"></td>
                                                        </tr>
                                                        <tr>
                                                             <td>Public / ride-share</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr5Kpub"  min="0" value="10"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10Kpub" min="0" value="45"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="trvlr10Kpluspub" min="0" value="15"></td>
+                                                            <td class="px-1"><input class="form-control pubTrnsprt" type="number" id="trvlr5Kpub"  min="0" value="10"></td>
+                                                            <td class="px-1"><input class="form-control pubTrnsprt" type="number" id="trvlr10Kpub" min="0" value="45"></td>
+                                                            <td class="px-1"><input class="form-control pubTrnsprt" type="number" id="trvlr10Kpluspub" min="0" value="15"></td>
                                                        </tr>
                                                        <tr>
                                                             <td>Walk</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nWlk" min="0" value="10"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" min="0" value="0" readonly></td>
-                                                            <td class="px-1"><input class="form-control" type="number" min="0" value="0" readonly></td>
+                                                            <td class="px-1"><input class="form-control wlkrs" type="number" id="nWlk" min="0" value="10"></td>
+                                                            <td class="px-1"><input class="form-control wlkrs" type="number" min="0" value="0" readonly></td>
+                                                            <td class="px-1"><input class="form-control wlkrs" type="number" min="0" value="0" readonly></td>
                                                        </tr>
                                                        </tbody>
                                                   </table>
@@ -881,9 +881,9 @@ SPDX-License-Identifier: Apache-2.0-->
 
 
                                              <div class="d-flex pt-4">
-                                             <p class="h5 sh5 mb-2 text-left">Company owned / contracted vehicles</p>
+                                             <p class="h5 sh5 mb-2 text-left" id="cmpTrvl_title">Company owned / contracted vehicles</p>
                                              </div>
-                                             <div class="form-row">
+                                             <div class="form-row" id="cmpTrvl_info">
                                                   <table style="width: 100%;">
                                                        <thead>
                                                        <tr>
@@ -980,7 +980,9 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="vhclSnt_1">Yes</label>
                                                        </div>
                                                   </div>
+                                             </div>
 
+                                             <div class="form-row" id="slfTrvl_info">
                                                   <p class="h5 sh5 mb-2 text-left">Self-owned vehicle travellers</p>
                                                   <div class="form-group col-md-12">
                                                        <label for="noPlnR_flag">Have employees been instructed not to take pillion riders on two wheelers?</label>
@@ -1026,7 +1028,9 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="hsLbb_1">Yes</label>
                                                        </div>
                                                   </div>
+                                             </div>
 
+                                             <div class="form-row" id="wlkr_info">
                                                   <p class="h5 sh5 mb-2 text-left">Employees that walk to work</p>
                                                   <div class="form-group col-md-12">
                                                        <label for="mskWlk_flag">Do they wear face covers?</label>
@@ -1039,7 +1043,9 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="mskWlk_1">Yes</label>
                                                        </div>
                                                   </div>
+                                             </div>
 
+                                             <div class="form-row" id="pubTrvl_info">
                                                   <p class="h5 sh5 mb-2 text-left">Employees traveling in public/ride-share vehicles</p>
                                                   <div class="form-group col-md-12">
                                                        <label for="mskPub_flag">Do they wear face covers?</label>
@@ -1066,6 +1072,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                    </div>
                                    <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
                                         <div class="card-body">
+                                             <p class="h5 sh5 mb-2 text-left">Visitors</p>
                                              <div class="form-group col-md-12">
                                                   <label for="nVstrs">Number of outside visitors or customers expected in a day in the premises</label>
                                                   <input class="form-control" type="number" name="nVstrs" id="nVstrs" min="0" value="10">
@@ -1100,20 +1107,37 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <label class="form-check-label" for="glvs_1">Yes</label>
                                                   </div>
                                              </div>
-
-                                             <p class="h5 sh5 mb-2 text-left">Mobility Within Premises</p>
                                              <div class="form-group col-md-12">
-                                                  <label for="nHM">Number of employees that are more than 2 hrs away from assigned work area during the day (high mobility)</label>
+                                                  <label for="dsgntdCstmrPlc">Do employees receive customers at a designated place?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="dsgntdCstmrPlc" id="dsgntdCstmrPlc_0" value="0">
+                                                  <label class="form-check-label" for="dsgntdCstmrPlc_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="dsgntdCstmrPlc" id="dsgntdCstmrPlc_1" value="1" checked>
+                                                  <label class="form-check-label" for="dsgntdCstmrPlc_1">Yes</label>
+                                                  </div>
+                                             </div>
+
+                                             <p class="h5 sh5 mb-2 text-left">Mobility Outside Premises</p>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nExtM">Number of employees that leave the office during normal work hours for external visits to customers / vendors / govt agencies and return back to the office</label>
+                                                  <input class="form-control" type="number" name="nExtM" id="nExtM" min="0" value="2">
+                                             </div>
+
+                                             <p class="h5 sh5 mb-2 text-left">Work-related Mobility Within Premises</p>
+                                             <div class="form-group col-md-12">
+                                                  <label for="nHM">Number of employees that are more than 2 hrs away from assigned work area during a day, but remain within the premises (high mobility)</label>
                                                   <input class="form-control" type="number" name="nHM" id="nHM" min="0" value="2">
                                              </div>
                                              <div class="form-group col-md-12">
-                                                  <label for="nMM">Number of employees that are more than 1 hr away from assigned work area during a day (mild mobility)</label>
+                                                  <label for="nMM">Number of employees that are more than 1 hr away from assigned work area during a day, but remain within the premises (mild mobility)</label>
                                                   <input class="form-control" type="number" name="nMM" id="nMM" min="0" value="2">
                                              </div>
                                              
-                                             <p class="h5 sh5 mb-2 text-left">Work Related Interactions</p>
+                                             <p class="h5 sh5 mb-2 text-left">Work-related Interactions Within Premises</p>
                                              <div class="form-group col-md-12">
-                                                  <label for="nMPD">Number of in-person meetings per day</label>
+                                                  <label for="nMPD">Number of face to face meetings per day under normal operation (pre-lockdown)</label>
                                                   <input class="form-control" type="number" name="nMPD" id="nMPD" min="0" value="50">
                                              </div>
                                              <div class="form-group col-md-12">
@@ -1128,7 +1152,7 @@ SPDX-License-Identifier: Apache-2.0-->
                               <div class="card"> 
                                    <div class="card-header" id="headingOne">
                                         <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSix">9. Cafeteria / Pantry / Kitchen</button>									
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseSix">9. Canteen / Pantry / Kitchen</button>									
                                         </h2>
                                    </div>
                                    <div id="collapseSix" class="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
@@ -1146,7 +1170,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </div>
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="cntn_flag">Will canteen or pantry / kitchen or both be functional?</label>
+                                                       <label for="cntn_flag">Will canteen or pantry / kitchen or both be functional? Choose 'Yes' even if the seating area is being used only for having food brought from home / tiffin provider / own caterer</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="cntn" id="cntn_0" value="0">
                                                        <label class="form-check-label" for="cntn_0">No</label>
@@ -1157,7 +1181,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </div>
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="cntnACOp_flag">Will air conditioner be operational in the canteen / pantry / kitchen?</label>
+                                                       <label for="cntnACOp_flag">Will air-conditioner be operational in the canteen / pantry / kitchen? Select 'No' if there is no air-conditioner.</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="cntnACOp" id="cntnACOp_0" value="0">
                                                        <label class="form-check-label" for="cntnACOp_0">No</label>
@@ -1173,13 +1197,13 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
                                                   </div>
                                                   
-                                                  <p>Number of people taking meals in the cafeteria. The calculator will assume others step outside the premises for lunch.</p>
+                                                  <p>Number of people taking meals in the canteen. The calculator will assume others step outside the premises for lunch.</p>
                                                   <table style="width: 100%;">
                                                        <thead>
                                                        <tr>
                                                             <th class="px-1" style="width: 20%;">Meal</th>
                                                             <th class="px-1" style="text-align: center; width:40%">Number of employees availing the facility </th>
-                                                            <th class="px-1" style="text-align: center; width:40%">Duration for which cafeteria is open (minutes)</th>
+                                                            <th class="px-1" style="text-align: center; width:40%">Duration for which canteen is open (minutes)</th>
                                                        </tr>
                                                        </thead>
                                                        <tbody>
@@ -1224,15 +1248,15 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </div>
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="cntnArea">Total area of canteen/pantry in Sq.ft. (In case of multiple cafeterias, add all of them)</label>
+                                                       <label for="cntnArea">Total area of canteen/pantry in Sq.ft. (In case of multiple canteens, add all of them)</label>
                                                        <input class="form-control" type="number" name="cntnArea" id="cntnArea" min="0" value="100">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="mxCntnPpl">Maximum number permitted at each time. (In case of multiple cafeterias, add all of them)</label>
+                                                       <label for="mxCntnPpl">Maximum number permitted at each time. (In case of multiple canteens, add all of them)</label>
                                                        <input class="form-control" type="number" name="mxCntnPpl" id="mxCntnPpl" min="1" value="2">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="nWS">Number of water dispensing stations, coffee machines, vending machines</label>
+                                                       <label for="nWS">Number of water dispensing stations or water points, coffee machines, vending machines</label>
                                                        <input class="form-control" type="number" name="nWS" id="nWS" min="0" value="2">
                                                   </div>
                                              </div>
@@ -1274,6 +1298,17 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="spPrsnt_1">Yes</label>
                                                        </div>
                                                   </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="noHT_flag">In toilets, do you follow a no handtowel policy?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="noHT" id="noHT_0" value="0">
+                                                       <label class="form-check-label" for="noHT_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="noHT" id="noHT_1" value="1" checked>
+                                                       <label class="form-check-label" for="noHT_1">Yes</label>
+                                                       </div>
+                                                  </div>
                                                   <p class="h5 sh5">House-keeping of premises</p>
                                                   <div class="form-group col-md-12">
                                                     <label for="freqCln">Number of times house-keeping staff clean the <b>entire premises</b> in a day (including temporary accommodation given to the workers)</label>
@@ -1312,7 +1347,30 @@ SPDX-License-Identifier: Apache-2.0-->
                                              </div>
                                         </div>
                                    </div>
-                              </div>                              
+                              </div> 
+                              
+                              <p style="margin-bottom:0.1cm;"></p>
+                              <div class="card"> 
+                                   <div class="card-header" id="headingOne">
+                                        <h2 class="mb-0">
+                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseEleven">11. Company Contact Imformation</button>									
+                                        </h2>
+                                   </div>
+                                   <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                             <div class="form-row">
+                                                  <div class="form-group col-md-12">
+                                                       <label for="cmpName">Company Name:</label>
+                                                       <input type="text" class="form-control" name="cmpName" id="cmpName" minlength="4" maxlength="60" placeholder="Company Name">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="emailAddr">Email Address:</label>
+                                                       <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4"  maxlength="60" placeholder="Email Address">
+                                                  </div>
+                                             </div>
+                                        </div>
+                                   </div>
+                              </div>  
                          </div>
                          <p style="margin-bottom:0.5cm;"> </p>
                          <button type="submit" class="sub-btn btn-primary btn-block">Submit</button>
@@ -1334,8 +1392,8 @@ SPDX-License-Identifier: Apache-2.0-->
                          <div id="scoreTable"></div>
                          <br><br>
                          <p>
-                         <button type="submit" class="sub-btn btn-primary btn-block" onclick="reEnter()">Revise inputs and recalculate</button>
-                         <button type="submit" class="prnt-btn btn-primary btn-block" onclick="printPage()">Print report</button>
+                         <button type="submit" id="reCalcBtn" class="sub-btn btn-primary btn-block" onclick="reEnter()">Enter inputs and calculate</button>
+                         <button type="submit" class="prnt-btn btn-primary btn-block" style="display: none" onclick="printPage()">Print report</button>
                          </p>
 
                          <p><br>General suggestions:<br>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf">WHO guidelines</a> are given below.</p>
@@ -1453,97 +1511,10 @@ SPDX-License-Identifier: Apache-2.0-->
           </div>
         </div>
       </section>
-
-     <script type="text/javascript" src="javascript/scripts.js"></script>
-     <script src="javascript/jquery-3.5.1.min.js"></script>
+     
+     <script type="text/javascript" src="javascript/scores.js"></script>
      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-     <script>
-          $(document).ready(function(){
-               // Alert user only in portrait mode on mobile browser...
-               if(window.innerHeight > window.innerWidth){ 
-                    alert("Please use this website in landscape mode for better experience or use a computer to fill the form.");
-               }
-
-               // Enable special questions for Manufacturing...
-               $("#NOE").on("input", function() {
-                    var selected_value = $("#NOE").val();
-                    if (selected_value==5){
-                         $("#mnfctHead").show();
-                         $("#mnfctQstns").show();
-                         $("#mnfctHead_epi").show();
-                         $("#mnfctQstns_epi").show();
-                    } else {
-                         $("#mnfctHead").hide();
-                         $("#mnfctQstns").hide();
-                         $("#mnfctHead_epi").hide();
-                         $("#mnfctQstns_epi").hide();
-                    }
-               });
-
-               // Dynamic gender table for shifts...
-               $("#nShifts").on("input", function() {
-                    var count_cal = $("#nShifts").val();
-                    $("#shiftsTable tbody").remove();
-                    var markup = "<tbody> </tbody>";
-                    $("#shiftsTable").append(markup);
-                    count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
-                    $("#nShifts").val(count_cal);
-                    for (i = 0; i < count_cal; i++) {
-                         console.log(i);
-                         markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
-                         $("#shiftsTable tbody").append(markup);
-                    }
-               });
-
-               // If elevator flag = false, disable elevetor capacity input.
-               $("#nEle").on("input", function() {
-                    var elevator_counts = $("#nEle").val();
-                    if (elevator_counts==0){
-                         $("#eleCpct").val(0);
-                         $('#eleCpct').prop("readonly", true);
-                    }
-                    else{
-                         $("#eleCpct").val(8);
-                         $('#eleCpct').prop("readonly", false);
-                    }
-               });
-
-               // If canteen flag = false, disable breakfast, lunch and coffee/snacks inputs.
-               $('input[name=cntn]').on("change", function() {
-                    var selected_value = $("input[name='cntn']:checked").val();
-                    console.log(selected_value);
-                    if (selected_value==0) {
-                         $("#nBrkfst").val(0);
-                         $("#nLnch").val(0);
-                         $("#nSnck").val(0);
-                         $("#dBrkfst").val(0);
-                         $("#dLnch").val(0);
-                         $("#dSnck").val(0);
-                         $("#nBrkfst").prop("readonly", true);
-                         $("#nLnch").prop("readonly", true);
-                         $("#dSnck").prop("readonly", true);
-                         $("#dBrkfst").prop("readonly", true);
-                         $("#dLnch").prop("readonly", true);
-                         $("#dSnck").prop("readonly", true);
-                    }
-                    else {
-                         $("#nBrkfst").val(20);
-                         $("#nLnch").val(25);
-                         $("#nSnck").val(15);
-                         $("#dBrkfst").val(60);
-                         $("#dLnch").val(90);
-                         $("#dSnck").val(60);
-                         $("#nBrkfst").prop("readonly", false);
-                         $("#nLnch").prop("readonly", false);
-                         $("#dSnck").prop("readonly", false);
-                         $("#dBrkfst").prop("readonly", false);
-                         $("#dLnch").prop("readonly", false);
-                         $("#dSnck").prop("readonly", false);
-                    }
-               });
-          }); 
-     </script>
   </body>
 </html>
 

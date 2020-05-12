@@ -144,7 +144,7 @@ function getValues(){
   dict["nMPD"] = parseFloat(document.getElementById("nMPD").value); // Meetings per day
   dict["avgMS"] = parseFloat(document.getElementById("avgMS").value); // Average number of members in the meeting
   
-  // Cafeteria/Pantry
+  // Canteen/Pantry
   dict["extFSP"] = parseInt(document.querySelector('input[name="extFSP"]:checked').value); // External food vendor
   dict["cntn"] = parseInt(document.querySelector('input[name="cntn"]:checked').value); // Canteen/pantry
   dict["cntnACOp"] = parseInt(document.querySelector('input[name="cntnACOp"]:checked').value); // Canteen/pantry air condition operational
@@ -440,7 +440,7 @@ function calcScore () {
     sg_isolation = "Well done!";
   }
 
-  // Cafeteria/Pantry
+  // Canteen/Pantry
   var time_brkfst = 15; // In minutes
   var time_lnch = 30;
   var time_snck = 15;
@@ -487,11 +487,11 @@ function calcScore () {
   var sg_cafeteria = "";
   give_suggestion =(score_cafeteria_scaled!=100);
   if ((!inputs["cntnArea"]>0 || !inputs["cntn"]) && nEmp>0){
-    sg_cafeteria = "No cafeteria/pantry/kitchen area are not functional. <br>Score is based on interaction during the following activities: <br>Using water dispenser, having lunch from outside and lunch brought from home.";
+    sg_cafeteria = "Canteen/pantry/kitchen area are not functional. <br>Score is based on interaction during the following activities: <br>Using water dispenser, having lunch from outside and lunch brought from home.";
   } else if (nEmp==0){
     sg_cafeteria = "You have entered the total number of employees in a shift to be zero. This is invalid.";
   } else if (score_cafeteria_scaled<70 && give_suggestion){
-    sg_cafeteria = "You have overcrowding in your cafeteria/pantry. <br>Consider staggered cafeteria/pantry timings. <br>Encourage employees to work from home.";
+    sg_cafeteria = "You have overcrowding in your canteen/pantry. <br>Consider staggered canteen/pantry timings. <br>Encourage employees to work from home.";
   } else if (nOutside/nEmp > 0.5 && score_cafeteria_scaled<60 && give_suggestion){
     sg_cafeteria = "You have too many outside contacts during lunch time. Encourage employees to bring lunch from home or provide lunch on premises."
   } else if (score_cafeteria > 90) {
@@ -793,7 +793,7 @@ function calcScore () {
   resTable += "<tr><td>Employee interactions: Mobility</td><td class='scoreCol' bgcolor=" + scoreColor(score_mobility) + ">" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
   resTable += "<tr><td>Employee interactions: Meetings</td><td class='scoreCol' bgcolor=" + scoreColor(score_meetings) + ">" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
   resTable += "<tr><td>Employee interactions: Outside contacts</td><td class='scoreCol' bgcolor=" + scoreColor(score_outside) + ">" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
-  resTable += "<tr><td>Cafeteria/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
+  resTable += "<tr><td>Canteen/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
 	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
@@ -812,7 +812,7 @@ function calcScore () {
   outputs["Employee interactions: Mobility"] = score_mobility;
   outputs["Employee interactions: Meetings"] = score_meetings;
   outputs["Employee interactions: Outside contacts"] = score_outside;
-  outputs["Cafeteria/pantry"] = score_cafeteria_scaled;
+  outputs["Canteen/pantry"] = score_cafeteria_scaled;
   outputs["Hygiene and sanitation"] = score_sanitation;
   outputs["Total"] = score_total;
  
@@ -825,11 +825,12 @@ function calcScore () {
   suggestions["Employee interactions: Mobility"] = sg_mobility;
   suggestions["Employee interactions: Meetings"] = sg_meetings;
   suggestions["Employee interactions: Outside contacts"] = sg_outside;
-  suggestions["Cafeteria/pantry"] = sg_cafeteria;
+  suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
   log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs, "suggestions": suggestions});
-  post_function(log_json);
+  window['logData'] = log_json;
+  //post_function(log_json);
 }
 
 function post_function(log_json)
@@ -841,7 +842,6 @@ function post_function(log_json)
     data: "data="+log_json
   });
 }
-
 
 function openPage(pageName, elmnt, color) {
   // Hide all elements with class="tabcontent" by default */
@@ -874,7 +874,7 @@ function handleFormSubmit(formObject) {
   calcScore();
   openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
   $("#reCalcBtn").html("Revise inputs and recalculate");
-  $(".prnt-btn").show()
+  $("#noPrint").show()
   $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
@@ -883,11 +883,17 @@ function reEnter() {
   $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
+function submitForm() {
+  calcScore();
+  post_function(window["logData"]);
+}
+
 function printPage(){
+  calcScore();
   $("#header").hide()
   $(".tablink").hide()
   $(".sub-btn").hide()
-  $(".prnt-btn").hide()
+  $("#noPrint").hide()
   $("#footer").hide()
   $(".tabcontent").css('color','black');
   $("#Scores").css('background-color','white');
@@ -896,7 +902,7 @@ function printPage(){
   $("#header").show()
   $(".tablink").show()
   $(".sub-btn").show()
-  $(".prnt-btn").show()
+  $("#noPrint").show()
   $("#footer").show()
   $(".tabcontent").css('color','white');
   $("#Scores").css('background-color','#774c60');

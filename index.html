@@ -1401,10 +1401,11 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label for="cmpName">Company Name:</label>
                                                        <input type="text" class="form-control" name="cmpName" id="cmpName" minlength="4" maxlength="60" placeholder="Company Name">
                                                   </div>
+                                                  <!--
                                                   <div class="form-group col-md-12">
                                                        <label for="emailAddr">Email Address:</label>
                                                        <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4"  maxlength="60" placeholder="Email Address">
-                                                  </div>
+                                                  </div>  -->
                                              </div>
                                         </div>
                                    </div>
@@ -1427,12 +1428,25 @@ SPDX-License-Identifier: Apache-2.0-->
              </em></p>
               <div class="row">
                     <div class="w-100">
-                         <div id="scoreTable"></div>
-                         <br><br>
-                         <p>
-                         <button type="submit" id="reCalcBtn" class="sub-btn btn-primary btn-block" onclick="reEnter()">Enter inputs and calculate</button>
-                         <button type="submit" class="prnt-btn btn-primary btn-block" style="display: none" onclick="printPage()">Print report</button>
-                         </p>
+                      <div id="scoreTable"></div>
+                      <br><br>
+                      <p>
+                      <button type="submit" id="reCalcBtn" class="sub-btn btn-primary btn-block" onclick="reEnter()">Enter inputs and calculate</button>
+                      <div id="noPrint" style="display: none">
+                        <button type="submit" class="prnt-btn btn-primary btn-block"" onclick="printPage()">Print report</button>
+                        </p>
+                        If you would like to save the entered data, click the "Save and submit form" button below. The saved data will be stored securely
+                        and will be used solely for the purpose of calibrating and improving the Workplace Readiness Calculator.
+                        In addition, if you provide a valid email address below, you will receive a unique link (over email) to retrieve the submitted form to enable
+                        you to resume your data entry or update the questionnaire inputs at a later date.
+                        <br><br>
+                        <div class="col-md-8">
+                          <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4" maxlength="60" placeholder="Email Address">
+                        </div>
+                        <br>
+                        <button type="submit" class="sub-btn btn-primary btn-block" onclick="submitForm()">Save and submit form</button>
+                        <br>
+                      </div>
 
                          <h4>General suggestions</h4>
                          <p>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</p>

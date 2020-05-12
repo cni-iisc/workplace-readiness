@@ -220,7 +220,7 @@ function getValues(){
 
   // Company contact information
   dict["cmpName"] = document.getElementById("cmpName").value; // Company Name
-  dict["emailAddr"] = document.getElementById("emailAddr").value; // Company Address
+  dict["emailAddr"] = document.getElementById("emailAddr").value; // Company Email
 
   return dict;
 }
@@ -886,6 +886,13 @@ function reEnter() {
 function submitForm() {
   calcScore();
   post_function(window["logData"]);
+  //console.log((window["logData"]).inputs)
+  var alertMsg = "Thank you for submitting the data. "
+  var email = document.getElementById("emailAddr").value;
+  if (email) {
+    alertMsg += "You will receive an email with a link to your submitted form data at " + email;
+  }
+  window.alert(alertMsg);
 }
 
 function printPage(){

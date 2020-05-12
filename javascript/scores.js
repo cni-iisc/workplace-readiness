@@ -789,15 +789,27 @@ function calcScore () {
   outputs["Epidemic related: Precautions"] = score_epidemic;
   outputs["Epidemic related: Awareness and readiness"] = score_isolation;
   outputs["Epidemic related: Advertisement and outreach"] = score_adv_outrch;
+  outputs["Transportation"] = score_total_transport_scaled;
   outputs["Employee interactions: Mobility"] = score_mobility;
   outputs["Employee interactions: Meetings"] = score_meetings;
   outputs["Employee interactions: Outside contacts"] = score_outside;
   outputs["Cafeteria/pantry"] = score_cafeteria_scaled;
   outputs["Hygiene and sanitation"] = score_sanitation;
-  outputs["Transportation"] = score_total_transport_scaled;
   outputs["Total"] = score_total;
-  
-  log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs});
+ 
+  var suggestions = new Object();
+  suggestions["Infrastructure"] = sg_office_infra;
+  suggestions["Epidemic related: Precautions"] = sg_epidemic;
+  suggestions["Epidemic related: Awareness and readiness"] = sg_isolation;
+  suggestions["Epidemic related: Advertisement and outreach"] = sg_adv_outrch;
+  suggestions["Transportation"] = sg_transport;
+  suggestions["Employee interactions: Mobility"] = sg_mobility;
+  suggestions["Employee interactions: Meetings"] = sg_meetings;
+  suggestions["Employee interactions: Outside contacts"] = sg_outside;
+  suggestions["Cafeteria/pantry"] = sg_cafeteria;
+  suggestions["Hygiene and sanitation"] = sg_sanitation;
+
+  log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs, "suggestions": suggestions});
   post_function(log_json);
 }
 

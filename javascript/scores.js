@@ -888,10 +888,11 @@ function submitForm() {
   post_function(window["logData"]);
   //console.log((window["logData"]).inputs)
   var alertMsg = "Thank you for submitting the data. "
+  /* Disable until we get email sending working
   var email = document.getElementById("emailAddr").value;
   if (email) {
     alertMsg += "You will receive an email with a link to your submitted form data at " + email;
-  }
+  } */
   window.alert(alertMsg);
 }
 

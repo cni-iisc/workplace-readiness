@@ -151,6 +151,7 @@ a:link, .nav a, .nav a:visited {
   background-color: #0086b3;
   border: none;
   border-radius: 10px;
+  text-align: center;
 }
 
 .card-header {

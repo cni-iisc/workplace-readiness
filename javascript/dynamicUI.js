@@ -52,17 +52,23 @@ $(document).ready(function(){
 
     // Dynamic gender table for shifts...
     $("#nShifts").on("input", function() {
-         var count_cal = parseInt($("#nShifts").val());
-         $("#shiftsTable tbody").remove();
-         var markup = "<tbody> </tbody>";
-         $("#shiftsTable").append(markup);
-         count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
-         $("#nShifts").val(count_cal);
-         for (i = 0; i < count_cal; i++) {
-              console.log(i);
-              markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
-              $("#shiftsTable tbody").append(markup);
-         }
+         var count_cal = $("#nShifts").val();
+         if (count_cal>0){
+                $("#shiftsTable tbody").remove();
+                $(".nShifts_info").show();
+                var markup = "<tbody> </tbody>";
+                $("#shiftsTable").append(markup);
+                count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
+                $("#nShifts").val(count_cal);
+                for (i = 0; i < count_cal; i++) {
+                    console.log(i);
+                    markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
+                    $("#shiftsTable tbody").append(markup);
+                }
+            } else {
+            $("#shiftsTable tbody").remove();
+            $(".nShifts_info").hide();
+        }
     });
 
     // If elevator flag = false, disable elevetor capacity input.

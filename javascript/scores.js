@@ -54,6 +54,7 @@ function getValues(){
   dict["tArea"] = parseInt(document.getElementById("tArea").value); // Total office area in sq.ft
   dict["nFloors"] = parseInt(document.getElementById("nFloors").value); // Number of floors in office
   dict["opnCubArea"] = parseInt(document.getElementById("opnCubArea").value); // Total open cubicle area in sq.ft
+  dict["strsArea"] = parseInt(document.getElementById("strsArea").value); // Total stores area in sq.ft // Not used in the calculations
   dict["mntrCCTV"] = parseInt(document.querySelector('input[name="mntrCCTV"]:checked').value); // CCTV monitoring
   dict["acsCntrl"] = parseInt(document.querySelector('input[name="acsCntrl"]:checked').value); // Access controlled // Not used in calculations
   dict["ntrlSlAr"] = parseInt(document.querySelector('input[name="ntrlSlAr"]:checked').value); // Access to natural sun light and fresh air
@@ -91,6 +92,8 @@ function getValues(){
   dict["adqFaceCover"] = parseInt(document.querySelector('input[name="adqFaceCover"]:checked').value); // Adequate Facecover quantity
   dict["newShfts"] = parseInt(document.querySelector('input[name="newShfts"]:checked').value); // New shifts/staggered work timings
   dict["advAvdLPM"] = parseInt(document.querySelector('input[name="advAvdLPM"]:checked').value); // Avoid large physical meetings
+  dict["vrtlMtng"] = parseInt(document.querySelector('input[name="vrtlMtng"]:checked').value); // Virtual meeting arrangements
+  dict["brrrs"] = parseInt(document.querySelector('input[name="brrrs"]:checked').value); // Barriers in place
   dict["encrgStrws"] = parseInt(document.querySelector('input[name="encrgStrws"]:checked').value); // Encourage to use stairways
   dict["nHsS"] = parseInt(document.getElementById("nHsS").value); // Number of hand-sanitiser stations
   dict["tchFree"] = parseInt(document.querySelector('input[name="tchFree"]:checked').value); // Hand sanitisers touch free
@@ -121,6 +124,7 @@ function getValues(){
   dict["advSclDis"] = parseInt(document.querySelector('input[name="advSclDis"]:checked').value); // Advised social distancing
   dict["advWFHVul"] = parseInt(document.querySelector('input[name="advWFHVul"]:checked').value); // Advised work from home to elderly and women
   dict["snzCvr"] = parseInt(document.querySelector('input[name="snzCvr"]:checked').value); // Advised to cover sneeze
+  dict["advNoHS"] = parseInt(document.querySelector('input[name="advNoHS"]:checked').value); // Advised not to shake hands
   dict["hkTrn"] = parseInt(document.querySelector('input[name="hkTrn"]:checked').value); // House-keeping staff training
   dict["sPrgm"] = parseInt(document.querySelector('input[name="sPrgm"]:checked').value); // Special program on COVID-19
   dict["pstrs"] = parseInt(document.querySelector('input[name="pstrs"]:checked').value); // Prosters on hygiene and social distancing
@@ -235,7 +239,7 @@ function clipAndRound_bounds (score) {
 function scoreColor (score) {
   var color = "";
   if (score < 50) { color = "#d62828"; }
-  else if (score >= 70) { color = "#2e933c"; }
+  else if (score >= 85) { color = "#2e933c"; }
   else { color = "#fcbf49"; }
   return color;
 }
@@ -567,9 +571,9 @@ function calcScore () {
   }
 
   var score_epidemic = 0;
-  score_epidemic = (1000/15)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
+  score_epidemic = (1000/17)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
                         (inputs["tchFree"]? 1:0.5)*((inputs["nHsS"] > (inputs["tArea"]/1000)) ? 1 : 0) + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] +
-                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1)) + meets_shift_requirement + 
+                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1)) + meets_shift_requirement + inputs["vrtlMtng"] + inputs["brrrs"] +
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0)) + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
 
   score_epidemic = clipAndRound_bounds(score_epidemic);
@@ -631,12 +635,22 @@ function calcScore () {
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
     sg_epidemic += "Consider avoiding large physical meetings.";
   }
+  if (!inputs["vrtlMtng"] && count <number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
+    sg_epidemic += "Make arrangements to have virtual meetings.";
+  }
+  if (!inputs["brrrs"] && count <number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
+    sg_epidemic += "Put barriers in place between open working spaces.";
+  }
   if (sg_epidemic=="" && score_epidemic>90){
     sg_epidemic = "Well done!";
   }
 
   // Advertisement and outreach
-  var score_adv_outrch = 100*(inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0));
+  var score_adv_outrch = (1000/11)*(inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + inputs["advNoHS"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0));
   score_adv_outrch = clipAndRound_bounds(score_adv_outrch);
 
   var sg_adv_outrch = "";
@@ -685,6 +699,11 @@ function calcScore () {
     count += 1;
     sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
     sg_adv_outrch += "Put up posters on hygiene in common places.";
+  }
+  if (!inputs["advNoHS"] && count<number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
+    sg_adv_outrch += "Advise employees not to shake hands.";
   }
   if (!(inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0) && count<number_of_suggestions && give_suggestion){
     count += 1;
@@ -856,10 +875,12 @@ function handleFormSubmit(formObject) {
   openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
   $("#reCalcBtn").html("Revise inputs and recalculate");
   $(".prnt-btn").show()
+  $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
 function reEnter() {
 	openPage('Qn', document.getElementById("QnTab"), '#2c4268')
+  $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
 function printPage(){

@@ -191,8 +191,12 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <input class="form-control" type="number" name="nFloors" id="nFloors" min="1" value="2">
                                                   </div>
                                                   <div class="form-group col-md-12">
-                                                       <label for="opnCubArea">Total approximate area of cubicle / open desk or working space (sq. ft) (operated by your company across all buildings in this premises)</label>
+                                                       <label for="opnCubArea">Total approximate area of cubicle / open desk or working space including shop floor area (sq. ft) (operated by your company across all buildings in this premises)</label>
                                                        <input class="form-control" type="number" name="opnCubArea" id="opnCubArea" min="0" value="2000">
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="strsArea">Total stores area (sq. ft) (operated by your company across all buildings in this premises)</label>
+                                                       <input class="form-control" type="number" name="strsArea" id="strsArea" min="0" value="100">
                                                   </div>
                                              </div>
 
@@ -504,6 +508,28 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   </div>
                                              </div>
                                              <div class="form-group col-md-12">
+                                                  <label for="vrtlMtng_flag">Have arrangements been made for virtual meetings (to reducce physical meetings)?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="vrtlMtng" id="vrtlMtng_0" value="0">
+                                                  <label class="form-check-label" for="vrtlMtng_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="vrtlMtng" id="vrtlMtng_1" value="1" checked>
+                                                  <label class="form-check-label" for="vrtlMtng_1">Yes</label>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="brrrs_flag">Have sufficient barriers been put in place between open working spaces (e.g. open working space could be made into cubicles, cubicle working spaces could have barriers lifted)?</label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="brrrs" id="brrrs_0" value="0">
+                                                  <label class="form-check-label" for="brrrs_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="brrrs" id="brrrs_1" value="1" checked>
+                                                  <label class="form-check-label" for="brrrs_1">Yes</label>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group col-md-12">
                                                   <label for="encrgStrws_flag">Have employees been encouraged to take stairways?</label>
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="encrgStrws" id="encrgStrws_0" value="0">
@@ -545,7 +571,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <input class="form-control" type="number" name="nPGT" id="nPGT" min="0" value="0">
                                              </div>
                                              <div class="form-group col-md-12">
-                                                  <label for="nWsB">Number of warning sign boards in common areas indicating "No spitting"</label>
+                                                  <label for="nWsB">Number of warning sign boards in common areas indicating "No spitting" and displaying fines for violation</label>
                                                   <input class="form-control" type="number" name="nWsB" id="nWsB" min="0" value="5">
                                              </div>
                                              <div class="form-group col-md-12">
@@ -593,7 +619,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                         <div class="card-body">
                                              <p class="h5 sh5 mb-2 text-left">If an employee gets sick at work</p>
                                              <div class="form-group col-md-12">
-                                                  <label for="hl_flag">Is there a company helpline?</label>
+                                                  <label for="hl_flag">Is there a company medical helpline?</label>
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="hl" id="hl_0" value="0">
                                                   <label class="form-check-label" for="hl_0">No</label>
@@ -741,6 +767,17 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="snzCvr" id="snzCvr_1" value="1" checked>
                                                        <label class="form-check-label" for="snzCvr_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-12">
+                                                       <label for="advNoHS_flag">Have employees been advised not to shake hands?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="advNoHS" id="advNoHS_0" value="0">
+                                                       <label class="form-check-label" for="advNoHS_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="advNoHS" id="advNoHS_1" value="1" checked>
+                                                       <label class="form-check-label" for="advNoHS_1">Yes</label>
                                                        </div>
                                                   </div>
                                                   <div class="form-group col-md-12">
@@ -1397,7 +1434,8 @@ SPDX-License-Identifier: Apache-2.0-->
                          <button type="submit" class="prnt-btn btn-primary btn-block" style="display: none" onclick="printPage()">Print report</button>
                          </p>
 
-                         <p><br>General suggestions:<br>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</p>
+                         <h4>General suggestions</h4>
+                         <p>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</p>
                          <ol>
                               <li>Make sure your workplaces are clean and hygienic. Wipe surfaces (desks and tables) and objects (telephones, keyboards) regularly with disinfectant.</li>
                               <li>Promote regular and thorough hand-washing by employees, contractors and customers.</li>
@@ -1410,6 +1448,10 @@ SPDX-License-Identifier: Apache-2.0-->
                               <li>Develop a contingency and business continuity plan for an outbreak where your business operates.</li>
                               <li>Develop partnerships and plans with your local health providers in advance of any emergency.</li>
                          </ol>
+                    </div>
+
+                    <div class="w-100">
+                         <p class="row pt-4" id="includedContent"></p>
                     </div>
               </div>
           </div>

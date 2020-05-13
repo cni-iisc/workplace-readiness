@@ -34,6 +34,14 @@ $(document).ready(function(){
         $("#includedContent").load("GoK_guidelines.html"); 
     });
     
+    // Accordion scroll to the starting of card
+    $('.collapse').on('shown.bs.collapse', function(e) {
+        var $card = $(this).closest('.card');
+        $('html,body').animate({
+          scrollTop: $card.offset().top-125
+        }, 500);
+    });  
+
     // Alert user only in portrait mode on mobile browser...
     if(window.innerHeight > window.innerWidth){ 
          alert("Please use this website in landscape mode for better experience or use a computer to fill the form.");

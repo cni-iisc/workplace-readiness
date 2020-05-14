@@ -475,7 +475,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <label for="tempScreening_flag">Is temperature screening done for every employee at entry and exit?</label>
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="tempScreening" id="tempScreening_0" value="0" checked>
-                                                  <label class="form-check-label" for="temp_screening_0">No</label>
+                                                  <label class="form-check-label" for="tempScreening_0">No</label>
                                                   </div>
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="tempScreening" id="tempScreening_1" value="1">
@@ -513,6 +513,18 @@ SPDX-License-Identifier: Apache-2.0-->
                                                   <div class="form-check">
                                                   <input class="form-check-input" type="radio" name="newShfts" id="newShfts_1" value="1" checked>
                                                   <label class="form-check-label" for="newShfts_1">Yes</label>
+                                                  </div>
+                                             </div>
+                                             <div class="form-group col-md-12">
+                                                  <label for="dclrtn_flag">Are employees required to sign a register or sign a declaration form at entrance asserting that they have no symptoms?
+                                                  </label>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="dclrtn" id="dclrtn_0" value="0">
+                                                  <label class="form-check-label" for="dclrtn_0">No</label>
+                                                  </div>
+                                                  <div class="form-check">
+                                                  <input class="form-check-input" type="radio" name="dclrtn" id="dclrtn_1" value="1" checked>
+                                                  <label class="form-check-label" for="dclrtn_1">Yes</label>
                                                   </div>
                                              </div>
                                              <div class="form-group col-md-12">
@@ -748,8 +760,8 @@ SPDX-License-Identifier: Apache-2.0-->
                                              <div class="form-row">
                                                   <div class="form-group col-md-12">
                                                        <label for="sPers_flag">Is there a designated <b>champion</b> for hygiene, epidemic awareness, and safety? 
-                                                         (This person is responsible for creating awareness about preventive measures and communicate directives issued 
-                                                         by the Ministry of Health and Family Welfare from time to time)</label>
+                                                         (This person is responsible for creating awareness about preventive measures, communicating directives issued 
+                                                         by, and liasing with the Ministry of Health and Family Welfare from time to time)</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="sPers" id="sPers_0" value="0">
                                                        <label class="form-check-label" for="sPers_0">No</label>
@@ -993,7 +1005,19 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </tbody>
                                                   </table>
 
-                                                  <div class="form-group col-md-6 pt-4">
+                                                  <div class="form-group col-md-12 pt-4">
+                                                       <label for="tempScreeningVhcl_flag">Are passengers temperature screened before they enter the vehicle?
+                                                       </label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="tempScreeningVhcl" id="tempScreeningVhcl_0" value="0" checked>
+                                                       <label class="form-check-label" for="tempScreeningVhcl_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="tempScreeningVhcl" id="tempScreeningVhcl_1" value="1">
+                                                       <label class="form-check-label" for="tempScreeningVhcl_1">Yes</label>
+                                                       </div>
+                                                  </div>
+                                                  <div class="form-group col-md-6">
                                                        <label for="mskMndt_flag">Are face covers mandated in every vehicle?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="mskMndt" id="mskMndt_0" value="0">
@@ -1004,7 +1028,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="mskMndt_1">Yes</label>
                                                        </div>
                                                   </div>
-                                                  <div class="form-group col-md-6 pt-4">
+                                                  <div class="form-group col-md-6">
                                                        <label for="hsVhcl_flag">Hand sanitiser provided in every vehicle?</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="hsVhcl" id="hsVhcl_0" value="0" checked>
@@ -1241,8 +1265,14 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="extFSP_1">Yes</label>
                                                        </div>
                                                   </div>
+
                                                   <div class="form-group col-md-12">
-                                                       <label for="cntn_flag">Will canteen or pantry / kitchen or both be functional? Choose 'Yes' even if the seating area is being used only for having food brought from home / tiffin provider / own caterer</label>
+                                                       <label for="nEmpHL">Number of people that bring food from home / tiffin provider / own caterer</label>
+                                                       <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
+                                                  </div>
+                                                  
+                                                  <div class="form-group col-md-12">
+                                                       <label for="cntn_flag">Will food be served in canteen or pantry / kitchen?
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="cntn" id="cntn_0" value="0">
                                                        <label class="form-check-label" for="cntn_0">No</label>
@@ -1252,6 +1282,19 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label class="form-check-label" for="cntn_1">Yes</label>
                                                        </div>
                                                   </div>
+
+                                                  <div class="form-group col-md-12" id="seatingFood_dspl" style="display:none">
+                                                       <label for="seatingFood_flag">If the answer to the above is no, is there a seating area for having food brought from home / tiffin provider / own caterer?</label>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="seatingFood" id="seatingFood_0" value="0" checked>
+                                                       <label class="form-check-label" for="seatingFood_0">No</label>
+                                                       </div>
+                                                       <div class="form-check">
+                                                       <input class="form-check-input" type="radio" name="seatingFood" id="seatingFood_1" value="1" >
+                                                       <label class="form-check-label" for="seatingFood_1">Yes</label>
+                                                       </div>
+                                                  </div>
+
                                                   <div class="form-group col-md-12">
                                                        <label for="cntnACOp_flag">Will air-conditioner be operational in the canteen / pantry / kitchen? Select 'No' if there is no air-conditioner.</label>
                                                        <div class="form-check">
@@ -1264,11 +1307,6 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </div>
                                                   </div>
 
-                                                  <div class="form-group col-md-12">
-                                                       <label for="nEmpHL">Number of people that bring food from home / tiffin provider / own caterer</label>
-                                                       <input class="form-control" type="number" name="nEmpHL" id="nEmpHL" min="0" value="2">
-                                                  </div>
-                                                  
                                                   <p>Number of people taking meals in the canteen. The calculator will assume others step outside the premises for lunch.</p>
                                                   <table style="width: 100%;">
                                                        <thead>
@@ -1410,11 +1448,11 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        <label for="typeDisinfect">Type of disinfection activity</label>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_0" value="0" checked>
-                                                       <label class="form-check-label" for="typeDisinfect_0">Wiping floors and all human contact surfaces with a chemical disinfectant</label>
+                                                       <label class="form-check-label" for="typeDisinfect_0">Wiping floors and all human contact surfaces with a chemical disinfectant (e.g., 1% sodium hypochlorite solution)</label>
                                                        </div>
                                                        <div class="form-check">
                                                        <input class="form-check-input" type="radio" name="typeDisinfect" id="typeDisinfect_1" value="1">
-                                                       <label class="form-check-label" for="typeDisinfect_1">Spraying entire premises with a chemical disinfectant</label>
+                                                       <label class="form-check-label" for="typeDisinfect_1">Spraying entire premises with a chemical disinfectant (e.g., 1% sodium hypochlorite solution)</label>
                                                        </div>
                                                   </div>
                                              </div>
@@ -1479,10 +1517,12 @@ SPDX-License-Identifier: Apache-2.0-->
                         <br>
                       </div>
 
-	                    <p><em>Disclaimer: This is a work in progress. We are working on tuning the score calculations and to add additional
-                        organisation types under the indicator.<br><br>
+	                    <p><em>Disclaimer: This is a work in progress. We are working on tuning the score calculations and adding additional
+                        organisation types.<br><br>
                              </em></p>
                          <h4>General suggestions</h4>
+                         <p>Standard Operating Procedure for industrial, commercial establishments and private offices during COVID-19
+                         suggested by Government of Karnataka can be found <a style="text-decoration: underline;" target="-blank" href="GoK_guidelines.html">here</a>.
                          <p>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</p>
                          <ol>
                               <li>Make sure your workplaces are clean and hygienic. Wipe surfaces (desks and tables) and objects (telephones, keyboards) regularly with disinfectant.</li>
@@ -1498,9 +1538,10 @@ SPDX-License-Identifier: Apache-2.0-->
                          </ol>
                     </div>
 
+                    <!--
                     <div class="w-100">
                          <p class="row pt-4" id="includedContent"></p>
-                    </div>
+                    </div> -->
               </div>
           </div>
      </div>

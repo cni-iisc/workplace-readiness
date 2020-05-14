@@ -92,6 +92,7 @@ function getValues(){
   dict["faceCover"] = parseInt(document.querySelector('input[name="faceCover"]:checked').value); // Face is covered with mask
   dict["adqFaceCover"] = parseInt(document.querySelector('input[name="adqFaceCover"]:checked').value); // Adequate Facecover quantity
   dict["newShfts"] = parseInt(document.querySelector('input[name="newShfts"]:checked').value); // New shifts/staggered work timings
+  dict["dclrtn"] = parseInt(document.querySelector('input[name="dclrtn"]:checked').value); // No symptoms declaration  
   dict["advAvdLPM"] = parseInt(document.querySelector('input[name="advAvdLPM"]:checked').value); // Avoid large physical meetings
   dict["vrtlMtng"] = parseInt(document.querySelector('input[name="vrtlMtng"]:checked').value); // Virtual meeting arrangements
   dict["brrrs"] = parseInt(document.querySelector('input[name="brrrs"]:checked').value); // Barriers in place
@@ -149,6 +150,7 @@ function getValues(){
   // Canteen/Pantry
   dict["extFSP"] = parseInt(document.querySelector('input[name="extFSP"]:checked').value); // External food vendor
   dict["cntn"] = parseInt(document.querySelector('input[name="cntn"]:checked').value); // Canteen/pantry
+  dict["seatingFood"] = parseInt(document.querySelector('input[name="seatingFood"]:checked').value); // Seating area for food
   dict["cntnACOp"] = parseInt(document.querySelector('input[name="cntnACOp"]:checked').value); // Canteen/pantry air condition operational
   dict["nBrkfst"] = parseInt(document.getElementById("nBrkfst").value); // Number of employees having breakfast in canteen
   dict["nLnch"] = parseInt(document.getElementById("nLnch").value); // Number of employees having lunch in canteen
@@ -176,6 +178,7 @@ function getValues(){
   dict["typeDisinfect"] = parseInt(document.querySelector('input[name="typeDisinfect"]:checked').value); //  Type of disinfection activity
 
   // Company Provided Transport
+  dict["tempScreeningVhcl"] = parseInt(document.querySelector('input[name="tempScreeningVhcl"]:checked').value); // Temperature screening before journey
   dict["bsCpctAct"] = parseInt(document.getElementById("bsCpctAct").value); // Actual Bus capacity
   dict["bsCpctCur"] = parseInt(document.getElementById("bsCpctCur").value); // Current Bus capacity
   dict["mnBsCpctAct"] = parseInt(document.getElementById("mnBsCpctAct").value); // Actual Mini bus capacity 
@@ -236,6 +239,13 @@ function clipAndRound_bounds (score) {
     score_out = 100;
   }
   return score_out;
+}
+
+function clipto95 (score) {
+  if (score>95) {
+    score = 95;
+  }
+  return (score);
 }
 
 function scoreColor (score) {
@@ -303,6 +313,8 @@ function calcScore () {
   }
   var crowding = 2*inputs["n2pOfcRm"] * nMeets + 3*inputs["n2pPlusOfcRm"] * nMeets * 1.2 +
       (inputs["nCub"] + inputs["nRem"] * 1.2) * nMeets * cFactor;
+  //turn crowding into a per-employee crowding and then reduce it to account for shift occupancy
+  crowding = ( crowding / total_emp )* (nEmp/total_emp);
   var stairsElev = 0.5 * inputs["nFloors"] * (1 + inputs["eleCpct"]/2 * (1-0.1*inputs["advSclDis"]))/2 * 4 * Math.max( (1 - 0.1*Math.min( inputs["nStrCln"], inputs["nEleDinf"] )), 0.5);
   var bmFlag = ((inputs["baDoor"] >= 1) ? 1 : 0);
   var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"] + ((inputs["rfidDoor"]>0) ? 1 : 0) ) ) * bmFlag;
@@ -312,7 +324,7 @@ function calcScore () {
   var premisesContacts = 0;
   //TODO: FIXME: premisesContacts increases with decrease in nEmp! Should divide by total_emp instead?
   if (nEmp>0){
-    premisesContacts = ((accessContacts + stairsElev + crowding) / nEmp ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-mskWeight*inputs["msk"]);
+    premisesContacts = (accessContacts + stairsElev + crowding ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-mskWeight*inputs["msk"]);
     premisesContacts *= (1+0.1*ac_factor-0.1*non_ac_factor);
   }
   var nominal_office_infra_raw_score = 31;
@@ -484,9 +496,9 @@ function calcScore () {
   var mntg_snck = 0;
   var mntg_wtr = 0;
 
-  if (inputs["cntnArea"]>0 && inputs["cntn"]){
-    //FIXME: should not go below zero! This causes score_cafeteria to go below zero which gets clipped to 0!
-    nOutside = nEmp - inputs["nLnch"] - inputs["nEmpHL"]; 
+  if (inputs["cntnArea"]>0 && ( inputs["cntn"] || inputs["seatingFood"] )) {
+    //FIXME: the nOutside gets a disproportionate share of nEmp
+    nOutside = Math.max(0, nEmp - inputs["nLnch"] - inputs["nEmpHL"]); 
     mtng_brkfst = (Math.min(inputs["nBrkfst"], inputs["mxCntnPpl"]) * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
     mtng_lnch = (Math.min(inputs["nLnch"], inputs["mxCntnPpl"]) * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
     mntg_snck = (Math.min(inputs["nSnck"], inputs["mxCntnPpl"]) * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
@@ -494,7 +506,7 @@ function calcScore () {
       mntg_wtr = (nEmp * time_wtr * num_wtr_sought * prsnl_area) / (inputs["nWS"] * inputs["cntnArea"] * pvtl_hrs *  60);
     }
   } else {
-    nOutside = nEmp - inputs["nEmpHL"];
+    nOutside = Math.max(0, nEmp - inputs["nEmpHL"]);
     if (inputs["nWS"]>0){
       mntg_wtr = (nEmp * time_wtr * num_wtr_sought * prsnl_area) / (inputs["nWS"] * 144 * pvtl_hrs *  60);
     }
@@ -512,8 +524,8 @@ function calcScore () {
   var score_cafeteria_scaled = clipAndRound_bounds(score_cafeteria_scaled);
   var sg_cafeteria = "";
   give_suggestion =(score_cafeteria_scaled!=100);
-  if ((!inputs["cntnArea"]>0 || !inputs["cntn"]) && nEmp>0){
-    sg_cafeteria = "Canteen/pantry/kitchen area are not functional. <br>Score is based on interaction during the following activities: <br>Using water dispenser, having lunch from outside and lunch brought from home.";
+  if ((!inputs["cntnArea"]>0 || !( inputs["cntn"] || inputs["seatingFood"] )) && nEmp>0){
+    sg_cafeteria = "Canteen/pantry/kitchen seating area are not being used for food/beverages consumption. <br>Score is based on interaction during the following activities: <br>Using water dispenser, having lunch from outside and lunch brought from home.";
   } else if (nEmp==0){
     sg_cafeteria = "You have entered the total number of employees in a shift to be zero. This is invalid.";
   } else if (score_cafeteria_scaled<70 && give_suggestion){
@@ -602,8 +614,8 @@ function calcScore () {
   var empPerHS = 15;
   var adequateHS = ((inputs["nHsS"] > (inputs["tArea"]/1000)) && (inputs["nHsS"] > nEmp/empPerHS) ) ? 1 : 0
   var score_epidemic = 0;
-  score_epidemic = (1000/17)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
-                        (inputs["tchFree"]? 1:0.5)*adequateHS + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] +
+  score_epidemic = (1000/18)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
+                        (inputs["tchFree"]? 1:0.5)*adequateHS + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] + inputs["dclrtn"] +
                         Math.min(inputs["nDinf"], 10)/10 + inputs["smkZS"] + meets_shift_requirement + inputs["vrtlMtng"] + inputs["brrrs"] +
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0)) + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
 
@@ -751,7 +763,7 @@ function calcScore () {
   var F = Math.max( (inputs["bsCpctAct"]) ? inputs["bsCpctCur"]/inputs["bsCpctAct"] : 0, (inputs["mnBsCpctAct"]) ? inputs["mnBsCpctCur"]/inputs["mnBsCpctAct"] : 0, 
                     (inputs["vnCpctAct"]) ? inputs["vnCpctCur"]/inputs["vnCpctAct"] : 0, (inputs["svCpctAct"]) ? inputs["svCpctCur"]/inputs["svCpctAct"] : 0,
                     (inputs["crCpctAct"]) ? inputs["crCpctCur"]/inputs["crCpctAct"] : 0);
-  var score_company_transport = F * (1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])) * (1-mskWeight*inputs["mskMndt"])
+  var score_company_transport = F * Math.max((1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"]+inputs["tempScreeningVhcl"])), 0.5) * (1-mskWeight*inputs["mskMndt"])
                                 * (inputs["trvlr5K"]*5 + inputs["trvlr10K"]*(10/1.25) + inputs["trvlr10Kplus"]*(15/1.5));
 
   // Self-owned Vehicles
@@ -816,16 +828,16 @@ function calcScore () {
 	resTable += "<table class='table table-bordered'><thead class='rTableHead'>";
 	resTable += "<th>Readiness category</th><th class='scoreCol'>Score (Max. 100)</th>";
   resTable += "<th>Specific suggestions for each readiness category</th></thead>";
-  resTable += "<tr><td>Infrastructure</td><td class='scoreCol' bgcolor=" + scoreColor(score_office_infra) + ">" + score_office_infra + "</td><td>" + sg_office_infra + "</td></tr>"
+  resTable += "<tr><td>Infrastructure</td><td class='scoreCol' bgcolor=" + scoreColor(score_office_infra) + ">" + clipto95 (score_office_infra) + "</td><td>" + sg_office_infra + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Precautions</td><td class='scoreCol' bgcolor=" + scoreColor(score_epidemic) + ">" + score_epidemic + "</td><td>" + sg_epidemic + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Awareness and readiness</td><td class='scoreCol' bgcolor=" + scoreColor(score_isolation) + ">" + score_isolation + "</td><td>" + sg_isolation + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Advertisement and outreach</td><td class='scoreCol' bgcolor=" + scoreColor(score_adv_outrch) + ">" + score_adv_outrch + "</td><td>" + sg_adv_outrch + "</td></tr>"
-  resTable += "<tr><td>Transportation</td><td class='scoreCol' bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Mobility</td><td class='scoreCol' bgcolor=" + scoreColor(score_mobility) + ">" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
-  resTable += "<tr><td>Employee interactions: Meetings</td><td class='scoreCol' bgcolor=" + scoreColor(score_meetings) + ">" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Outside contacts</td><td class='scoreCol' bgcolor=" + scoreColor(score_outside) + ">" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
-  resTable += "<tr><td>Canteen/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
-	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
+  resTable += "<tr><td>Transportation</td><td class='scoreCol' bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + clipto95(score_total_transport_scaled) + "</td><td>" + sg_transport + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Mobility</td><td class='scoreCol' bgcolor=" + scoreColor(score_mobility) + ">" + clipto95(score_mobility) + "</td><td>"+ sg_mobility +"</td></tr>"
+  resTable += "<tr><td>Employee interactions: Meetings</td><td class='scoreCol' bgcolor=" + scoreColor(score_meetings) + ">" + clipto95(score_meetings) + "</td><td>" + sg_meetings + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Outside contacts</td><td class='scoreCol' bgcolor=" + scoreColor(score_outside) + ">" + clipto95(score_outside) + "</td><td>" + sg_outside + "</td></tr>"
+  resTable += "<tr><td>Canteen/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + clipto95(score_cafeteria_scaled) + "</td><td>" + sg_cafeteria + "</td></tr>"
+	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + clipto95(score_sanitation) + "</td><td>" + sg_sanitation + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
   document.getElementById("scoreTable").innerHTML = overall_report + resTable;

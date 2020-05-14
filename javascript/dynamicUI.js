@@ -155,9 +155,48 @@ $(document).ready(function(){
          }
     });
 
+    //FIXME: Add an onLoad query for setting value of cntn to 1 even if the cached value is 0
     // If canteen flag = false, disable breakfast, lunch and coffee/snacks inputs.
     $("input[name='cntn']").on("change", function() {
          var selected_value = $("input[name='cntn']:checked").val();
+         if (selected_value==0) {
+            $("#seatingFood").val(0);
+            $("#seatingFood_dspl").show();
+
+              $("#nBrkfst").val(0);
+              $("#nLnch").val(0);
+              $("#nSnck").val(0);
+              $("#dBrkfst").val(0);
+              $("#dLnch").val(0);
+              $("#dSnck").val(0);
+              $("#nBrkfst").prop("readonly", true);
+              $("#nLnch").prop("readonly", true);
+              $("#nSnck").prop("readonly", true);
+              $("#dBrkfst").prop("readonly", true);
+              $("#dLnch").prop("readonly", true);
+              $("#dSnck").prop("readonly", true);
+         }
+         else {
+              $("#seatingFood").val(1);
+              $("#seatingFood_dspl").hide();
+              $("#nBrkfst").val(20);
+              $("#nLnch").val(25);
+              $("#nSnck").val(15);
+              $("#dBrkfst").val(60);
+              $("#dLnch").val(90);
+              $("#dSnck").val(60);
+              $("#nBrkfst").prop("readonly", false);
+              $("#nLnch").prop("readonly", false);
+              $("#nSnck").prop("readonly", false);
+              $("#dBrkfst").prop("readonly", false);
+              $("#dLnch").prop("readonly", false);
+              $("#dSnck").prop("readonly", false);
+         }
+    });
+
+    // If seating area for food flag = false, disable breakfast, lunch and coffee/snacks inputs.
+    $("input[name='seatingFood']").on("change", function() {
+         var selected_value = $("input[name='seatingFood']:checked").val();
          if (selected_value==0) {
               $("#nBrkfst").val(0);
               $("#nLnch").val(0);
@@ -187,7 +226,6 @@ $(document).ready(function(){
               $("#dSnck").prop("readonly", false);
          }
     });
-
     // Breakfast
     $("#nBrkfst").on("input", function() {
        meal_capacity("Brkfst");

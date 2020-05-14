@@ -30,6 +30,10 @@ function getValues(){
   var dict = new Object();
   
   // Nature of Establishment
+  dict["uuidQ"] = parseInt(document.querySelector('input[name="uuidQ"]:checked').value); // UUID Question
+  if (dict["uuidQ"]!=0){
+    dict["uuid"] = parseInt(document.getElementById("uuid").value); // UUID
+  }
   dict["NOE"] = parseInt(document.getElementById("NOE").value); // Nature of Establishment
   
   // Employee Information
@@ -69,7 +73,7 @@ function getValues(){
   dict["n2pPlusOfcRm"] = parseInt(document.getElementById("n2pPlusOfcRm").value); // Number of office rooms with more than 2 people
   dict["nCub"] = parseInt(document.getElementById("nCub").value); // Number of office seats with cubicle separation
   dict["nRem"] = parseInt(document.getElementById("nRem").value); // Number of remaining office seats
-  dict["percAc"] = parseInt(document.getElementById("percAC").value); // Percentage of air conditioned premise
+  dict["percAC"] = parseInt(document.getElementById("percAC").value); // Percentage of air conditioned premise
   dict["centralAC"] = parseInt(document.querySelector('input[name="centralAC"]:checked').value); // centralised A/C
   dict["tempAC"] = parseInt(document.getElementById("tempAC").value); // Temperature setting
 
@@ -81,7 +85,7 @@ function getValues(){
   dict["nStrHrDinf"] = parseInt(document.getElementById("nStrHrDinf").value); // Frequency of stairway handrails disinfection process
   dict["mtngSpts"] = parseInt(document.getElementById("mtngSpts").value); // meeting rooms
   dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value); // Other meeting spaces
-  if (dict["NOE"]==5){
+  if (dict["NOE"]==3){
     dict["sfRsrtPlnt"] = parseInt(document.querySelector('input[name="sfRsrtPlnt"]:checked').value); // Safe restart plant flag for manufacturing
     dict["onstDsMngt"] = parseInt(document.querySelector('input[name="onstDsMngt"]:checked').value); // On-site disaster management flag for manufacturing
   }
@@ -98,10 +102,10 @@ function getValues(){
   dict["nHsS"] = parseInt(document.getElementById("nHsS").value); // Number of hand-sanitiser stations
   dict["tchFree"] = parseInt(document.querySelector('input[name="tchFree"]:checked').value); // Hand sanitisers touch free
   dict["smkZS"] = parseInt(document.querySelector('input[name="smkZS"]:checked').value); // Smoking zone sealed
-  dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
+  //dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
   dict["nWsB"] = parseInt(document.getElementById("nWsB").value); // Number of warning sign boards
   dict["nASapp"] = parseInt(document.getElementById("nASapp").value); // Number of employees with Aarogya Setu app
-  if (dict["NOE"]==5){
+  if (dict["NOE"]==3){
     dict["strlzBxs"] = parseInt(document.querySelector('input[name="strlzBxs"]:checked').value); // sterilise manufacturing box
     dict["mskPPE"] = parseInt(document.querySelector('input[name="mskPPE"]:checked').value); // PPE mask for manufacturing workers
   }
@@ -126,6 +130,7 @@ function getValues(){
   dict["snzCvr"] = parseInt(document.querySelector('input[name="snzCvr"]:checked').value); // Advised to cover sneeze
   dict["advNoHS"] = parseInt(document.querySelector('input[name="advNoHS"]:checked').value); // Advised not to shake hands
   dict["hkTrn"] = parseInt(document.querySelector('input[name="hkTrn"]:checked').value); // House-keeping staff training
+  dict["hkEqp"] = parseInt(document.querySelector('input[name="hkEqp"]:checked').value); // House-keeping staff equipped
   dict["sPrgm"] = parseInt(document.querySelector('input[name="sPrgm"]:checked').value); // Special program on COVID-19
   dict["pstrs"] = parseInt(document.querySelector('input[name="pstrs"]:checked').value); // Prosters on hygiene and social distancing
 
@@ -141,7 +146,7 @@ function getValues(){
   dict["nExtM"] = parseInt(document.getElementById("nExtM").value); // Number of employees that go outside to meet customers
   dict["nHM"] = parseInt(document.getElementById("nHM").value); // Number of employees that are more than 2 hours aways
   dict["nMM"] = parseInt(document.getElementById("nMM").value); // Number of employees that are more than 1 hour aways 
-  dict["nMPD"] = parseFloat(document.getElementById("nMPD").value); // Meetings per day
+  dict["nMPD"] = parseFloat(document.getElementById("nMPD").value); // Meetings involving physical presence per day
   dict["avgMS"] = parseFloat(document.getElementById("avgMS").value); // Average number of members in the meeting
   
   // Canteen/Pantry
@@ -254,11 +259,16 @@ function sg_update(msg_count, current_sg, msg){
 function calcScore () {
   inputs = getValues(); //Read values from html page...
 
+  mskWeight = 0.4;
   var number_of_suggestions = 3;
   var suggestion = "";
 
-  //TODO: Make 0.4 * mask factor a variable.
-
+  //Mandate org name and email
+  if (!inputs["emailAddr"] || !inputs["cmpName"]) {
+    window.alert("Please provide organisation name and email to proceed")
+    return -1;
+  }
+  
   var nM = inputs["nM_1"];
   var nF = inputs["nF_1"];
   var nOth = inputs["nOth_1"];
@@ -288,11 +298,12 @@ function calcScore () {
   var bmFlag = ((inputs["baDoor"] >= 1) ? 1 : 0);
   var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"] + ((inputs["rfidDoor"]>0) ? 1 : 0) ) ) * bmFlag;
   var shiftDelta = ( (inputs["tGapShift"] < 1) ? 1 : 0);
-  var ac_factor = (inputs["percAc"]/100) * (inputs["centralAC"]? 2:1);
-  var non_ac_factor = (1-inputs["percAc"]/100) * inputs["ntrlSlAr"] / 2;
+  var ac_factor = (inputs["percAC"]/100) * (inputs["centralAC"]? 2:1);
+  var non_ac_factor = (1-inputs["percAC"]/100) * inputs["ntrlSlAr"] / 2;
   var premisesContacts = 0;
+  //TODO: FIXME: premisesContacts increases with decrease in nEmp! Should divide by total_emp instead?
   if (nEmp>0){
-    premisesContacts = ((accessContacts + stairsElev + crowding) / nEmp ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-0.4*inputs["msk"]);
+    premisesContacts = ((accessContacts + stairsElev + crowding) / nEmp ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-mskWeight*inputs["msk"]);
     premisesContacts *= (1+0.1*ac_factor-0.1*non_ac_factor);
   }
   var nominal_office_infra_raw_score = 31;
@@ -300,7 +311,7 @@ function calcScore () {
 
   // Other meeting spaces
   var total_meeting_spaces = inputs["mtngSpts"] + inputs["oMtngSpts"];
-  var score_other_spaces = 0.5 * total_meeting_spaces * Math.max(1-0.1*(inputs["freqCln"]*Math.min(1, inputs["nHskpngStff"])), 0.5) * (1-0.4*inputs["msk"]);
+  var score_other_spaces = 0.5 * total_meeting_spaces * Math.max(1-0.1*(inputs["freqCln"]*Math.min(1, inputs["nHskpngStff"])), 0.5) * (1-mskWeight*inputs["msk"]);
   var score_office_infra = 0;
   if (premisesContacts+score_other_spaces>0 && !isNaN(premisesContacts+score_other_spaces)){
     score_office_infra = nominal_office_infra_raw_score*nominal_office_infra_scaled_score/(premisesContacts + score_other_spaces);
@@ -365,9 +376,9 @@ function calcScore () {
   }
 
   // Sick Rooms/Isolation Ward
-  var manufacturing_plant = (inputs["NOE"]==5);
+  var manufacturing_plant = (inputs["NOE"]==3);
   var score_sickRoom = 100*(inputs["iQS"]*2 + inputs["amblnc"] + inputs["lHsptl"]*2 + inputs["emrgncResp"] + inputs["hl"] + 
-                            inputs["imdtFM"] + inputs["alrg"] * Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60)) * inputs["medInsurance"]);
+                            inputs["imdtFM"] + inputs["alrg"] * Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60)) + inputs["medInsurance"]);
   if (manufacturing_plant){
     score_sickRoom *= 8/10;
     score_sickRoom += (inputs["sfRsrtPlnt"] ? 50:0) + (inputs["onstDsMngt"] ? 50:0) + (inputs["strlzBxs"] ? 50:0) + (inputs["mskPPE"] ? 50:0);
@@ -375,68 +386,73 @@ function calcScore () {
 
   var score_isolation = clipAndRound_bounds(score_sickRoom);
   var count = 0;
+  // This list of suggestions is exhaustive now; update sg_isolation if a new field is added to score
   var sg_isolation = "";
-  give_suggestion = (score_isolation!=100);
   if (!inputs["sfRsrtPlnt"] && manufacturing_plant){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
-    sg_isolation += "You do not have a standard operating procedure for safe restarting of your plant. You must comply with this requirement.";
+    sg_isolation += "You do not have a standard operating procedure for safe restarting of your plant.";
   }
   if (!inputs["onstDsMngt"] && manufacturing_plant && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
-    sg_isolation += "You do not have an industrial on-site disaster management plan. You must comply with this requirement.";
+    sg_isolation += "You do not have an industrial on-site disaster management plan.";
   }
-  if (!inputs["strlzBxs"] && manufacturing_plant && count<number_of_suggestions && give_suggestion){
+  if (!inputs["strlzBxs"] && manufacturing_plant && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Sterilise boxes and wrapping brought into factory premises.";
   }
-  if (!inputs["mskPPE"] && manufacturing_plant && count<number_of_suggestions && give_suggestion){
+  if (!inputs["mskPPE"] && manufacturing_plant && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Provide face protection shields along with masks and PPEs.";
   }
-  if (!inputs["iQS"] && give_suggestion){
+  if (!inputs["iQS"]){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Designate a well-ventilated place for immediate quarantine.";
   }
-  if (!inputs["lHsptl"] && count<number_of_suggestions && give_suggestion){
+  if (!inputs["lHsptl"] && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Prepare a list of COVID-19 ready hospitals.";
   } 
-  if (!inputs["amblnc"] && count<number_of_suggestions && give_suggestion){
+  if (!inputs["amblnc"] && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Keep an ambulance on stand-by.";
   } 
-  if (!inputs["emrgncResp"] && count<number_of_suggestions && give_suggestion) {
+  if (!inputs["emrgncResp"] && count<number_of_suggestions) {
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Give instructions to transport department on COVID-19 emergency.";
   }
-  if (!inputs["hl"] && count<number_of_suggestions && give_suggestion) {
+  if (!inputs["medInsurance"] && count<number_of_suggestions) {
+    count += 1;
+    sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
+    sg_isolation += "Get medical insurance for all employees";
+  }
+  if (!inputs["hl"] && count<number_of_suggestions) {
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Consider having a dedicated COVID-19 helpline.";
   }
-  if (Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60)) < 0.5 && count <number_of_suggestions && give_suggestion) {
+  if (Math.max( 0, (1.0 - inputs["lstUpdtTime"]/60)) < 0.5 && count <number_of_suggestions) {
       count += 1;
       sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
-      sg_isolation += "Update medical history of employees.";
+      sg_isolation += "Update medical history of employees more often.";
   }
-  if (!inputs["imdtFM"] && count<number_of_suggestions && give_suggestion){
+  if (!inputs["imdtFM"] && count<number_of_suggestions){
     count += 1;
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Consider preparing a list of immediate family members and caretakers of employees.";
   }
-  if (!inputs["alrg"] && count<number_of_suggestions && give_suggestion){
+  if (!inputs["alrg"] && count<number_of_suggestions){
     sg_isolation = (sg_isolation=="") ? "" : sg_isolation + "<br>";
     sg_isolation += "Consider preparing a list of employees' medical history.";
   }
-  if (sg_isolation=="" && score_isolation>90){
+  if (sg_isolation=="" && score_isolation>89.9){
     sg_isolation = "Well done!";
   }
 
@@ -460,7 +476,8 @@ function calcScore () {
   var mntg_wtr = 0;
 
   if (inputs["cntnArea"]>0 && inputs["cntn"]){
-    nOutside = nEmp - inputs["nLnch"] - inputs["nEmpHL"];
+    //FIXME: should not go below zero! This causes score_cafeteria to go below zero which gets clipped to 0!
+    nOutside = nEmp - inputs["nLnch"] - inputs["nEmpHL"]; 
     mtng_brkfst = (Math.min(inputs["nBrkfst"], inputs["mxCntnPpl"]) * time_brkfst * prsnl_area) / (inputs["cntnArea"] * (inputs["dBrkfst"] ? inputs["dBrkfst"] : 60));
     mtng_lnch = (Math.min(inputs["nLnch"], inputs["mxCntnPpl"]) * time_lnch * prsnl_area) / (inputs["cntnArea"] * (inputs["dLnch"] ? inputs["dLnch"] : 90));
     mntg_snck = (Math.min(inputs["nSnck"], inputs["mxCntnPpl"]) * time_snck * prsnl_area) / (inputs["cntnArea"] * (inputs["dSnck"] ? inputs["dSnck"] : 60));
@@ -505,7 +522,7 @@ function calcScore () {
   }
   var score_mobility = 0;
   if (nLM+inputs["nMM"]+inputs["nHM"]+inputs["nExtM"]>0){
-    score_mobility = ((0.25*nLM + 0.5*inputs["nMM"] + inputs["nHM"] + 1.5*inputs["nExtM"])/(nLM+inputs["nMM"]+inputs["nHM"]+inputs["nExtM"])) * (1-0.4*inputs["msk"]);
+    score_mobility = ((0.25*nLM + 0.5*inputs["nMM"] + inputs["nHM"] + 1.5*inputs["nExtM"])/(nLM+inputs["nMM"]+inputs["nHM"]+inputs["nExtM"])) * (1-mskWeight*inputs["msk"]);
   }
   var nominal_raw_score_mobility = 0.85;
   var nominal_scaled_score_mobility = 1000;
@@ -524,20 +541,23 @@ function calcScore () {
 
   var score_meetings = 1000;
   // Meetings
+  // TODO: nMPD is now post-covid. Adjust the formula accordingly!!!
   if (inputs["nMPD"] && inputs["avgMS"]){
-    score_meetings = 1000*total_emp/(inputs["nMPD"] * Math.pow(inputs["avgMS"], 1.2) * (1-0.4*inputs["msk"]));
+    //score_meetings = 1000*total_emp/(inputs["nMPD"] * Math.pow(inputs["avgMS"], 1.2) * (1-mskWeight*inputs["msk"]));
+    score_meetings = 1000*nEmp/(inputs["nMPD"] * Math.pow(inputs["avgMS"], 1.2) * (1-mskWeight*inputs["msk"]));
   }
   score_meetings = clipAndRound_bounds(score_meetings);
+  score_meetings = (score_meetings > 95)? 95: score_meetings;
 
   var sg_meetings = "";
   give_suggestion = (score_meetings!=100);
   if (!inputs["msk"] && give_suggestion){
-    sg_meetings = "Consider making mask mandatory in all the meetings";
+    sg_meetings = "Consider making mask mandatory in all the meetings.";
   } else if (score_meetings<70){
     sg_meetings = "Consider shifting to online meetings";
   } else if (inputs["avgMS"]>5 && give_suggestion) {
-    sg_meetings = "Consider reducing number of employees per meeting";
-  } else if (score_meetings>90) {
+    sg_meetings = "Consider reducing number of participants in meetings involving physical presence.";
+  } else if (sg_meetings == "" && score_meetings >= 90) {
     sg_meetings = "Well done!";
   }
 
@@ -545,7 +565,7 @@ function calcScore () {
   var score_outside = 1000;
   var sg_outside = "";
   if (inputs["nVstrs"] && inputs["nEmpCstmr"]){
-    score_outside =  100*nEmp/(inputs["nVstrs"] * Math.pow(inputs["nEmpCstmr"]+inputs["nDlvrHndlng"], 0.1) * (1-0.4*inputs["msk"]) * (1-0.1*(inputs["glvs"]+inputs["dsgntdCstmrPlc"])));
+    score_outside =  100*nEmp/(inputs["nVstrs"] * Math.pow(inputs["nEmpCstmr"]+inputs["nDlvrHndlng"], 0.1) * (1-mskWeight*inputs["msk"]) * (1-0.1*(inputs["glvs"]+inputs["dsgntdCstmrPlc"])));
     score_outside = clipAndRound_bounds(score_outside);
     give_suggestion = (score_outside!=100);
     if (score_outside >= 900) {
@@ -566,14 +586,16 @@ function calcScore () {
   // Epidemic related precautions
   var meets_shift_requirement = 1;
   // Uncomment this in the production code.
-  if (0<inputs["NOE"] && inputs["NOE"]<=4){
+  if (0<inputs["NOE"] && inputs["NOE"]<=2){
     meets_shift_requirement = ((total_emp*0.33>=nEmp) ? 1:0) ; 
   }
 
+  var empPerHS = 15;
+  var adequateHS = ((inputs["nHsS"] > (inputs["tArea"]/1000)) && (inputs["nHsS"] > nEmp/empPerHS) ) ? 1 : 0
   var score_epidemic = 0;
   score_epidemic = (1000/17)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
-                        (inputs["tchFree"]? 1:0.5)*((inputs["nHsS"] > (inputs["tArea"]/1000)) ? 1 : 0) + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] +
-                        Math.min(inputs["nDinf"], 10)/10 + Math.min(1, inputs["smkZS"]*((inputs["nPGT"]>0) ? 0 : 1)) + meets_shift_requirement + inputs["vrtlMtng"] + inputs["brrrs"] +
+                        (inputs["tchFree"]? 1:0.5)*adequateHS + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] +
+                        Math.min(inputs["nDinf"], 10)/10 + inputs["smkZS"] + meets_shift_requirement + inputs["vrtlMtng"] + inputs["brrrs"] +
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0)) + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
 
   score_epidemic = clipAndRound_bounds(score_epidemic);
@@ -620,11 +642,6 @@ function calcScore () {
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
     sg_epidemic += "Consider sealing smoking zones.";
   }
-  if (!((inputs["nPGT"]>0) ? 0 : 1) && count <number_of_suggestions && give_suggestion){
-    count += 1;
-    sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
-    sg_epidemic += "Consider banning pan-masala, gutkha and tobacco on the premises.";
-  }
   if (!(inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0) && count <number_of_suggestions && give_suggestion){
     count += 1;
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
@@ -650,14 +667,25 @@ function calcScore () {
   }
 
   // Advertisement and outreach
-  var score_adv_outrch = (1000/11)*(inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + inputs["advNoHS"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0));
+  var score_adv_outrch = (1000/12)*(inputs["covidPage"] + inputs["faq"] + inputs["sPers"] + inputs["hkTrn"] + inputs["hkEqp"] + inputs["advSclDis"] + inputs["advWFHVul"] + inputs["snzCvr"] + inputs["sPrgm"] + inputs["pstrs"] + inputs["advNoHS"] + (inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0));
   score_adv_outrch = clipAndRound_bounds(score_adv_outrch);
 
+  // This list of suggestions is exhaustive now; update sg_adv_outrch if a new field is added to score
   var sg_adv_outrch = "";
   give_suggestion = (score_adv_outrch!=100);
   count = 0;
+  if (!inputs["hkEqp"] && count<number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_adv_outrch += "House-keeping staff need to be equipped with masks, aprons, gloves, etc.";
+  }
+  if (!inputs["hkTrn"] && count<number_of_suggestions && give_suggestion){
+    count += 1;
+    sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
+    sg_adv_outrch += "House-keeping staff are critical for COVID-19 management. Conduct trainings on COVID-19 related precautions for them.";
+  }
   if (!inputs["covidPage"] && count<number_of_suggestions && give_suggestion){
     count += 1;
+    sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
     sg_adv_outrch += "Prepare a COVID-19 awareness page.";
   }
   if (!inputs["faq"] && count<number_of_suggestions && give_suggestion){    
@@ -669,11 +697,6 @@ function calcScore () {
     count += 1;
     sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
     sg_adv_outrch += "Designate a cleanliness, awareness and safety champion.";
-  }
-  if (!inputs["hkTrn"] && count<number_of_suggestions && give_suggestion){
-    count += 1;
-    sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
-    sg_adv_outrch += "Conduct intensive training of house-keeping staff for COVID-19 related precautions.";
   }
   if (!inputs["advSclDis"] && count<number_of_suggestions && give_suggestion){
     count += 1;
@@ -703,14 +726,14 @@ function calcScore () {
   if (!inputs["advNoHS"] && count<number_of_suggestions && give_suggestion){
     count += 1;
     sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
-    sg_adv_outrch += "Advise employees not to shake hands.";
+    sg_adv_outrch += "Advise employees to use non-contact greetings.";
   }
   if (!(inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0) && count<number_of_suggestions && give_suggestion){
     count += 1;
     sg_adv_outrch = (sg_adv_outrch=="") ? "" : sg_adv_outrch + "<br>";
     sg_adv_outrch += "Have more warning sign boards for \'no spitting\'.";
   }
-  if (sg_adv_outrch=="" && score_adv_outrch>90){
+  if (sg_adv_outrch=="" && score_adv_outrch>=90){
     sg_adv_outrch = "Well done!";
   }
 
@@ -719,7 +742,7 @@ function calcScore () {
   var F = Math.max( (inputs["bsCpctAct"]) ? inputs["bsCpctCur"]/inputs["bsCpctAct"] : 0, (inputs["mnBsCpctAct"]) ? inputs["mnBsCpctCur"]/inputs["mnBsCpctAct"] : 0, 
                     (inputs["vnCpctAct"]) ? inputs["vnCpctCur"]/inputs["vnCpctAct"] : 0, (inputs["svCpctAct"]) ? inputs["svCpctCur"]/inputs["svCpctAct"] : 0,
                     (inputs["crCpctAct"]) ? inputs["crCpctCur"]/inputs["crCpctAct"] : 0);
-  var score_company_transport = F * (1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])) * (1-0.4*inputs["mskMndt"])
+  var score_company_transport = F * (1-0.1*(inputs["nTrnsptSnt"]+inputs["drvSrnd"]+inputs["hsVhcl"]+inputs["vhclSnt"]+inputs["noACVhcl"])) * (1-mskWeight*inputs["mskMndt"])
                                 * (inputs["trvlr5K"]*5 + inputs["trvlr10K"]*(10/1.25) + inputs["trvlr10Kplus"]*(15/1.5));
 
   // Self-owned Vehicles
@@ -729,16 +752,16 @@ function calcScore () {
     F_slf = 1/2;
   }
   
-  var score_self_transport = F_slf * (1-0.1*inputs["hsLbb"]) * (1-0.4*inputs["mskCar"])
+  var score_self_transport = F_slf * (1-0.1*inputs["hsLbb"]) * (1-mskWeight*inputs["mskCar"])
                              * (inputs["trvlr5Kslf"]*5 + inputs["trvlr10Kslf"]*(10/1.25) + inputs["trvlr10Kplusslf"]*(15/1.5));
 
   // Walking
-  var score_walk = inputs["nWlk"] * ((1-inputs["hsLbb"])*0.2 + inputs["hsLbb"]*0.1)*(1-0.4*inputs["mskWlk"]);
+  var score_walk = inputs["nWlk"] * ((1-inputs["hsLbb"])*0.2 + inputs["hsLbb"]*0.1)*(1-mskWeight*inputs["mskWlk"]);
 
   // Public Transport
   var pubTrnsprtUsrs = inputs["trvlr5Kpub"]+inputs["trvlr10Kpub"]+inputs["trvlr10Kpluspub"];
   
-  var score_public_transport = (1-0.1*inputs["hsLbb"]) * (1-0.4*inputs["mskPub"]) *
+  var score_public_transport = (1-0.1*inputs["hsLbb"]) * (1-mskWeight*inputs["mskPub"]) *
                                  (inputs["trvlr5Kpub"]*5 + inputs["trvlr10Kpub"]*(10/1.25) + inputs["trvlr10Kpluspub"]*(15/1.5));
   
   var score_total_transport = 1;
@@ -839,7 +862,11 @@ function post_function(log_json)
   $.ajax({
     type: "POST",
     url: "https://workplacereadinesscalculator.xyz/data",
-    data: "data="+log_json
+    data: "data="+log_json,
+    success: function(data){
+        $("#display_uuid").show();
+        $("#display_uuid").load("Your UUID is: "+data['uuid']+"<br>Please store this for future use."); 
+    }
   });
 }
 
@@ -871,7 +898,8 @@ document.getElementById("QnTab").click();
 function handleFormSubmit(formObject) {
   /* google.script.run.withSuccessHandler(onSuccess).processForm(formObject); */
   /* document.getElementById("myForm").reset(); */
-  calcScore();
+  var resOK = calcScore();
+  if (resOK < 0 ) { return; }
   openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
   $("#reCalcBtn").html("Revise inputs and recalculate");
   $("#noPrint").show()
@@ -884,7 +912,8 @@ function reEnter() {
 }
 
 function submitForm() {
-  calcScore();
+  var resOK = calcScore();
+  if (resOK < 0 ) { return; }
   post_function(window["logData"]);
   //console.log((window["logData"]).inputs)
   /* Disable until we get email sending working
@@ -897,7 +926,6 @@ function submitForm() {
 }
 
 function printPage(){
-  //calcScore();
   $("#header").hide()
   $(".tablink").hide()
   $(".sub-btn").hide()

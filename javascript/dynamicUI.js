@@ -28,6 +28,40 @@ function meal_capacity(meal_type){
     }
 }
 
+function populate_field(key, db_value){
+    var input_type = $("#"+key).attr('type');
+    if (input_type=='number' || input_type=='text' || input_type=='email'){
+        $("#"+key).val(db_value);
+    } else if ($('#'+key+'_'+db_value.toString()).is(':radio')){
+        $('#'+key+'_'+db_value.toString()).attr('checked', true);
+    } else if ($('#'+key).is('select')){
+        $('#'+key).val(db_value);
+    }
+}
+
+function get_data(uuid_field){
+    $.ajax({
+      type: "POST",
+      url: "https://workplacereadinesscalculator.xyz/retrieve",
+      data: "data="+{'uuid': uuid_field},
+      success: function(data){
+        if (data.length != 0){
+            var db_input = data['db_record']['inputs'];
+            for (var key in db_input) {
+                if (db_input.hasOwnProperty(key)){
+                    var db_value = db_input[key];
+                    populate_field(key, db_value);
+                }
+            }
+            $("#uuid").prop("readonly", true);
+            $("#uuid_status").val("Valid UUID");
+        } else {
+            $("#uuid_status").val("Invalid UUID");
+        }
+      }
+    });
+}
+
 $(document).ready(function(){
     // Add GoK guidelines html
     $(function(){
@@ -42,6 +76,26 @@ $(document).ready(function(){
         }, 500);
     });  
 
+    // Enable UUID
+    $("input[name='uuidQ']").on("change", function() {
+        var selected_value = parseInt($("input[name='uuidQ']:checked").val());
+        console.log(selected_value);
+        if (selected_value==1) {
+            $(".uuid_field").show();
+            $(".uuid_status_info").show();
+        }
+        else {
+            $(".uuid_field").hide();
+            $(".uuid_status_info").hide();
+        }
+    });
+
+    // Enter UUID
+    $("#uuid").on("input", function() {
+        var selected_value = $("#uuid").val();
+        get_data(selected_value);
+    });
+
     // Alert user only in portrait mode on mobile browser...
     if(window.innerHeight > window.innerWidth){ 
          alert("Please use this website in landscape mode for better experience or use a computer to fill the form.");
@@ -50,7 +104,7 @@ $(document).ready(function(){
     // Enable special questions for Manufacturing...
     $("#NOE").on("input", function() {
          var selected_value = parseInt($("#NOE").val());
-         if (selected_value==5){
+         if (selected_value==3){
               $("#mnfctHead").show();
               $("#mnfctQstns").show();
               $("#mnfctHead_epi").show();

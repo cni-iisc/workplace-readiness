@@ -47,12 +47,14 @@ function get_data(uuid_field){
       success: function(data){
         if (data.length != 0){
             var db_input = data[0]['inputs'];
+            console.log(db_input);
             for (var key in db_input) {
                 if (db_input.hasOwnProperty(key)){
                     var db_value = db_input[key];
                     populate_field(key, db_value);
                 }
             }
+            $("#uuid").val(uuid_field);
             $("#uuid").prop("readonly", true);
             $("#uuid_status").val("Valid UUID");
         } else {

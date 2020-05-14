@@ -31,9 +31,6 @@ function getValues(){
   
   // Nature of Establishment
   dict["uuidQ"] = parseInt(document.querySelector('input[name="uuidQ"]:checked').value); // UUID Question
-  if (dict["uuidQ"]!=0){
-    dict["uuid"] = parseInt(document.getElementById("uuid").value); // UUID
-  }
   dict["NOE"] = parseInt(document.getElementById("NOE").value); // Nature of Establishment
   
   // Employee Information
@@ -235,7 +232,7 @@ function clipAndRound_bounds (score) {
   if (score_out < 0 ) {
     score_out = 0;
   } else if (score_out > 100 ) {
-    console.log('Raw score: ' + score.toString());
+    //console.log('Raw score: ' + score.toString());
     score_out = 100;
   }
   return score_out;
@@ -256,7 +253,19 @@ function sg_update(msg_count, current_sg, msg){
   return ([msg_count, current_sg])
 }
 
+function set_uuid(){
+  var sub_uuid = document.getElementById("subUUID").innerText;
+  var uuid_field = '';
+  if ($("#uuid_status").val() == "Valid UUID") {
+    uuid_field = document.getElementById("uuid").value;
+  } else if (sub_uuid.length>0){
+    uuid_field = sub_uuid.split(": ")[1]; // UUID value...
+  }
+  return (uuid_field);
+}
+
 function calcScore () {
+  
   inputs = getValues(); //Read values from html page...
 
   mskWeight = 0.4;
@@ -846,28 +855,30 @@ function calcScore () {
   suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
-  log_json = JSON.stringify({'inputs': inputs, 'outputs': outputs, "suggestions": suggestions});
+  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, "suggestions": suggestions});
   window['logData'] = log_json;
-  //post_function(log_json);
+  post_function(log_json);
 }
 
 function post_function(log_json)
-{   
-  //console.log(log_json);
-  var retData = "";
+{
+  var orgName = document.getElementById("cmpName").value;
+  $("#orgName").text("Organisation name: " + orgName);
+
   $.ajax({
     type: "POST",
     url: "https://workplacereadinesscalculator.xyz/data",
     data: "data="+log_json,
     success: function(data){
         if ($("#uuid_status").val() == "Valid UUID"){
-          $("#subUUID").text('Your submission ID is: ' + $("#uuid").val()); 
+          $("#subUUID").text('Your submission ID is: ' + $("#uuid").val());
+          $("#display_uuid").show();
         } else {
-          $("#subUUID").text('Your submission ID is: ' + data['uuid']); 
+          $("#subUUID").text('Your submission ID is: ' + data['uuid']);
+          $("#display_uuid").show(); 
         }
     }
   });
-  //console.log(retData);
   return "";
 }
 
@@ -915,11 +926,8 @@ function reEnter() {
 function submitForm() {
   var resOK = calcScore();
   if (resOK < 0 ) { return; }
-  var retData = post_function(window["logData"]);
-  var orgName = document.getElementById("cmpName").value;
-  $("#orgName").text("Organisation name: " + orgName);
+  post_function(window["logData"]);
   //console.log(retData['uuid']);
-  $("#display_uuid").show();
   //console.log((window["logData"]).inputs)
   /* Disable until we get email sending working
   var alertMsg = "Thank you for submitting the data. "

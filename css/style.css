@@ -147,7 +147,8 @@ a:link, .nav a, .nav a:visited {
 }
 
 .overall_report{
-  font-size: 18px;
+  font-size: 1.1em;
+  font-weight: bold;
   background-color: #0086b3;
   border: none;
   border-radius: 10px;

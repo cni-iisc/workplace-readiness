@@ -797,7 +797,6 @@ function calcScore () {
   var score_total = score_office_infra + score_epidemic +  score_isolation + 
       score_adv_outrch + score_mobility + score_meetings +  score_outside + score_cafeteria_scaled + score_sanitation + score_total_transport_scaled
   
-  var greeting = "<b>Company name:  " + inputs['cmpName'] + "</b><br><br>"; 
   var overall_report = "<div class='overall_report p-3'><b>Your overall COVID-19 readiness score is ";
   overall_report += score_total  + " / 1000"
   overall_report += "<br>Your percentile score among your type of establishment is "
@@ -820,11 +819,7 @@ function calcScore () {
 	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
-  if (inputs["cmpName"]!=""){
-    document.getElementById("scoreTable").innerHTML = greeting + overall_report + resTable;
-  } else {
-    document.getElementById("scoreTable").innerHTML = overall_report + resTable;
-  }
+  document.getElementById("scoreTable").innerHTML = overall_report + resTable;
 
   var outputs = new Object();
   outputs["Infrastructure"] = score_office_infra;
@@ -859,15 +854,21 @@ function calcScore () {
 function post_function(log_json)
 {   
   //console.log(log_json);
+  var retData = "";
   $.ajax({
     type: "POST",
     url: "https://workplacereadinesscalculator.xyz/data",
     data: "data="+log_json,
     success: function(data){
-        $("#display_uuid").show();
-        $("#display_uuid").load("Your UUID is: "+data['uuid']+"<br>Please store this for future use."); 
+        if ($("#uuid_status").val() == "Valid UUID"){
+          $("#subUUID").text('Your submission ID is: ' + $("#uuid").val()); 
+        } else {
+          $("#subUUID").text('Your submission ID is: ' + data['uuid']); 
+        }
     }
   });
+  //console.log(retData);
+  return "";
 }
 
 function openPage(pageName, elmnt, color) {
@@ -914,7 +915,11 @@ function reEnter() {
 function submitForm() {
   var resOK = calcScore();
   if (resOK < 0 ) { return; }
-  post_function(window["logData"]);
+  var retData = post_function(window["logData"]);
+  var orgName = document.getElementById("cmpName").value;
+  $("#orgName").text("Organisation name: " + orgName);
+  //console.log(retData['uuid']);
+  $("#display_uuid").show();
   //console.log((window["logData"]).inputs)
   /* Disable until we get email sending working
   var alertMsg = "Thank you for submitting the data. "

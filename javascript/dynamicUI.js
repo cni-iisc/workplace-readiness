@@ -43,10 +43,10 @@ function get_data(uuid_field){
     $.ajax({
       type: "POST",
       url: "https://workplacereadinesscalculator.xyz/retrieve",
-      data: "data="+{'uuid': uuid_field},
+      data: "data="+JSON.stringify({'uuid': uuid_field}),
       success: function(data){
         if (data.length != 0){
-            var db_input = data['db_record']['inputs'];
+            var db_input = data[0]['inputs'];
             for (var key in db_input) {
                 if (db_input.hasOwnProperty(key)){
                     var db_value = db_input[key];

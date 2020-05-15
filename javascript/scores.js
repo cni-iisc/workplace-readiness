@@ -880,7 +880,7 @@ function post_function(log_json)
 
   $.ajax({
     type: "POST",
-    url: "https://workplacereadinesscalculator.xyz/data",
+    url: window.location.href+"api/update",
     data: "data="+log_json,
     success: function(data){
         if ($("#uuid_status").val() == "Valid UUID"){

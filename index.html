@@ -1484,7 +1484,7 @@ SPDX-License-Identifier: Apache-2.0-->
                               </div>  
                          </div>
                          <p style="margin-bottom:0.5cm;"> </p>
-                         <button type="submit" class="sub-btn btn-primary btn-block">Submit</button>
+                         <button type="submit" class="sub-btn btn-primary btn-block">Calculate score</button>
                     </form>
                     <br><br>
                     <div class="d-flex bg-success text-white" style="display:none" id="output"></div>
@@ -1501,21 +1501,26 @@ SPDX-License-Identifier: Apache-2.0-->
                       <div class="overall_report p-3" id="display_uuid" style="display: none;">
                         <div id="orgName"></div>
                         <div id="subUUID"></div>
-                        Please save this submission ID. By entering this submission ID, you can resume or revise this submission.
+                        <div class="blinking">Please save this submission ID. You can use it to resume or revise this submission.</div>
                       </div>
+                      <br>
+
+                      <div id="noPrint" style="display: none">
+                        <button type="submit" class="sub-btn btn-primary btn-block" onclick="printPage()">Print report</button>
+                      </div>
+                      <br>
+
                       <div id="scoreTable"></div>
                       <br><br>
                       <p>
-                      <button type="submit" id="reCalcBtn" class="sub-btn btn-primary btn-block" onclick="reEnter()">Enter inputs and calculate</button>
-                      <div id="noPrint" style="display: none">
-                        <!-- <button type="submit" class="prnt-btn btn-primary btn-block" onclick="printPage()">Print report</button> -->
+                      <button type="submit" id="reCalcBtn" class="sub-btn btn-primary btn-block" onclick="reEnter()">Enter inputs</button>
+                        <!--
                         Once you are done entering the data, please press the "Save and submit form" button to generate a report. 
                         The report will also include a unique form ID to retrieve the submitted form to enable
                         you to resume your data entry or update the questionnaire inputs at a later date.
                         <br><br>
                         <button type="submit" class="sub-btn btn-primary btn-block" onclick="submitForm()">Submit form and generate report</button>
-                        <br>
-                      </div>
+                        <br>  -->
 
 	                    <p><em>Disclaimer: This is a work in progress. We are working on tuning the score calculations and adding additional
                         organisation types.<br><br>

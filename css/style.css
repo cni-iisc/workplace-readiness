@@ -167,6 +167,17 @@ a:link, .nav a, .nav a:visited {
   text-align: center;
   column-width: 80px;
 }
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+.blinking {
+  animation: blinker 1s linear 10;
+}
+
 @media screen and (max-width: 1200px) {
    .header-wide {
     display: none;

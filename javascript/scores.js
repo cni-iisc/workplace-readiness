@@ -347,7 +347,7 @@ function calcScore () {
   } else if (shiftDelta && sg_office_infra<number_of_suggestions && give_suggestion) {
     count += 1;
     sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
-    sg_office_infra += "Minimum gap of 1 hours between consecutive shifts is recommended.";
+    sg_office_infra += "Minimum gap of 1 hour between consecutive shifts is recommended.";
   } else if (score_office_infra<70 && sg_office_infra<number_of_suggestions && give_suggestion){
     count += 1;
     sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
@@ -528,11 +528,12 @@ function calcScore () {
     sg_cafeteria = "Canteen/pantry/kitchen seating area are not being used for food/beverages consumption. <br>Score is based on interaction during the following activities: <br>Using water dispenser, having lunch from outside and lunch brought from home.";
   } else if (nEmp==0){
     sg_cafeteria = "You have entered the total number of employees in a shift to be zero. This is invalid.";
-  } else if (score_cafeteria_scaled<70 && give_suggestion){
-    sg_cafeteria = "You have overcrowding in your canteen/pantry. <br>Consider staggered canteen/pantry timings. <br>Encourage employees to work from home.";
-  } else if (nOutside/nEmp > 0.5 && score_cafeteria_scaled<60 && give_suggestion){
+  } else if (nOutside/nEmp > 0.5 && score_cafeteria_scaled<60 ){
     sg_cafeteria = "You have too many outside contacts during lunch time. Encourage employees to bring lunch from home or provide lunch on premises."
-  } else if (score_cafeteria > 90) {
+  // FIXME: re-look at the following suggestion: check if the seating area per person is indeed the reason 
+  } else if (score_cafeteria_scaled<70){
+    sg_cafeteria = "You have overcrowding in your canteen/pantry seating area. <br>Consider staggered canteen/pantry timings or encourage employees to work from home.";
+  } else if (score_cafeteria_scaled > 90 && sg_cafeteria == "") {
     sg_cafeteria = "Well done!";
   }
 
@@ -925,7 +926,7 @@ function handleFormSubmit(formObject) {
   var resOK = calcScore();
   if (resOK < 0 ) { return; }
   openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
-  $("#reCalcBtn").html("Revise inputs and recalculate");
+  $("#reCalcBtn").html("Revise inputs");
   $("#noPrint").show()
   $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
@@ -959,6 +960,7 @@ function printPage(){
   $(".tabcontent").css('color','black');
   $("#Scores").css('background-color','white');
   $(".rTableHead").css('background-color','white');
+  $(".overall_report").css('background-color','#e6f2ff');
   window.print()
   $("#header").show()
   $(".tablink").show()
@@ -968,5 +970,6 @@ function printPage(){
   $(".tabcontent").css('color','white');
   $("#Scores").css('background-color','#774c60');
   $(".rTableHead").css('background-color','#2c4268');
+  $(".overall_report").css('background-color','#0086b3');
 }
 

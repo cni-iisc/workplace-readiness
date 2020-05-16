@@ -1307,30 +1307,30 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </div>
                                                   </div>
 
-                                                  <p>Number of people taking meals in the canteen. The calculator will assume others step outside the premises for lunch.</p>
-                                                  <table style="width: 100%;">
+                                                  <p class="meals_info">Number of people taking meals in the canteen. The calculator will assume others step outside the premises for lunch.</p>
+                                                  <table class="meals_info" style="width: 100%;">
                                                        <thead>
                                                        <tr>
-                                                            <th class="px-1" style="width: 20%;">Meal</th>
-                                                            <th class="px-1" style="text-align: center; width:40%">Number of employees availing the facility </th>
-                                                            <th class="px-1" style="text-align: center; width:40%">Duration for which canteen is open (minutes)</th>
+                                                            <th class="px-1 meals_info" style="width: 20%;">Meal</th>
+                                                            <th class="px-1 meals_info" style="text-align: center; width:40%">Number of employees availing the facility </th>
+                                                            <th class="px-1 meals_info" style="text-align: center; width:40%">Duration for which canteen is open (minutes)</th>
                                                        </tr>
                                                        </thead>
                                                        <tbody>
                                                        <tr>
                                                             <td>Breakfast</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nBrkfst" min="0" value="20"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dBrkfst" min="0" value="60"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="nBrkfst" min="0" value="20"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="dBrkfst" min="0" value="60"></td>
                                                        </tr>
                                                        <tr>
                                                             <td>Lunch</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nLnch" min="0" value="35"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dLnch" min="0" value="90"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="nLnch" min="0" value="35"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="dLnch" min="0" value="90"></td>
                                                        </tr>
                                                        <tr>
                                                             <td>Coffee / Snacks</td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nSnck" min="0" value="15"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="dSnck" min="0" value="60"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="nSnck" min="0" value="15"></td>
+                                                            <td class="px-1"><input class="form-control meals_info" type="number" id="dSnck" min="0" value="60"></td>
                                                        </tr>
                                                        </tbody>
                                                   </table>
@@ -1525,11 +1525,14 @@ SPDX-License-Identifier: Apache-2.0-->
 	                    <p><em>Disclaimer: This is a work in progress. We are working on tuning the score calculations and adding additional
                         organisation types.<br><br>
                              </em></p>
-                         <h4>General suggestions</h4>
-                         <p>Standard Operating Procedure for industrial, commercial establishments and private offices during COVID-19
-                         suggested by Government of Karnataka can be found <a style="text-decoration: underline;" target="-blank" href="GoK_guidelines.html">here</a>.
-                         <p>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</p>
-                         <ol>
+                        <h4>General suggestions</h4>
+                        <div id="GoK_screen">
+                          <p><b>Standard Operating Procedure for industrial, commercial establishments and private offices during COVID-19
+                            suggested by Government of Karnataka can be found <a style="text-decoration: underline;" target="-blank" href="GoK_guidelines.html">here</a>.</b></p>
+                        </div>
+                        
+                        <p><b>Read WHO’s guidelines for workplace readiness. Some excerpts from the <a style="text-decoration: underline;" href="https://www.who.int/docs/default-source/coronaviruse/advice-for-workplace-clean-19-03-2020.pdf" target="_blank">WHO guidelines</a> are given below.</b></p>
+                        <p><ul>
                               <li>Make sure your workplaces are clean and hygienic. Wipe surfaces (desks and tables) and objects (telephones, keyboards) regularly with disinfectant.</li>
                               <li>Promote regular and thorough hand-washing by employees, contractors and customers.</li>
                               <li>Promote good respiratory hygiene in the workplace.</li>
@@ -1540,13 +1543,14 @@ SPDX-License-Identifier: Apache-2.0-->
                               <li>Promote regular teleworking across your organisation.</li>
                               <li>Develop a contingency and business continuity plan for an outbreak where your business operates.</li>
                               <li>Develop partnerships and plans with your local health providers in advance of any emergency.</li>
-                         </ol>
+                        </ul></p>
+                        <div id="GoK_print">
+                          <div class="w-100">
+                            <!-- <div class="page-break">P.T.O.</div> -->
+                            <p class="row pt-4" id="includedContent"></p>
+                          </div> 
+                        </div>
                     </div>
-
-                    <!--
-                    <div class="w-100">
-                         <p class="row pt-4" id="includedContent"></p>
-                    </div> -->
               </div>
           </div>
      </div>

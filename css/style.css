@@ -163,10 +163,12 @@ a:link, .nav a, .nav a:visited {
   background-color: #2c4268;
 }
 
+
 .scoreCol {
   text-align: center;
-  column-width: 80px;
+  /* column-width: 80px; */
 }
+
 
 @keyframes blinker {
   50% {
@@ -190,5 +192,36 @@ a:link, .nav a, .nav a:visited {
 @media screen and (min-width: 1199px) {
   .header-narrow {
    display: none;
- }
+  }
+  #GoK_print {
+    display: none;
+  }
+}
+
+@media print {
+	body {
+		margin: 1cm;
+		color: #000;
+		background-color: #fff;
+		width: 95%;
+		display: block;
+	}
+  #GoK_screen {
+    display: none;
+  }
+	#GoK_print { 
+		page-break-inside: always;
+		break-before: always;
+		float: none;
+		display: block;
+	}
+  .page-break	{
+    display: block; 
+    page-break-after: always; 
+  }
+	a:link, a:visited {
+	    text-decoration: none;
+			color: black;
+	}
+}
 

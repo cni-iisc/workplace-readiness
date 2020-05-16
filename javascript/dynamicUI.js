@@ -69,6 +69,18 @@ $(document).ready(function(){
     $(function(){
         $("#includedContent").load("GoK_guidelines.html"); 
     });
+
+    // Stop enter from submitting and shift focus to the next field
+    $('form input').keydown(function (e) {
+        if (e.keyCode == 13) {
+            var inputs = $(this).parents("form").eq(0).find(":input");
+            if (inputs[inputs.index(this) + 1] != null) {                    
+                inputs[inputs.index(this) + 1].focus();
+            }
+            e.preventDefault();
+            return false;
+        }
+    });
     
     // Accordion scroll to the starting of card
     $('.collapse').on('shown.bs.collapse', function(e) {
@@ -83,12 +95,12 @@ $(document).ready(function(){
         var selected_value = parseInt($("input[name='uuidQ']:checked").val());
         console.log(selected_value);
         if (selected_value==1) {
-            $(".uuid_field").show();
-            $(".uuid_status_info").show();
+            $(".uuid_field").slideDown();
+            $(".uuid_status_info").slideDown();
         }
         else {
-            $(".uuid_field").hide();
-            $(".uuid_status_info").hide();
+            $(".uuid_field").slideUp();
+            $(".uuid_status_info").slideUp();
         }
     });
 
@@ -121,37 +133,37 @@ $(document).ready(function(){
 
     // Dynamic gender table for shifts...
     $("#nShifts").on("input", function() {
-         var count_cal = $("#nShifts").val();
-         if (count_cal>0){
-                $("#shiftsTable tbody").remove();
-                $(".nShifts_info").show();
-                var markup = "<tbody> </tbody>";
-                $("#shiftsTable").append(markup);
-                count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
-                $("#nShifts").val(count_cal);
-                for (i = 0; i < count_cal; i++) {
-                    console.log(i);
-                    markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
-                    $("#shiftsTable tbody").append(markup);
-                }
-            } else {
-            $("#shiftsTable tbody").remove();
-            $(".nShifts_info").hide();
-        }
-    });
+        var count_cal = $("#nShifts").val();
+        if (count_cal>0){
+               $("#shiftsTable tbody").remove();
+               $(".nShifts_info").show();
+               var markup = "<tbody> </tbody>";
+               $("#shiftsTable").append(markup);
+               count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
+               $("#nShifts").val(count_cal);
+               for (i = 0; i < count_cal; i++) {
+                   console.log(i);
+                   markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
+                   $("#shiftsTable tbody").append(markup);
+               }
+           } else {
+           $("#shiftsTable tbody").remove();
+           $(".nShifts_info").hide();
+       }
+   });
 
     // If elevator flag = false, disable elevetor capacity input.
     $("#nEle").on("input", function() {
          var elevator_counts = parseInt($("#nEle").val());
          if (elevator_counts==0){
               $("#eleCpct").val(0);
-              $("#eleCpct_vsbl").hide();
-              $("#nEleDinf_vsbl").hide();
+              $("#eleCpct_vsbl").slideUp();
+              $("#nEleDinf_vsbl").slideUp();
          }
          else{
               $("#eleCpct").val(8);
-              $("#eleCpct_vsbl").show();
-              $("#nEleDinf_vsbl").show();
+              $("#eleCpct_vsbl").slideDown();
+              $("#nEleDinf_vsbl").slideDown();
          }
     });
 
@@ -161,7 +173,7 @@ $(document).ready(function(){
          var selected_value = $("input[name='cntn']:checked").val();
          if (selected_value==0) {
             $("#seatingFood").val(0);
-            $("#seatingFood_dspl").show();
+            $("#seatingFood_dspl").slideDown();
 
               $("#nBrkfst").val(0);
               $("#nLnch").val(0);
@@ -175,10 +187,11 @@ $(document).ready(function(){
               $("#dBrkfst").prop("readonly", true);
               $("#dLnch").prop("readonly", true);
               $("#dSnck").prop("readonly", true);
+              $(".meals_info").slideUp();
          }
          else {
               $("#seatingFood").val(1);
-              $("#seatingFood_dspl").hide();
+              $("#seatingFood_dspl").slideUp();
               $("#nBrkfst").val(20);
               $("#nLnch").val(25);
               $("#nSnck").val(15);
@@ -191,6 +204,7 @@ $(document).ready(function(){
               $("#dBrkfst").prop("readonly", false);
               $("#dLnch").prop("readonly", false);
               $("#dSnck").prop("readonly", false);
+              $(".meals_info").slideDown();
          }
     });
 
@@ -210,6 +224,7 @@ $(document).ready(function(){
               $("#dBrkfst").prop("readonly", true);
               $("#dLnch").prop("readonly", true);
               $("#dSnck").prop("readonly", true);
+              $(".meals_info").slideUp();
          }
          else {
               $("#nBrkfst").val(20);
@@ -224,6 +239,7 @@ $(document).ready(function(){
               $("#dBrkfst").prop("readonly", false);
               $("#dLnch").prop("readonly", false);
               $("#dSnck").prop("readonly", false);
+              $(".meals_info").slideDown();
          }
     });
     // Breakfast
@@ -245,12 +261,12 @@ $(document).ready(function(){
     $('input.cmpOwnd').on("input", function () {
         var cmpnTrnsprtUsrs = parseInt($("#trvlr5K").val()) + parseInt($("#trvlr10K").val()) + parseInt($("#trvlr10Kplus").val());
         if (cmpnTrnsprtUsrs==0){
-            $("#cmpTrvl_title").hide();
-            $("#cmpTrvl_info").hide();
+            $("#cmpTrvl_title").slideUp();
+            $("#cmpTrvl_info").slideUp();
         }
         else {
-            $("#cmpTrvl_title").show();
-            $("#cmpTrvl_info").show();
+            $("#cmpTrvl_title").slideDown();
+            $("#cmpTrvl_info").slideDown();
         }
      });
     
@@ -258,10 +274,10 @@ $(document).ready(function(){
      $('input.slfOwnd').on("input", function () {
         var slfTrnsprtUsrs = parseInt($("#trvlr5Kslf").val()) + parseInt($("#trvlr10Kslf").val()) + parseInt($("#trvlr10Kplusslf").val());
         if (slfTrnsprtUsrs==0){
-            $("#slfTrvl_info").hide();
+            $("#slfTrvl_info").slideUp();
         }
         else {
-            $("#slfTrvl_info").show();
+            $("#slfTrvl_info").slideDown();
         }
      });
 
@@ -269,10 +285,10 @@ $(document).ready(function(){
      $('input.wlkrs').on("input", function () {
         var nWlk = parseInt($("#nWlk").val());
         if (nWlk==0){
-            $("#wlkr_info").hide();
+            $("#wlkr_info").slideUp();
         }
         else {
-            $("#wlkr_info").show();
+            $("#wlkr_info").slideDown();
         }
      });
 
@@ -280,10 +296,10 @@ $(document).ready(function(){
      $('input.pubTrnsprt').on("input", function () {
         var pubTrnsprtUsrs = parseInt($("#trvlr5Kpub").val()) + parseInt($("#trvlr10Kpub").val()) + parseInt($("#trvlr10Kpluspub").val());
         if (pubTrnsprtUsrs==0){
-            $("#pubTrvl_info").hide();
+            $("#pubTrvl_info").slideUp();
         }
         else {
-            $("#pubTrvl_info").show();
+            $("#pubTrvl_info").slideDown();
         }
      });
 
@@ -312,11 +328,11 @@ $(document).ready(function(){
     $("#percAC").on("input", function() {
         var percAc = parseInt($("#percAC").val());
         if (percAc==0){
-            $("#centralAC_Q").hide();
-            $("#tempAC_Q").hide();
+            $("#centralAC_Q").slideUp();
+            $("#tempAC_Q").slideUp();
         } else {
-            $("#centralAC_Q").show();
-            $("#tempAC_Q").show();
+            $("#centralAC_Q").slideDown();
+            $("#tempAC_Q").slideDown();
         }
     });
 
@@ -324,9 +340,9 @@ $(document).ready(function(){
     $("input[name='acsCntrl']").on("change", function() {
         var selected_value = $("input[name='acsCntrl']:checked").val();
         if (selected_value==0){
-            $(".acsCntrl_info").hide();
+            $(".acsCntrl_info").slideUp();
         } else {
-            $(".acsCntrl_info").show();
+            $(".acsCntrl_info").slideDown();
         }
     });
 
@@ -334,9 +350,9 @@ $(document).ready(function(){
     $("input[name='strAvlbl']").on("change", function() {
         var selected_value = $("input[name='strAvlbl']:checked").val();
         if (selected_value==0){
-            $(".strAvlbl_info").hide();
+            $(".strAvlbl_info").slideUp();
         } else {
-            $(".strAvlbl_info").show();
+            $(".strAvlbl_info").slideDown();
         }
     });
     

@@ -40,9 +40,10 @@ function populate_field(key, db_value){
 }
 
 function get_data(uuid_field){
+      //url: window.location.href+"api/retrieve",
     $.ajax({
       type: "POST",
-      url: window.location.href+"api/retrieve",
+      url: "https://workplacereadinesscalculator.xyz/retrieve",
       data: "data="+JSON.stringify({'uuid': uuid_field}),
       success: function(data){
         if (data.length != 0){
@@ -67,7 +68,8 @@ function get_data(uuid_field){
 $(document).ready(function(){
     // Add GoK guidelines html
     $(function(){
-        $("#includedContent").load("GoK_guidelines.html"); 
+        $("#includedContent").load("GoK_guidelines.html");
+        $("html, body").animate({ scrollTop: 0 });
     });
 
     // Stop enter from submitting and shift focus to the next field
@@ -131,26 +133,51 @@ $(document).ready(function(){
          }
     });
 
+    $('#nShifts').on('focusin', function(){
+        $(this).data('prev_value', $(this).val());
+    });
+
     // Dynamic gender table for shifts...
-    $("#nShifts").on("input", function() {
-        var count_cal = $("#nShifts").val();
-        if (count_cal>0){
-               $("#shiftsTable tbody").remove();
-               $(".nShifts_info").show();
-               var markup = "<tbody> </tbody>";
-               $("#shiftsTable").append(markup);
-               count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
-               $("#nShifts").val(count_cal);
-               for (i = 0; i < count_cal; i++) {
-                   console.log(i);
-                   markup = "<tr><td>Shift "+(i+1)+"</td><td class='px-1'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='40'></td><td class='px-1'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='3'></td><td class='px-1'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
-                   $("#shiftsTable tbody").append(markup);
-               }
-           } else {
-           $("#shiftsTable tbody").remove();
-           $(".nShifts_info").hide();
-       }
-   });
+    $("#nShifts").on("change", function() {
+        var prev_value = parseInt($("#nShifts").data('prev_value'));
+        prev_value = Math.max(prev_value, 0);
+        var count_cal = parseInt($("#nShifts").val());
+        count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
+        $("#nShifts").val(count_cal);
+        var count_diff = count_cal - prev_value;
+
+        if (count_cal==0) {
+            $("#shiftsTable tbody").slideUp();
+            $("#shiftsTable tbody").remove();
+            $(".nShifts_info").slideUp();
+            }
+        else if (count_diff>0 && prev_value>0){
+            for (i = 0; i < count_diff; i++) {
+                markup = "<tr class='emp_info_"+(prev_value+i+1)+"' style='display: none;'><td>Shift "+(prev_value+i+1)+"</td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nM_"+(prev_value+i+1)+"' min='0' value='34'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nF_"+(prev_value+i+1)+"' min='0' value='25'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nOth_"+(prev_value+i+1)+"' min='0' value='0'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='pCS_"+(prev_value+i+1)+"' min='0' value='2'></td></tr>";
+                $("#shiftsTable tbody").append(markup);
+            }
+            for (i = 0; i < count_diff; i++) {
+                $(".emp_info_"+(prev_value+i+1)).fadeIn();
+            }
+        } else if (count_diff>0 && prev_value==0) {
+            var markup = "<tbody> </tbody>";
+            $("#shiftsTable").append(markup);
+            for (i = 0; i < count_diff; i++) {
+                markup = "<tr class='emp_info_"+(prev_value+i+1)+"' style='display: none;'><td>Shift "+(prev_value+i+1)+"</td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nM_"+(prev_value+i+1)+"' min='0' value='34'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nF_"+(prev_value+i+1)+"' min='0' value='25'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nOth_"+(prev_value+i+1)+"' min='0' value='0'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='pCS_"+(prev_value+i+1)+"' min='0' value='2'></td></tr>";
+                $("#shiftsTable tbody").append(markup);
+                $(".emp_info_"+(prev_value+i+1)).fadeIn();
+            }
+            $("#shiftsTable tbody").slideDown();
+            $("#shiftsTable").slideDown();
+            $(".nShifts_info").slideDown();
+        } else if (count_diff<0 && prev_value>0){
+            for (i = 0; i < Math.abs(count_diff); i++) {
+                $(".emp_info_"+(prev_value-i)).fadeOut( function() {
+                    $(this).remove();
+                });
+            }
+        }
+    });
 
     // If elevator flag = false, disable elevetor capacity input.
     $("#nEle").on("input", function() {

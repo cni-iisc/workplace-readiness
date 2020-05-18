@@ -814,7 +814,7 @@ function calcScore () {
     sg_transport = "Well done!";
   }
 
-  onSuccess("Successfully generated workplace readiness score!");
+  //onSuccess("Successfully generated workplace readiness score!");
   var sg_total = "For general suggestions, see below"
   var score_total = score_office_infra + score_epidemic +  score_isolation + 
       score_adv_outrch + score_mobility + score_meetings +  score_outside + score_cafeteria_scaled + score_sanitation + score_total_transport_scaled
@@ -868,17 +868,24 @@ function calcScore () {
   suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
-  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, "suggestions": suggestions});
+  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse()});
   window['logData'] = log_json;
-  post_function(log_json);
+  if (post_function(log_json) < 0) {
+    return -1;
+  }
+  else {
+    return 1;
+  }
 }
 
 function post_function(log_json)
 {
   var orgName = document.getElementById("cmpName").value;
   $("#orgName").text("Organisation name: " + orgName);
-
+  //url: "https://workplacereadinesscalculator.xyz/api/update",
+  var result = 1; 
   $.ajax({
+    'async':false,
     type: "POST",
     url: window.location.href+"api/update",
     data: "data="+log_json,
@@ -890,9 +897,19 @@ function post_function(log_json)
           $("#subUUID").text('Your submission ID is: ' + data['uuid']);
           $("#display_uuid").show(); 
         }
+      result = 1;
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      if(XMLHttpRequest.responseText == 'recaptcha_failed') {
+        alert("Please validate the captcha below before calculating score");
+        result = -1;
+      }
+      else {
+        alert("Server connection unavailable. Your session data may not be saved. Please try calculating scores again");
+      }
     }
   });
-  return "";
+  return result;
 }
 
 function openPage(pageName, elmnt, color) {
@@ -921,7 +938,6 @@ function openPage(pageName, elmnt, color) {
 document.getElementById("QnTab").click();
 
 function handleFormSubmit(formObject) {
-  /* google.script.run.withSuccessHandler(onSuccess).processForm(formObject); */
   /* document.getElementById("myForm").reset(); */
   var resOK = calcScore();
   if (resOK < 0 ) { return; }

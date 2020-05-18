@@ -206,6 +206,10 @@ a:link, .nav a, .nav a:visited {
 		width: 95%;
 		display: block;
 	}
+	.row {
+	  display:block !important;
+  }
+
   #GoK_screen {
     display: none;
   }

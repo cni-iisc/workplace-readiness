@@ -16,6 +16,7 @@ SPDX-License-Identifier: Apache-2.0-->
         
           gtag('config', 'UA-164131064-2');
         </script>
+	      <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script src="javascript/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="javascript/dynamicUI.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -448,12 +449,12 @@ SPDX-License-Identifier: Apache-2.0-->
                                                        </tr>
                                                        </thead>
                                                        <tbody>
-                                                       <tr>
+                                                       <tr class="emp_info_1">
                                                             <td>Shift 1</td>
                                                             <td class="px-1"><input class="form-control" type="number" id="nM_1" min="0" value="34"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="nF_1" min="0" value="6"></td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="nF_1" min="0" value="25"></td>
                                                             <td class="px-1"><input class="form-control" type="number" id="nOth_1" min="0" value="0"></td>
-                                                            <td class="px-1"><input class="form-control" type="number" id="pCS_1" min="0" value="1"></td>
+                                                            <td class="px-1"><input class="form-control" type="number" id="pCS_1" min="0" value="2"></td>
                                                        </tr>
                                                        </tbody>
                                                   </table>
@@ -1485,6 +1486,10 @@ SPDX-License-Identifier: Apache-2.0-->
                          </div>
                          <p style="margin-bottom:0.5cm;"> </p>
                          <button type="submit" class="sub-btn btn-primary btn-block">Calculate score</button>
+                         <p style="margin-bottom:0.5cm;"> </p>
+                         <div class="row justify-content-center">
+			                     <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW"></div>
+                         </div>
                     </form>
                     <br><br>
                     <div class="d-flex bg-success text-white" style="display:none" id="output"></div>

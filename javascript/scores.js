@@ -882,7 +882,6 @@ function post_function(log_json)
 {
   var orgName = document.getElementById("cmpName").value;
   $("#orgName").text("Organisation name: " + orgName);
-  //url: "https://workplacereadinesscalculator.xyz/api/update",
   var result = 1; 
   $.ajax({
     'async':false,

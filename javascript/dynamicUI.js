@@ -40,10 +40,9 @@ function populate_field(key, db_value){
 }
 
 function get_data(uuid_field){
-      //url: window.location.href+"api/retrieve",
     $.ajax({
       type: "POST",
-      url: "https://workplacereadinesscalculator.xyz/retrieve",
+      url: window.location.href+"api/retrieve",
       data: "data="+JSON.stringify({'uuid': uuid_field}),
       success: function(data){
         if (data.length != 0){

@@ -97,15 +97,19 @@ body, html {
 }
 
 #Qn {background-color: #2c4268;}
-#Scores {background-color: #774c60;}
-#About {background-color: #606c38;}
-#Contact {background-color: #3c096c;}
+#Scores {background-color: #3AA696;}
+#About {background-color: #707c48;}
+#Contact {background-color: #94618E;}
 
 /*
 table, th, td {
   border: 1px solid #ffff80;
 }
 */
+
+.sTable {
+  background-color: #309080;
+}
 
 a {
     text-decoration: none;
@@ -180,11 +184,27 @@ a:link, .nav a, .nav a:visited {
   animation: blinker 1s linear 10;
 }
 
+.fbPanel {
+    border: 1px groove #ccc !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  2px 2px 5px 5px #aaa;
+            box-shadow:  2px 2px 5px 5px #aaa;
+}
+.fbLegend {
+    width:inherit; /* Or auto */
+    padding:0 10px; /* To give a bit of padding on the left and right */
+    border-bottom:1px;
+}
+
 @media screen and (max-width: 1200px) {
    .header-wide {
     display: none;
   }
    .footer-wide {
+    display: none;
+  }
+  #GoK_print {
     display: none;
   }
 }
@@ -195,6 +215,9 @@ a:link, .nav a, .nav a:visited {
   }
   #GoK_print {
     display: none;
+  }
+  #GoK_screen {
+    display: block;
   }
 }
 

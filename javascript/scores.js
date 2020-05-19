@@ -16,6 +16,16 @@ function preventFormSubmit() {
 }
 window.addEventListener('load', preventFormSubmit);    
 
+var widgetIdCalc;
+var widgetIdFB;
+
+
+//To enable multiple captchas on a site
+var CaptchaCallback = function() {
+    widgetIdCalc = grecaptcha.render('captchaFieldCalc', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
+    widgetIdFB = grecaptcha.render('captchaFieldFB', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
+};
+
 function onSuccess (scoreMsg) {
     document.getElementById("output").innerHTML=scoreMsg;
     document.getElementById("output").style.display = "inline";
@@ -826,7 +836,7 @@ function calcScore () {
   overall_report += "</div><br><br>"
 
 	var resTable = "";
-	resTable += "<table class='table table-bordered'><thead class='rTableHead'>";
+	resTable += "<table class='table sTable table-bordered'><thead class='rTableHead'>";
 	resTable += "<th>Readiness category</th><th class='scoreCol'>Score (Max. 100)</th>";
   resTable += "<th>Specific suggestions for each readiness category</th></thead>";
   resTable += "<tr><td>Infrastructure</td><td class='scoreCol' bgcolor=" + scoreColor(score_office_infra) + ">" + clipto95 (score_office_infra) + "</td><td>" + sg_office_infra + "</td></tr>"
@@ -868,7 +878,7 @@ function calcScore () {
   suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
-  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse()});
+  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse(widgetIdCalc)});
   window['logData'] = log_json;
   if (post_function(log_json) < 0) {
     return -1;
@@ -887,6 +897,7 @@ function post_function(log_json)
     'async':false,
     type: "POST",
     url: window.location.href+"api/update",
+    //url: "https://workplacereadinesscalculator.xyz/api/update",
     data: "data="+log_json,
     success: function(data){
         if ($("#uuid_status").val() == "Valid UUID"){
@@ -897,6 +908,7 @@ function post_function(log_json)
           $("#display_uuid").show(); 
         }
       result = 1;
+      grecaptcha.reset(widgetIdCalc);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       if(XMLHttpRequest.responseText == 'recaptcha_failed') {
@@ -940,7 +952,7 @@ function handleFormSubmit(formObject) {
   /* document.getElementById("myForm").reset(); */
   var resOK = calcScore();
   if (resOK < 0 ) { return; }
-  openPage('Scores', document.getElementById("ScoresTab"), '#774c60')
+  openPage('Scores', document.getElementById("ScoresTab"), '#3AA696')
   $("#reCalcBtn").html("Revise inputs");
   $("#noPrint").show()
   $('html, body').animate({ scrollTop: 0 }, 'fast');
@@ -983,8 +995,39 @@ function printPage(){
   $("#noPrint").show()
   $("#footer").show()
   $(".tabcontent").css('color','white');
-  $("#Scores").css('background-color','#774c60');
+  $("#Scores").css('background-color','#3AA696');
   $(".rTableHead").css('background-color','#2c4268');
   $(".overall_report").css('background-color','#0086b3');
+}
+
+function fbSubmit(formObject) {
+  var fbName = document.getElementById("fbName").value;
+  var fbEmail = document.getElementById("fbEmail").value;
+  var fbText = document.getElementById("fbText").value;
+  fb_json = JSON.stringify({'fbName': fbName, 'fbEmail': fbEmail, 'fbText': fbText, 'recaptcha': grecaptcha.getResponse(widgetIdFB)});
+  //fb_json = JSON.stringify({'fbName': fbName, 'fbEmail': fbEmail, 'fbText': fbText});
+  //console.log(fb_json);
+  var result = 1; 
+  $.ajax({
+    'async':false,
+    type: "POST",
+    url: window.location.href+"api/feedbackSubmit",
+    //url: "https://workplacereadinesscalculator.xyz/api/feedbackSubmit",
+    data: "data="+fb_json,
+    success: function(data){
+      alert("Thank you for providing your feedback," + fbName);
+      document.getElementById("fbForm").reset();
+      grecaptcha.reset(widgetIdFB);
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      if(XMLHttpRequest.responseText == 'recaptcha_failed') {
+        alert("Please validate the captcha before submitting");
+        result = -1;
+      }
+      else {
+        alert("Server connection unavailable. Please try again later");
+      }
+    }
+  });
 }
 

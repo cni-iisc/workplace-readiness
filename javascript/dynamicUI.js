@@ -67,7 +67,8 @@ function get_data(uuid_field){
 $(document).ready(function(){
     // Add GoK guidelines html
     $(function(){
-        $("#includedContent").load("GoK_guidelines.html");
+        $("#GoI_guidelines").load("GoI_guidelines.html");
+        $("#GoK_guidelines").load("GoK_guidelines.html");
         $("html, body").animate({ scrollTop: 0 });
     });
 

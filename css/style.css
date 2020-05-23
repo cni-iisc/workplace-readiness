@@ -238,7 +238,6 @@ a:link, .nav a, .nav a:visited {
   }
 	#GoK_print { 
 		page-break-inside: always;
-		break-before: always;
 		float: none;
 		display: block;
 	}

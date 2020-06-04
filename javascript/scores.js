@@ -333,6 +333,7 @@ function calcScore () {
   var non_ac_factor = (1-inputs["percAC"]/100) * inputs["ntrlSlAr"] / 2;
   var premisesContacts = 0;
   //TODO: FIXME: premisesContacts increases with decrease in nEmp! Should divide by total_emp instead?
+  
   if (nEmp>0){
     premisesContacts = (accessContacts + stairsElev + crowding ) * (1 + (shiftDelta)) * (1+0.2*((inputs["nCW"]) ? 1 : 0)) * (1-mskWeight*inputs["msk"]);
     premisesContacts *= (1+0.1*ac_factor-0.1*non_ac_factor);

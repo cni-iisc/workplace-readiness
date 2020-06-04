@@ -139,19 +139,20 @@ $(document).ready(function(){
 
     // Dynamic gender table for shifts...
     $("#nShifts").on("change", function() {
-        var prev_value = parseInt($("#nShifts").data('prev_value'));
+        var prev_value = 0;
+        for (i = 0; i < 5; i++){
+            if($("#nM_"+(i+1)).length > 0){
+                prev_value += 1;
+            }
+        }
         prev_value = Math.max(prev_value, 0);
         var count_cal = parseInt($("#nShifts").val());
         count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
+        count_cal = Math.max(count_cal, $('#nShifts').attr('min'));
         $("#nShifts").val(count_cal);
         var count_diff = count_cal - prev_value;
 
-        if (count_cal==0) {
-            $("#shiftsTable tbody").slideUp();
-            $("#shiftsTable tbody").remove();
-            $(".nShifts_info").slideUp();
-            }
-        else if (count_diff>0 && prev_value>0){
+        if (count_diff>0 && prev_value>0){
             for (i = 0; i < count_diff; i++) {
                 markup = "<tr class='emp_info_"+(prev_value+i+1)+"' style='display: none;'><td>Shift "+(prev_value+i+1)+"</td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nM_"+(prev_value+i+1)+"' min='0' value='34'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nF_"+(prev_value+i+1)+"' min='0' value='25'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='nOth_"+(prev_value+i+1)+"' min='0' value='0'></td><td class='px-1 emp_info_"+(prev_value+i+1)+"' style='display: none;'><input class='form-control' type='number' id='pCS_"+(prev_value+i+1)+"' min='0' value='2'></td></tr>";
                 $("#shiftsTable tbody").append(markup);

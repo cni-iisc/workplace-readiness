@@ -40,5 +40,26 @@ If you are interested in the server-side functionality as well:
 2. If using Gunicorn, configure Gunicorn to run the app defined in server_code/wsgi.py
 3. Configure HTTP server, Gunicorn, and MongoDB to run on system startup
 
+The steps laid below are for one such reference implementation on AWS EC2 running Ubuntu 18.04 LTS. 
 
+### Setting up gunicorn server
 
+1. Install Gunicorn server with the command: `pip3 install gunicorn`
+2. Create a gunicorn_server.service file in `/etc/systemd/system/` folder. One such file is present in config folder of this repository. 
+3. Fill in the necessary fields, namely WorkingDirectory and ExecStart. WorkingDirectory requires absolute path to the server code. ExecStart requires the absolute path to gunicorn executable.
+4. Number of subworkers can also be configured in the service file. The default number is configured as 3.  
+
+### Setting up nginx
+1. Install nginx with `sudo apt install nginx`
+2. Create a website specific nginx configuration file in `/etc/nginx/sites-available/` folder. One such file is present in config folder of this repository. 
+3. Fill in the necessary field, namely server_name, ssl_certificate, ssl_certificate_key, root and proxy_pass. server_name requires website address, ssl_certificate requires fullchain.pem file location, ssl_certificate_key requires privkey.pem file location, root requires location of the static files to be served on server_name and proxy_pass requires the location of the gunicorn server.
+4. Create a sumbolic link to sites-enable folder with the following command: `sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/`
+5. This configuration makes the nginx accept requests only on http and https. It will also enforce all http requests to https requests.
+
+### Additional steps
+1. One needs to configure the DNS entries to forward the request received on the website address to our server.
+2. The reference implementation reads fields from SAMPLE_ENV file while running the serve code. Fields like SENDER_EMAIL, SENDER_PASSWORD, CAPTCHA_PRIVATE, DB_JSON, DB_FEEDBACK, HTTP_ORIGIN can be configured in this file. Once this field are configured we can start running our services.
+3. Start mongoDB: `sudo systemctl start mongod`
+4. Start gunicorn server: `sudo systemctl start gunicorn_server`
+5. Start nginx: `sudo systemctl start nginx`
+6. Verify everything is working correctly and then make these processes autostart on startup with the same step, except replacing `start` with `enable`, as 3, 4 and 5.

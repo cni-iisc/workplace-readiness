@@ -197,6 +197,15 @@ a:link, .nav a, .nav a:visited {
     border-bottom:1px;
 }
 
+#counter, #week_counter{
+  font-size: 1.1em;
+  font-weight: bold;
+  background-color: #0086b3;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+}
+
 @media screen and (max-width: 1200px) {
    .header-wide {
     display: none;

@@ -47,7 +47,6 @@ function get_data(uuid_field){
       success: function(data){
         if (data.length != 0){
             var db_input = data[0]['inputs'];
-            console.log(db_input);
             for (var key in db_input) {
                 if (db_input.hasOwnProperty(key)){
                     var db_value = db_input[key];
@@ -95,7 +94,6 @@ $(document).ready(function(){
     // Enable UUID
     $("input[name='uuidQ']").on("change", function() {
         var selected_value = parseInt($("input[name='uuidQ']:checked").val());
-        console.log(selected_value);
         if (selected_value==1) {
             $(".uuid_field").slideDown();
             $(".uuid_status_info").slideDown();

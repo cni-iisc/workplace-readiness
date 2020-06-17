@@ -613,22 +613,18 @@ function calcScore () {
     }
   }
   else{
+    score_outside = clipAndRound_bounds(score_outside);
     sg_outside = "No outside interactions";
   }
 
   // Epidemic related precautions
-  var meets_shift_requirement = 1;
-  // Uncomment this in the production code.
-  if (0<inputs["NOE"] && inputs["NOE"]<=2){
-    meets_shift_requirement = ((total_emp*0.33>=nEmp) ? 1:0) ; 
-  }
 
   var empPerHS = 15;
   var adequateHS = ((inputs["nHsS"] > (inputs["tArea"]/1000)) && (inputs["nHsS"] > nEmp/empPerHS) ) ? 1 : 0
   var score_epidemic = 0;
-  score_epidemic = (1000/18)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
+  score_epidemic = (1000/17)*(inputs["tempScreening"] + inputs["faceCover"] + inputs["adqFaceCover"] + inputs["newShfts"] + inputs["informCZEmp"] + inputs["informWFH"] +
                         (inputs["tchFree"]? 1:0.5)*adequateHS + Math.min(inputs["nStrHrDinf"]*0.5, 1) + inputs["encrgStrws"] + inputs["dclrtn"] +
-                        Math.min(inputs["nDinf"], 10)/10 + inputs["smkZS"] + meets_shift_requirement + inputs["vrtlMtng"] + inputs["brrrs"] +
+                        Math.min(inputs["nDinf"], 10)/10 + inputs["smkZS"] + inputs["vrtlMtng"] + inputs["brrrs"] +
                         ((inputs["nWsB"] > (inputs["nFloors"]*2) ? 1 : 0)) + inputs["nASapp"]/total_emp + inputs["advAvdLPM"]);                              
 
   score_epidemic = clipAndRound_bounds(score_epidemic);
@@ -636,10 +632,6 @@ function calcScore () {
   var sg_epidemic = "";
   give_suggestion = (score_epidemic!=100);
   count = 0;
-  if (!meets_shift_requirement){
-    count += number_of_suggestions;
-    sg_epidemic = "For your establishment, there is a maximum 33% attendance requirement which is not met.";
-  }
   if (!inputs["tempScreening"] && count<number_of_suggestions && give_suggestion){
     count += 1;
     sg_epidemic = (sg_epidemic=="") ? "" : sg_epidemic + "<br>";
@@ -832,8 +824,7 @@ function calcScore () {
   
   var overall_report = "<div class='overall_report p-3'><b>Your overall COVID-19 readiness score is ";
   overall_report += score_total  + " / 1000"
-  overall_report += "<br>Your percentile score among your type of establishment is "
-  overall_report +=  score_total/10;
+  overall_report += "<div id='percentile_disp'> </div>"
   overall_report += "</div><br><br>"
 
 	var resTable = "";
@@ -908,6 +899,18 @@ function post_function(log_json)
           $("#subUUID").text('Your submission ID is: ' + data['uuid']);
           $("#display_uuid").show(); 
         }
+        if('percentile' in data && data['percentile'] != '-1' ) {
+          $("#percentile_disp").text('Your percentile rank among your type of establishment is  ' + data['percentile']);
+          $("#percentile_disp").show();
+        }
+        if('vis_counter' in data) {
+          $("#counter").text('Total submissions: ' + data['vis_counter']);
+          $("#counter").show();
+	}
+        if('week_counter' in data) {
+          $("#week_counter").text('Submissions in past week: ' + data['week_counter']);
+          $("#week_counter").show();
+        }
       result = 1;
       grecaptcha.reset(widgetIdCalc);
     },
@@ -917,7 +920,7 @@ function post_function(log_json)
         result = -1;
       }
       else {
-        alert("Server connection unavailable. Your session data may not be saved. Please try calculating scores again");
+        alert("Server connection unavailable. Your session data may not be saved. Please try calculating scores again.");
       }
     }
   });

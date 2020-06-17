@@ -1488,7 +1488,9 @@ SPDX-License-Identifier: Apache-2.0-->
                          <button type="submit" class="sub-btn btn-primary btn-block">Calculate score</button>
                          <p style="margin-bottom:0.5cm;"> </p>
                          <div class="row justify-content-center">
-			                     <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldCalc"></div>
+                           <div class="col-md-6">
+			                       <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldCalc"></div>
+                           </div>
                          </div>
                     </form>
                     <br><br>
@@ -1500,6 +1502,15 @@ SPDX-License-Identifier: Apache-2.0-->
 
 	<div id="Scores" class="tabcontent">
           <div class="container">
+            <div class="row">
+              <div class="col"></div>
+              <div class="col-md-3 justify-content-end">
+                <div id="counter" style="display: none;">Visitors count: 50</div>
+              </div>
+              <div class="col-md-3 justify-content-end">
+                <div id="week_counter" style="display: none;">Visitors in past week: 50</div>
+              </div>
+            </div>
             <h3>COVID-19 Readiness Report</h3>
               <div class="row">
                     <div class="w-100">
@@ -1588,11 +1599,11 @@ SPDX-License-Identifier: Apache-2.0-->
                      <legend class="fbLegend">Feedback</legend>
                      <div class="row justify-content-between p-2">
                        <label for="fbName">Name</label>
-                       <input type="text" placeholder="Your name" id="fbName" size="50" maxlength="120">
+                       <input type="text" placeholder="Your name" id="fbName" size="25" maxlength="100">
                      </div>
                      <div class="row p-2">
                        <label for="fbEmail">Email address</label>
-                       <input type="email" class="form-control" id="fbEmail" aria-describedby="emailHelp" placeholder="Enter email">
+                       <input type="email" class="form-control" id="fbEmail" aria-describedby="emailHelp" placeholder="Enter email" size="25" maxlength="70">
                        <small id="emailHelp" class="form-text">We'll only use this email for responding to your feedback.</small>
                      </div>
                      <div class="row p-2">

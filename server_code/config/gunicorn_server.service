@@ -1,0 +1,14 @@
+[Unit]
+Description=Gunicorn instance to serve json receiver service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+# Server code absolute location
+WorkingDirectory=/home/user_name/Documents/workplace_readiness_server/
+# gunicorn server absolute location
+ExecStart=/home/ubuntu/.local/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

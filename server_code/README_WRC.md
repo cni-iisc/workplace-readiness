@@ -14,8 +14,8 @@ There are ten specific readiness indices, one for each  sub-heading. Some of the
 
 The software tool is comprised of two parts: 
 
-1. The static website (including the client-side javascript code) in `web_files` directory: these files, served by a webserver, take care of rendering the questionnaire, user input validation, and readiness score calculation. The tool can work stand-alone without the server-side component (although with limited functionality).
-2. The server-side code in `server_code` directory: example python WSGI code to implement the REST API for storing the submitted inputs in a database and retrieving a specific user submission based on a unique session key.
+1. the static website (including the client-side javascript code) that takes care of rendering the questionnaire, user input validation, and readiness score calculation. The files for these are kept in the top-level directory of this repository. The tool can work stand-alone without the server-side component (although with limited functionality).
+2. the server-side code that implements the REST API for storing the submitted inputs in a database and retrieving a specific user submission based on a unique session key.
 
 ### Instructions for hosting the Readiness Indicator
 
@@ -39,7 +39,6 @@ If you are interested in the server-side functionality as well:
 1. Configure the HTTP server to direct the queries to the WSGI server for REST API under /api path
 2. If using Gunicorn, configure Gunicorn to run the app defined in server_code/wsgi.py
 3. Configure HTTP server, Gunicorn, and MongoDB to run on system startup
-4. Set up the site-specific environment by editing the `SAMPLE_ENV` file  and save it as `.env`
 
 The steps laid below are for one such reference implementation on AWS EC2 running Ubuntu 18.04 LTS. 
 

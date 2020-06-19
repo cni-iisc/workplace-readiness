@@ -1,0 +1,28 @@
+server{
+    listen 80;
+    server_name mywebsitename.extension;
+    return 301 https://$server_name$request_uri;
+}
+
+server{
+    listen 443 ssl;
+    # website address...
+    server_name mywebsitename.extension;
+    # ssl certificate location...
+    ssl_certificate location_of_fullchain.pem;
+    ssl_certificate_key location_of_privkey.pem;     
+    ssl_prefer_server_ciphers on;
+
+    location / {
+    include proxy_params;
+    root website_static_files_folder_location;
+    }
+
+    location /api {
+    include proxy_params;
+    # gunicorn server location...
+    proxy_pass http://localhost:5000;
+    }
+
+}
+

@@ -63,3 +63,7 @@ The steps laid below are for one such reference implementation on AWS EC2 runnin
 4. Start gunicorn server: `sudo systemctl start gunicorn_server`
 5. Start nginx: `sudo systemctl start nginx`
 6. Verify everything is working correctly and then make these processes autostart on startup with the same step, except replacing `start` with `enable`, as 3, 4 and 5.
+
+## Copyright and License
+Copyright [2020] [Indian Institute of Science, Bangalore]
+SPDX-License-Identifier: Apache-2.0

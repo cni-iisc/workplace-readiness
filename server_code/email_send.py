@@ -1,3 +1,6 @@
+# Copyright [2020] [Indian Institute of Science, Bangalore]
+# SPDX-License-Identifier: Apache-2.0
+
 import smtplib, ssl
 import os
 from dotenv import load_dotenv

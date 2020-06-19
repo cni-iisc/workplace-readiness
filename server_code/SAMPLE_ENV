@@ -1,3 +1,6 @@
+# Copyright [2020] [Indian Institute of Science, Bangalore]
+# SPDX-License-Identifier: Apache-2.0
+
 # Enter the relevant details below and rename the file as .env
 SENDER_EMAIL="YOUR GMAIL ADDRESS FOR FEEDBACK ACKNOWLEDGEMENT"
 SENDER_PASSWORD="GMAIL_PASSWORD"

@@ -1,9 +1,16 @@
+# Copyright [2020] [Indian Institute of Science, Bangalore]
+# SPDX-License-Identifier: Apache-2.0
+
 from bson.json_util import dumps
 from bson.objectid import ObjectId
-import json
-import os
-from pymongo import MongoClient
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
+import json
+import numpy as np
+import os
+import pandas as pd
+from pymongo import MongoClient
+from pytz import timezone
 
 load_dotenv()
 db_json = os.getenv("DB_JSON")
@@ -53,5 +60,47 @@ def dates_filter_query(field, start_time, end_time):
     if (field == '_id'):
         filtered_rows = collection.find({field : {'$gte' : ObjectId.from_datetime(start_time), '$lt' : ObjectId.from_datetime(end_time)}})
     else:
-        filtered_rows = collection.find({'$or': [{field : {'$gte' : start_time, '$lt' : end_time}}, {'_id': {'$gte' : ObjectId.from_datetime(start_time), '$lt' : ObjectId.from_datetime(end_time)}}]})
+        filtered_rows = collection.find({field : {'$gte' : start_time, '$lt' : end_time}})
     return (filtered_rows)
+
+def dates_filter_query_revisits(start_time, end_time):
+    collection = get_mongo_client(db_name = db_json, collection_name = "json_logs")
+    revisit_rows = collection.find({'date' : {'$gte' : start_time, '$lt' : end_time}})
+    filtered_row = []
+    count = 0
+    for record in revisit_rows:
+        gen_time = datetime.strftime(record['_id'].generation_time.astimezone(timezone('Asia/Kolkata')), '%d-%m-%Y %H:%M')
+        mod_time = datetime.strftime(record['date'].astimezone(timezone('Asia/Kolkata')), '%d-%m-%Y %H:%M')
+        if (mod_time != gen_time):
+            filtered_row.append(count)
+        count += 1
+    revisit_rows = collection.find({'date' : {'$gte' : start_time, '$lt' : end_time}})
+    temp_df = pd.json_normalize(list(revisit_rows))
+    temp_df = temp_df.iloc[filtered_row, :].reset_index()
+    return (temp_df)
+
+def visitor_count_percentile(NOE, score):
+    collection = get_mongo_client(db_name = db_json, collection_name = "json_logs")
+    all_rows = collection.find()
+
+    current_time = datetime.now().astimezone(timezone('Asia/Kolkata'))
+    current_time = current_time.replace(hour=0, minute=0, second=1)
+    week_before = current_time - timedelta(days=1)
+
+    total_count = 0
+    week_count = 0
+
+    for row in all_rows:
+        gen_time = row['_id'].generation_time.astimezone(timezone('Asia/Kolkata'))
+        if (gen_time > week_before):
+            week_count += 1
+        total_count += 1
+
+    filtered_rows = collection.find({"inputs.NOE" : NOE})
+    temp_df = pd.DataFrame({'Total': pd.json_normalize(list(filtered_rows))['outputs.Total']})
+    percentile_score = -1
+    if(len(temp_df.index) > 50):
+        if(score in temp_df['Total'].unique()):
+            temp_df['ranks'] = temp_df.Total.rank(pct=True)*100
+            percentile_score = temp_df['ranks'][temp_df.loc[temp_df['Total'] == score].index[0]]
+    return ([total_count, week_count, percentile_score])

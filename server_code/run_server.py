@@ -1,5 +1,8 @@
+# Copyright [2020] [Indian Institute of Science, Bangalore]
+# SPDX-License-Identifier: Apache-2.0
+
 from datetime import datetime
-from db_access import insert_row, get_row, check_uniqueness, append_row_fb
+from db_access import insert_row, get_row, check_uniqueness, append_row_fb, visitor_count_percentile
 from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 import json
@@ -14,6 +17,7 @@ from email_send import gmail_send
 
 load_dotenv()
 http_origin = os.getenv("HTTP_ORIGIN")
+admin_email = os.getenv("ADMIN_EMAIL")
 
 app = Flask(__name__)
 CORS(app)
@@ -71,7 +75,9 @@ def start_receiving():
             new_uuid = 1
         insert_row(json_data, new_uuid)
         #return_response = Response(json.dumps({'uuid': json_data['uuid']}), status=200, mimetype='application/json')
-        return_response = Response(json.dumps({'uuid': json_data['uuid'], 'percentile': '99', 'vis_counter': '50'}), status=200, mimetype='application/json')
+        vis_count, week_count, percentile = visitor_count_percentile(json_data['inputs']['NOE'], json_data['outputs']['Total'])
+        f_percentile = f'{percentile:.2g}'
+        return_response = Response(json.dumps({'uuid': json_data['uuid'], 'percentile': f_percentile, 'vis_counter': vis_count, 'week_counter': week_count}), status=200, mimetype='application/json')
         return (return_response)
     else:
         return ('Undone')
@@ -114,6 +120,13 @@ def receive_feedback():
             email_body = "Dear " + json_data['fbName'] + ",\nThank you for your feedback.\n-COVID-19 Readiness Indicator team\n"
             email_recipient = json_data['fbEmail']
             gmail_send(email_recipient, email_sub, email_body)
+            fb_body = 'Feedback received from ' + json_data['fbName'] + '\nEmail: '
+            fb_body += json_data['fbEmail']
+            fb_body += '\n\nFeedback text:\n\n'
+            fb_body += json_data['fbText']
+            self_sub = "Feedback on WRC received"
+            gmail_send(admin_email, self_sub, fb_body)
+
         return_response = Response('Submitted feedback', status=200, mimetype='application/text')
         return (return_response)
     else:

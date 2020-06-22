@@ -1,5 +1,7 @@
 # COVID-19 Readiness Indicator
 
+This is the source code repository for the COVID-19 Readiness Indicator, jointly developed by the [Centre for Networked Intelligence, Indian Institute of Science](https://cni.iisc.ac.in), and the Karnataka State Disaster Management Authority. The online tool is hosted at <a href="https://covid.readiness.in/">covid.readiness.in</a>. 
+
 ## About
 
 The very first priority of any organisation during a  pandemic is the safety and well-being of its workforce. Organisations  must assess whether their employees are safe, followed by whether  they are available to perform critical functions. It is important for  organisations to be able to monitor the situation, provide a safe  workplace and offer their employees the support that they need. This  readiness indicator will enable organisations to understand their  current level of preparedness and key risk areas. It also helps in  planning and in establishing pandemic-specific policies, procedures, and  necessary management practices. From a pandemic planning perspective, organisations could pay closer attention to the geographical concentration of critical activities and functions, and  their segmentation for  work transfer to alternate locations, sites and shifts.  Organisations must create requisite capabilities, practice relevant  standard operating procedures and conduct brief pandemic training  with employees to enhance employee and organisational preparedness to  respond  effectively to COVID-19 pandemic.               

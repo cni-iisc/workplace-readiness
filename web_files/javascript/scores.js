@@ -597,24 +597,24 @@ function calcScore () {
   // Outside contacts
   var score_outside = 1000;
   var sg_outside = "";
-  if (inputs["nVstrs"] && inputs["nEmpCstmr"]){
+  if (inputs["nVstrs"] && (inputs["nEmpCstmr"] + inputs["nDlvrHndlng"])){
     score_outside =  100*nEmp/(inputs["nVstrs"] * Math.pow(inputs["nEmpCstmr"]+inputs["nDlvrHndlng"], 0.1) * (1-mskWeight*inputs["msk"]) * (1-0.1*(inputs["glvs"]+inputs["dsgntdCstmrPlc"])));
     score_outside = clipAndRound_bounds(score_outside);
     give_suggestion = (score_outside!=100);
-    if (score_outside >= 900) {
+    if (score_outside >= 90) {
      sg_outside = "Well done!";
     }
     else if (!inputs["msk"] && give_suggestion){
       sg_outside = "Consider using masks while meeting visitors";
     } else if (!inputs["glvs"] && give_suggestion){
       sg_outside = "Consider wearing gloves while meeting visitors";
-    } else if (score_outside<700) {
+    } else if (score_outside<70) {
       sg_outside = "Consider reducing the number of employees that meet outsiders";
     }
   }
   else{
     score_outside = clipAndRound_bounds(score_outside);
-    sg_outside = "No outside interactions";
+    sg_outside = "No in-bound visitors";
   }
 
   // Epidemic related precautions

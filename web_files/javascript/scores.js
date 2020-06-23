@@ -244,7 +244,7 @@ function clipAndRound_bounds (score) {
   var score_out = Math.round(score/10);
   if (score_out < 0 ) {
     score_out = 0;
-  } else if (score_out > 100 ) {
+  } else if (score_out > 100) {
     //console.log('Raw score: ' + score.toString());
     score_out = 100;
   }
@@ -370,6 +370,7 @@ function calcScore () {
     sg_office_infra = (sg_office_infra=="") ? "" : sg_office_infra + "<br>";
     sg_office_infra += "Well done!";
   }
+  score_office_infra = clipto95(score_office_infra);
 
   // Toilet scores
   var nGntsTlt = nM + nOth/2.0; 
@@ -406,6 +407,7 @@ function calcScore () {
   } else if (score_sanitation > 90) {
     sg_sanitation = "Well done!";
   }
+  score_sanitation = clipto95(score_sanitation);
 
   // Sick Rooms/Isolation Ward
   var manufacturing_plant = (inputs["NOE"]==3);
@@ -547,6 +549,7 @@ function calcScore () {
   } else if (score_cafeteria_scaled > 90 && sg_cafeteria == "") {
     sg_cafeteria = "Well done!";
   }
+  score_cafeteria_scaled = clipto95(score_cafeteria_scaled);    
 
   // Mobility
   var nLM = nEmp - inputs["nHM"] - inputs["nMM"];
@@ -571,6 +574,7 @@ function calcScore () {
   } else {
     sg_mobility = "Well done!";
   }
+  score_mobility = clipto95(score_mobility);    
 
   var score_meetings = 1000;
   // Meetings
@@ -593,6 +597,7 @@ function calcScore () {
   } else if (sg_meetings == "" && score_meetings >= 90) {
     sg_meetings = "Well done!";
   }
+  score_meetings = clipto95(score_meetings);    
 
   // Outside contacts
   var score_outside = 1000;
@@ -616,6 +621,7 @@ function calcScore () {
     score_outside = clipAndRound_bounds(score_outside);
     sg_outside = "No in-bound visitors";
   }
+  score_outside = clipto95(score_outside);    
 
   // Epidemic related precautions
 
@@ -816,6 +822,7 @@ function calcScore () {
   } else if (score_total_transport_scaled>90) {
     sg_transport = "Well done!";
   }
+  score_total_transport_scaled = clipto95(score_total_transport_scaled);    
 
   //onSuccess("Successfully generated workplace readiness score!");
   var sg_total = "For general suggestions, see below"
@@ -831,16 +838,16 @@ function calcScore () {
 	resTable += "<table class='table sTable table-bordered'><thead class='rTableHead'>";
 	resTable += "<th>Readiness category</th><th class='scoreCol'>Score (Max. 100)</th>";
   resTable += "<th>Specific suggestions for each readiness category</th></thead>";
-  resTable += "<tr><td>Infrastructure</td><td class='scoreCol' bgcolor=" + scoreColor(score_office_infra) + ">" + clipto95 (score_office_infra) + "</td><td>" + sg_office_infra + "</td></tr>"
+  resTable += "<tr><td>Infrastructure</td><td class='scoreCol' bgcolor=" + scoreColor(score_office_infra) + ">" + score_office_infra + "</td><td>" + sg_office_infra + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Precautions</td><td class='scoreCol' bgcolor=" + scoreColor(score_epidemic) + ">" + score_epidemic + "</td><td>" + sg_epidemic + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Awareness and readiness</td><td class='scoreCol' bgcolor=" + scoreColor(score_isolation) + ">" + score_isolation + "</td><td>" + sg_isolation + "</td></tr>"
   resTable += "<tr><td>Epidemic related: Advertisement and outreach</td><td class='scoreCol' bgcolor=" + scoreColor(score_adv_outrch) + ">" + score_adv_outrch + "</td><td>" + sg_adv_outrch + "</td></tr>"
-  resTable += "<tr><td>Transportation</td><td class='scoreCol' bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + clipto95(score_total_transport_scaled) + "</td><td>" + sg_transport + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Mobility</td><td class='scoreCol' bgcolor=" + scoreColor(score_mobility) + ">" + clipto95(score_mobility) + "</td><td>"+ sg_mobility +"</td></tr>"
-  resTable += "<tr><td>Employee interactions: Meetings</td><td class='scoreCol' bgcolor=" + scoreColor(score_meetings) + ">" + clipto95(score_meetings) + "</td><td>" + sg_meetings + "</td></tr>"
-  resTable += "<tr><td>Employee interactions: Outside contacts</td><td class='scoreCol' bgcolor=" + scoreColor(score_outside) + ">" + clipto95(score_outside) + "</td><td>" + sg_outside + "</td></tr>"
-  resTable += "<tr><td>Canteen/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + clipto95(score_cafeteria_scaled) + "</td><td>" + sg_cafeteria + "</td></tr>"
-	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + clipto95(score_sanitation) + "</td><td>" + sg_sanitation + "</td></tr>"
+  resTable += "<tr><td>Transportation</td><td class='scoreCol' bgcolor=" + scoreColor(score_total_transport_scaled) + ">" + score_total_transport_scaled + "</td><td>" + sg_transport + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Mobility</td><td class='scoreCol' bgcolor=" + scoreColor(score_mobility) + ">" + score_mobility + "</td><td>"+ sg_mobility +"</td></tr>"
+  resTable += "<tr><td>Employee interactions: Meetings</td><td class='scoreCol' bgcolor=" + scoreColor(score_meetings) + ">" + score_meetings + "</td><td>" + sg_meetings + "</td></tr>"
+  resTable += "<tr><td>Employee interactions: Outside contacts</td><td class='scoreCol' bgcolor=" + scoreColor(score_outside) + ">" + score_outside + "</td><td>" + sg_outside + "</td></tr>"
+  resTable += "<tr><td>Canteen/pantry</td><td class='scoreCol' bgcolor=" + scoreColor(score_cafeteria_scaled) + ">" + score_cafeteria_scaled + "</td><td>" + sg_cafeteria + "</td></tr>"
+	resTable += "<tr><td>Hygiene and sanitation</td><td class='scoreCol' bgcolor=" + scoreColor(score_sanitation) + ">" + score_sanitation + "</td><td>" + sg_sanitation + "</td></tr>"
   //resTable += "<tr><td>Total <br>(Max. score: 1000)</td><td>" + score_total + "</td><td>" + sg_total + "</td></tr>"
   resTable += "</table>";
   document.getElementById("scoreTable").innerHTML = overall_report + resTable;

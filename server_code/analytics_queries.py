@@ -69,10 +69,17 @@ def number_of_users(start_time, end_time, NOE, score_category, print_statement, 
     pie_chart(percentages, labels, file_name, plot_title, (-0.1, 1.1), 90) 
     return (True) 
 
-def score_by_category(key, df, score_category):
+def score_by_category(key, NOE, df, score_category):
     for category in score_category:
         sns.distplot(df['outputs.'+category], kde=False)
-        plt.xlabel(category, fontsize=30)
+        if (category == 'Total' and key!='scores_hist'):
+            plt.xlabel(NOE[key], fontsize=30)
+        else:
+            plt.xlabel(category, fontsize=30)
+        if (category== 'Total'):
+            plt.xlim([0, 1000])
+        else:
+            plt.xlim([0, 100])
         plt.ylabel('Counts', fontsize=30)
         plt.savefig('./analytics/'+key+'/'+category.replace('/', '_')+'.png')
         plt.clf()
@@ -82,14 +89,14 @@ def scores_categorywise_histogram(field, start_time, end_time, NOE, score_catego
     user_today = dates_filter_query(field = field, start_time = start_time, end_time = end_time)
     temp_df = pd.json_normalize(list(user_today))
     #print (print_statement, len(temp_df))
-    score_by_category('scores_hist', temp_df, score_category)
+    score_by_category('scores_hist', NOE, temp_df, score_category)
 
     for key in NOE.keys():
         NOE_filtered_rows = temp_df[temp_df['inputs.NOE']==int(key)]
         mean_score = 0
         if (len(NOE_filtered_rows)>0):
             mean_score = NOE_filtered_rows['outputs.Total'].mean()
-            score_by_category(key, NOE_filtered_rows, score_category)
+            score_by_category(key, NOE, NOE_filtered_rows, score_category)
         #print (NOE[key], ': ', len(NOE_filtered_rows), ' Mean score: ', mean_score)  
 
     return (True)
@@ -117,7 +124,7 @@ def user_bar_plot(counts, label_name, file_name):
 def number_of_users_analytics(creation_dates, NOE, score_category):
     # Number of users today...
     print ('Number of Users today queries...')
-    current_time = datetime.now()
+    current_time = (datetime.now()).replace(hour=23, minute=59, second=59)
     midnight_time = current_time.replace(hour=0, minute=0, second=1) 
     print_statement = 'Total user today: '
     number_of_users(start_time = midnight_time, end_time = current_time, NOE = NOE, score_category = score_category, print_statement = print_statement, timeframe = 'today')

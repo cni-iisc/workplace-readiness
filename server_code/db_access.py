@@ -85,7 +85,7 @@ def visitor_count_percentile(NOE, score):
 
     current_time = datetime.now().astimezone(timezone('Asia/Kolkata'))
     current_time = current_time.replace(hour=0, minute=0, second=1)
-    week_before = current_time - timedelta(days=1)
+    week_before = current_time - timedelta(days=7)
 
     total_count = 0
     week_count = 0

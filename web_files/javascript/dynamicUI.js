@@ -32,6 +32,15 @@ function populate_field(key, db_value){
     var input_type = $("#"+key).attr('type');
     if (input_type=='number' || input_type=='text' || input_type=='email'){
         $("#"+key).val(db_value);
+        if (key=='nShifts' && db_value>1){
+            for (i = 1; i < db_value; i++) {
+                markup = "<tr class='emp_info_"+(i+1)+"' style='display: none;'><td>Shift "+(i+1)+"</td><td class='px-1 emp_info_"+(i+1)+"' style='display: none;'><input class='form-control' type='number' id='nM_"+(i+1)+"' min='0' value='34'></td><td class='px-1 emp_info_"+(i+1)+"' style='display: none;'><input class='form-control' type='number' id='nF_"+(i+1)+"' min='0' value='25'></td><td class='px-1 emp_info_"+(i+1)+"' style='display: none;'><input class='form-control' type='number' id='nOth_"+(i+1)+"' min='0' value='0'></td><td class='px-1 emp_info_"+(i+1)+"' style='display: none;'><input class='form-control' type='number' id='pCS_"+(i+1)+"' min='0' value='2'></td></tr>";
+                $("#shiftsTable tbody").append(markup);
+            }
+            for (i = 1; i < db_value; i++) {
+                $(".emp_info_"+(i+1)).fadeIn();
+            }
+        }        
     } else if ($('#'+key+'_'+db_value.toString()).is(':radio')){
         $('#'+key+'_'+db_value.toString()).attr('checked', true);
     } else if ($('#'+key).is('select')){

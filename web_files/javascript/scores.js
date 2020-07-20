@@ -911,11 +911,11 @@ function post_function(log_json)
           $("#percentile_disp").show();
         }
         if('vis_counter' in data) {
-          $("#counter").text('Total submissions: ' + data['vis_counter']);
+          $("#counter").text('Total number of users: ' + data['vis_counter']);
           $("#counter").show();
 	}
         if('week_counter' in data) {
-          $("#week_counter").text('Submissions in past week: ' + data['week_counter']);
+          $("#week_counter").text('New users in past week: ' + data['week_counter']);
           $("#week_counter").show();
         }
       result = 1;

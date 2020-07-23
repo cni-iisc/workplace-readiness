@@ -91,6 +91,7 @@ def visitor_count_percentile(NOE, score):
     week_count = 0
 
     for row in all_rows:
+        #gen_time = row['date'].astimezone(timezone('Asia/Kolkata'))
         gen_time = row['_id'].generation_time.astimezone(timezone('Asia/Kolkata'))
         if (gen_time > week_before):
             week_count += 1
@@ -104,3 +105,4 @@ def visitor_count_percentile(NOE, score):
             temp_df['ranks'] = temp_df.Total.rank(pct=True)*100
             percentile_score = temp_df['ranks'][temp_df.loc[temp_df['Total'] == score].index[0]]
     return ([total_count, week_count, percentile_score])
+

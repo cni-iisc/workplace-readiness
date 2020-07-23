@@ -20,12 +20,12 @@ IST = pytz.timezone ("Asia/Kolkata")
 #yest = timedelta(days=1)
 #rdate = (datetime.now().astimezone(IST) - yest).strftime('%d-%b-%Y')
 rdate = (datetime.now().astimezone(IST)).strftime('%d-%b-%Y')
-print(rdate)
+#print(rdate)
 email_sub = "Daily report (" + rdate + ") on Covid Readiness Indicator"
 email_body = "Please find attached the daily summary report for submissions to the web server.\n\n"
 #email_body += "Dry run only, hence not attaching the report pptx yet.\n\n"
 email_body += "\n-COVID-19 Readiness Indicator team\n"
-email_recipients = ['pvp.iisc@gmail.com', 'contact.cni@iisc.ac.in', 'nihesh.7391@gmail.com', 'rajeshs@iisc.ac.in']
+email_recipients = ['contact.cni@iisc.ac.in', 'nihesh.7391@gmail.com', 'pvp.iisc@gmail.com', 'rajeshs@iisc.ac.in']
 file_name = 'Daily_Reports/Workplace_Readiness_Daily_Report_'+datetime.strftime(today, '%d_%m')+'.pptx'
 attachment = [file_name]
 #gmail_send(email_recipient, email_sub, email_body)

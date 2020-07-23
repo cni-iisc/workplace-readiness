@@ -1,10 +1,12 @@
 import smtplib, ssl
 import os
 from os.path import basename
+from datetime import datetime, timedelta
+import pytz
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.utils import COMMASPACE, formatdate
+from email.utils import COMMASPACE, formatdate, format_datetime
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,10 +27,13 @@ def send_gmails(send_to, subject, body, files=None):
 
     send_from = os.getenv("SENDER_EMAIL")
     spass = os.getenv("SENDER_PASSWORD")
+    IST = pytz.timezone ("Asia/Kolkata")
+    india_time = datetime.now().astimezone(IST)
+
     msg = MIMEMultipart()
     msg['From'] = send_from
     msg['To'] = COMMASPACE.join(send_to)
-    msg['Date'] = formatdate(localtime=True)
+    msg['Date'] = format_datetime(india_time)
     msg['Subject'] = subject
 
     msg.attach(MIMEText(body))

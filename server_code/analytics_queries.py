@@ -104,10 +104,12 @@ def scores_categorywise_histogram(field, start_time, end_time, NOE, score_catego
 def number_of_users_per_timeframe(field, start_time, end_time):
     user_today = dates_filter_query(field = field, start_time = start_time, end_time = end_time)
     temp_df = pd.json_normalize(list(user_today))
+    print (len(temp_df))
     return (len(temp_df))
 
 def number_of_users_per_timeframe_revis(start_time, end_time):
     temp_df = dates_filter_query_revisits(start_time = start_time, end_time = end_time)
+    print (len(temp_df))
     return (len(temp_df))
 
 def user_bar_plot(counts, label_name, file_name):
@@ -148,7 +150,7 @@ def number_of_users_analytics(creation_dates, NOE, score_category):
     # Number of scores per category per organisation type...
     print_statement = ''
     scores_categorywise_histogram(field = '_id', start_time = unique_generation_dates[0], end_time = current_time, NOE = NOE, score_category = score_category, print_statement = print_statement)
-    
+
     # Number of new users on each day...
     print ('Generation dates...')
     gen_user = []
@@ -158,7 +160,7 @@ def number_of_users_analytics(creation_dates, NOE, score_category):
     data = pd.DataFrame({'dates': unique_generation_dates[1:], 'counts': gen_user})
     data['dates'] = data['dates'].dt.date
     user_bar_plot(data, 'New Users', 'New_users')
-
+    
     # Number of revisiting users on each day...
     print ('Modification dates...')
     mod_user = []

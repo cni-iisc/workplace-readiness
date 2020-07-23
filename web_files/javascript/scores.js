@@ -44,54 +44,54 @@ function getValues(){
   dict["NOE"] = parseInt(document.getElementById("NOE").value); // Nature of Establishment
   
   // Employee Information
-  dict["nShifts"] = parseInt(document.getElementById("nShifts").value); // Number of shifts
+  dict["nShifts"] = parseInt(document.getElementById("nShifts").value) || 1; // Number of shifts
   for (var i=0; i<dict["nShifts"]; ++i){
-    dict["nM_"+(i+1).toString()] = parseInt(document.getElementById("nM_"+(i+1).toString()).value); // Number of male employees in shift i
-    dict["nF_"+(i+1).toString()] = parseInt(document.getElementById("nF_"+(i+1).toString()).value); // Number of female employees in shift i
-    dict["nOth_"+(i+1).toString()] = parseInt(document.getElementById("nOth_"+(i+1).toString()).value); // Number of other employees in shift i
-    dict["pCS_"+(i+1).toString()] = parseInt(document.getElementById("pCS_"+(i+1).toString()).value); // Number of casual labour and security in shift i
+    dict["nM_"+(i+1).toString()] = parseInt(document.getElementById("nM_"+(i+1).toString()).value) || 0; // Number of male employees in shift i
+    dict["nF_"+(i+1).toString()] = parseInt(document.getElementById("nF_"+(i+1).toString()).value) || 0; // Number of female employees in shift i
+    dict["nOth_"+(i+1).toString()] = parseInt(document.getElementById("nOth_"+(i+1).toString()).value) || 0; // Number of other employees in shift i
+    dict["pCS_"+(i+1).toString()] = parseInt(document.getElementById("pCS_"+(i+1).toString()).value) || 0; // Number of casual labour and security in shift i
   }
 
-  dict["tGapShift"] = parseFloat(document.getElementById("tGapShift").value); // Time gap between shifts in hours
+  dict["tGapShift"] = parseFloat(document.getElementById("tGapShift").value) || 0; // Time gap between shifts in hours
   dict["informCZEmp"] = parseInt(document.querySelector('input[name="informCZEmp"]:checked').value); // Inform containment zone employee not to come
   dict["informWFH"] = parseInt(document.querySelector('input[name="informWFH"]:checked').value); // Encourage work from home 
-  dict["n29"] = parseInt(document.getElementById("n29").value); // Number of employees with age betwwen 15 and 29
-  dict["n49"] = parseInt(document.getElementById("n49").value); // Number of employees with age betwwen 30 and 49
-  dict["n64"] = parseInt(document.getElementById("n64").value); // Number of employees with age betwwen 50 and 64
-  dict["n65plus"] = parseInt(document.getElementById("n65plus").value); // Number of employees with age more than 65
+  dict["n29"] = parseInt(document.getElementById("n29").value) || 0; // Number of employees with age betwwen 15 and 29
+  dict["n49"] = parseInt(document.getElementById("n49").value) || 0; // Number of employees with age betwwen 30 and 49
+  dict["n64"] = parseInt(document.getElementById("n64").value) || 0; // Number of employees with age betwwen 50 and 64
+  dict["n65plus"] = parseInt(document.getElementById("n65plus").value) || 0; // Number of employees with age more than 65
 
   // Office Infrastructure Information
-  dict["nBldng"] = parseInt(document.getElementById("nBldng").value); // Number of buildings // Not used in calculations
-  dict["tArea"] = parseInt(document.getElementById("tArea").value); // Total office area in sq.ft
-  dict["nFloors"] = parseInt(document.getElementById("nFloors").value); // Number of floors in office
-  dict["opnCubArea"] = parseInt(document.getElementById("opnCubArea").value); // Total open cubicle area in sq.ft
-  dict["strsArea"] = parseInt(document.getElementById("strsArea").value); // Total stores area in sq.ft // Not used in the calculations
+  dict["nBldng"] = parseInt(document.getElementById("nBldng").value) || 1; // Number of buildings // Not used in calculations
+  dict["nCW"] = parseInt(document.getElementById("nCW").value) || 1; // Number of companies in Cowork space
   dict["mntrCCTV"] = parseInt(document.querySelector('input[name="mntrCCTV"]:checked').value); // CCTV monitoring
   dict["acsCntrl"] = parseInt(document.querySelector('input[name="acsCntrl"]:checked').value); // Access controlled // Not used in calculations
   dict["ntrlSlAr"] = parseInt(document.querySelector('input[name="ntrlSlAr"]:checked').value); // Access to natural sun light and fresh air
-  dict["baDoor"] = parseInt(document.getElementById("baDoor").value); // Number of biometric based access doors
-  dict["rfidDoor"] = parseInt(document.getElementById("rfidDoor").value); // Number of RFID based access doors
+  dict["baDoor"] = parseInt(document.getElementById("baDoor").value) || 0; // Number of biometric based access doors
+  dict["rfidDoor"] = parseInt(document.getElementById("rfidDoor").value) || 0; // Number of RFID based access doors
   dict["sntBio"] = parseInt(document.querySelector('input[name="sntBio"]:checked').value); // Sanitiser at Biometric access doors
-  dict["nCW"] = parseInt(document.getElementById("nCW").value); // Number of companies in Cowork space
+  dict["tArea"] = parseInt(document.getElementById("tArea").value) || 1; // Total office area in sq.ft
+  dict["nFloors"] = parseInt(document.getElementById("nFloors").value) || 1; // Number of floors in office
+  dict["opnCubArea"] = parseInt(document.getElementById("opnCubArea").value) || 0; // Total open cubicle area in sq.ft
+  dict["strsArea"] = parseInt(document.getElementById("strsArea").value) || 0; // Total stores area in sq.ft // Not used in the calculations
 
   // Office Composition
-  dict["nSOfcRm"] = parseInt(document.getElementById("nSOfcRm").value); // Number of single office rooms
-  dict["n2pOfcRm"] = parseInt(document.getElementById("n2pOfcRm").value); // Number of office rooms with 2 people
-  dict["n2pPlusOfcRm"] = parseInt(document.getElementById("n2pPlusOfcRm").value); // Number of office rooms with more than 2 people
-  dict["nCub"] = parseInt(document.getElementById("nCub").value); // Number of office seats with cubicle separation
-  dict["nRem"] = parseInt(document.getElementById("nRem").value); // Number of remaining office seats
-  dict["percAC"] = parseInt(document.getElementById("percAC").value); // Percentage of air conditioned premise
+  dict["nSOfcRm"] = parseInt(document.getElementById("nSOfcRm").value) || 0; // Number of single office rooms
+  dict["n2pOfcRm"] = parseInt(document.getElementById("n2pOfcRm").value) || 0; // Number of office rooms with 2 people
+  dict["n2pPlusOfcRm"] = parseInt(document.getElementById("n2pPlusOfcRm").value) || 0; // Number of office rooms with more than 2 people
+  dict["nCub"] = parseInt(document.getElementById("nCub").value) || 0; // Number of office seats with cubicle separation
+  dict["nRem"] = parseInt(document.getElementById("nRem").value) || 0; // Number of remaining office seats
+  dict["percAC"] = parseInt(document.getElementById("percAC").value) || 0; // Percentage of air conditioned premise
   dict["centralAC"] = parseInt(document.querySelector('input[name="centralAC"]:checked').value); // centralised A/C
-  dict["tempAC"] = parseInt(document.getElementById("tempAC").value); // Temperature setting
+  dict["tempAC"] = parseInt(document.getElementById("tempAC").value) || 25; // Temperature setting
 
   // Common Usage Area
-  dict["nEle"] = parseInt(document.getElementById("nEle").value); // Number of Elevetors
-  dict["eleCpct"] = parseInt(document.getElementById("eleCpct").value); // Average capacity of Elevetors
-  dict["nEleDinf"] = parseInt(document.getElementById("nEleDinf").value); // Frequency of elevetor disinfection process
-  dict["nStrCln"] = parseInt(document.getElementById("nStrCln").value); // Frequency of stairway cleaning
-  dict["nStrHrDinf"] = parseInt(document.getElementById("nStrHrDinf").value); // Frequency of stairway handrails disinfection process
-  dict["mtngSpts"] = parseInt(document.getElementById("mtngSpts").value); // meeting rooms
-  dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value); // Other meeting spaces
+  dict["nEle"] = parseInt(document.getElementById("nEle").value) || 0; // Number of Elevetors
+  dict["eleCpct"] = parseInt(document.getElementById("eleCpct").value) || 2; // Average capacity of Elevetors
+  dict["nEleDinf"] = parseInt(document.getElementById("nEleDinf").value) || 0; // Frequency of elevetor disinfection process
+  dict["nStrCln"] = parseInt(document.getElementById("nStrCln").value) || 0; // Frequency of stairway cleaning
+  dict["nStrHrDinf"] = parseInt(document.getElementById("nStrHrDinf").value) || 0; // Frequency of stairway handrails disinfection process
+  dict["mtngSpts"] = parseInt(document.getElementById("mtngSpts").value) || 0; // meeting rooms
+  dict["oMtngSpts"] = parseInt(document.getElementById("oMtngSpts").value) || 0; // Other meeting spaces
   if (dict["NOE"]==3){
     dict["sfRsrtPlnt"] = parseInt(document.querySelector('input[name="sfRsrtPlnt"]:checked').value); // Safe restart plant flag for manufacturing
     dict["onstDsMngt"] = parseInt(document.querySelector('input[name="onstDsMngt"]:checked').value); // On-site disaster management flag for manufacturing
@@ -111,8 +111,8 @@ function getValues(){
   dict["tchFree"] = parseInt(document.querySelector('input[name="tchFree"]:checked').value); // Hand sanitisers touch free
   dict["smkZS"] = parseInt(document.querySelector('input[name="smkZS"]:checked').value); // Smoking zone sealed
   //dict["nPGT"] = parseInt(document.getElementById("nPGT").value); // Number of employees consuming Pan masala, gutkha, tobacco 
-  dict["nWsB"] = parseInt(document.getElementById("nWsB").value); // Number of warning sign boards
-  dict["nASapp"] = parseInt(document.getElementById("nASapp").value); // Number of employees with Aarogya Setu app
+  dict["nWsB"] = parseInt(document.getElementById("nWsB").value) || 0; // Number of warning sign boards
+  dict["nASapp"] = parseInt(document.getElementById("nASapp").value) || 0; // Number of employees with Aarogya Setu app
   if (dict["NOE"]==3){
     dict["strlzBxs"] = parseInt(document.querySelector('input[name="strlzBxs"]:checked').value); // sterilise manufacturing box
     dict["mskPPE"] = parseInt(document.querySelector('input[name="mskPPE"]:checked').value); // PPE mask for manufacturing workers
@@ -126,7 +126,7 @@ function getValues(){
   dict["emrgncResp"] = parseInt(document.querySelector('input[name="emrgncResp"]:checked').value); // Emergency Response
   dict["alrg"] = parseInt(document.querySelector('input[name="alrg"]:checked').value); // Employee allergy list
   dict["imdtFM"] = parseInt(document.querySelector('input[name="imdtFM"]:checked').value); // Immediate family members list
-  dict["lstUpdtTime"] = parseInt(document.getElementById("lstUpdtTime").value); // Last information update time
+  dict["lstUpdtTime"] = parseInt(document.getElementById("lstUpdtTime").value) || 1; // Last information update time
   dict["medInsurance"] = parseInt(document.querySelector('input[name="medInsurance"]:checked').value); // Do all employees have medical insurance
 
   // Advertisement and Outreach
@@ -144,94 +144,94 @@ function getValues(){
 
   // Employee Interactions
   dict["nVstrs"] = parseInt(document.getElementById("nVstrs").value); // Number of visitors
-  dict["nEmpCstmr"] = parseInt(document.getElementById("nEmpCstmr").value); // Number of employees that meet with customer
-  dict["nDlvrHndlng"] = parseInt(document.getElementById("nDlvrHndlng").value); // Number of employees handling deliveries 
+  dict["nEmpCstmr"] = parseInt(document.getElementById("nEmpCstmr").value) || 0; // Number of employees that meet with customer
+  dict["nDlvrHndlng"] = parseInt(document.getElementById("nDlvrHndlng").value) || 0; // Number of employees handling deliveries 
   dict["msk"] = parseInt(document.querySelector('input[name="msk"]:checked').value); // Employees wear mask
   dict["glvs"] = parseInt(document.querySelector('input[name="glvs"]:checked').value); // Employess wear mask and gloves
   dict["dsgntdCstmrPlc"] = parseInt(document.querySelector('input[name="dsgntdCstmrPlc"]:checked').value); // Designated customer meeting place
   
   // Mobility Related
-  dict["nExtM"] = parseInt(document.getElementById("nExtM").value); // Number of employees that go outside to meet customers
-  dict["nHM"] = parseInt(document.getElementById("nHM").value); // Number of employees that are more than 2 hours aways
-  dict["nMM"] = parseInt(document.getElementById("nMM").value); // Number of employees that are more than 1 hour aways 
-  dict["nMPD"] = parseFloat(document.getElementById("nMPD").value); // Meetings involving physical presence per day
-  dict["avgMS"] = parseFloat(document.getElementById("avgMS").value); // Average number of members in the meeting
+  dict["nExtM"] = parseInt(document.getElementById("nExtM").value) || 0; // Number of employees that go outside to meet customers
+  dict["nHM"] = parseInt(document.getElementById("nHM").value) || 0; // Number of employees that are more than 2 hours aways
+  dict["nMM"] = parseInt(document.getElementById("nMM").value) || 0; // Number of employees that are more than 1 hour aways 
+  dict["nMPD"] = parseFloat(document.getElementById("nMPD").value) || 0; // Meetings involving physical presence per day
+  dict["avgMS"] = parseFloat(document.getElementById("avgMS").value) || 2; // Average number of members in the meeting
   
   // Canteen/Pantry
   dict["extFSP"] = parseInt(document.querySelector('input[name="extFSP"]:checked').value); // External food vendor
   dict["cntn"] = parseInt(document.querySelector('input[name="cntn"]:checked').value); // Canteen/pantry
   dict["seatingFood"] = parseInt(document.querySelector('input[name="seatingFood"]:checked').value); // Seating area for food
   dict["cntnACOp"] = parseInt(document.querySelector('input[name="cntnACOp"]:checked').value); // Canteen/pantry air condition operational
-  dict["nBrkfst"] = parseInt(document.getElementById("nBrkfst").value); // Number of employees having breakfast in canteen
-  dict["nLnch"] = parseInt(document.getElementById("nLnch").value); // Number of employees having lunch in canteen
-  dict["nSnck"] = parseInt(document.getElementById("nSnck").value); // Number of employees having snacks/coffee in canteen
-  dict["dBrkfst"] = parseInt(document.getElementById("dBrkfst").value); // Duration for which breakfast is served
-  dict["dLnch"] = parseInt(document.getElementById("dLnch").value); // Duration for which lunch is served
-  dict["dSnck"] = parseInt(document.getElementById("dSnck").value); // Duration for which coffee/snacks is served
-  dict["nEmpHL"] = parseInt(document.getElementById("nEmpHL").value); // Number of employees who bring lunch from home
+  dict["nBrkfst"] = parseInt(document.getElementById("nBrkfst").value) || 0; // Number of employees having breakfast in canteen
+  dict["nLnch"] = parseInt(document.getElementById("nLnch").value) || 0; // Number of employees having lunch in canteen
+  dict["nSnck"] = parseInt(document.getElementById("nSnck").value) || 0; // Number of employees having snacks/coffee in canteen
+  dict["dBrkfst"] = parseInt(document.getElementById("dBrkfst").value) || 30; // Duration for which breakfast is served
+  dict["dLnch"] = parseInt(document.getElementById("dLnch").value) || 30; // Duration for which lunch is served
+  dict["dSnck"] = parseInt(document.getElementById("dSnck").value) || 30; // Duration for which coffee/snacks is served
+  dict["nEmpHL"] = parseInt(document.getElementById("nEmpHL").value) || 0; // Number of employees who bring lunch from home
   dict["mlStggrd"] = parseInt(document.querySelector('input[name="mlStggrd"]:checked').value); // Meals staggered
   dict["utnslShrd"] = parseInt(document.querySelector('input[name="utnslShrd"]:checked').value); // Utensils shared
-  dict["cntnArea"] = parseInt(document.getElementById("cntnArea").value); // Canteen area in sq.ft
-  dict["mxCntnPpl"] = parseInt(document.getElementById("mxCntnPpl").value); // Maximum number of employees allowed in canteen at a time
-  dict["nWS"] = parseInt(document.getElementById("nWS").value); // Number of water stations
+  dict["cntnArea"] = parseInt(document.getElementById("cntnArea").value) || 50; // Canteen area in sq.ft
+  dict["mxCntnPpl"] = parseInt(document.getElementById("mxCntnPpl").value) || 1; // Maximum number of employees allowed in canteen at a time
+  dict["nWS"] = parseInt(document.getElementById("nWS").value) || 0; // Number of water stations
   
   // Washroom Information
-  dict["nGntsT"] = parseInt(document.getElementById("nGntsT").value); // Number of gents toilet
-  dict["nLdsT"] = parseInt(document.getElementById("nLdsT").value); // Number of ladies toilet
-  dict["tClnFreq"] = parseInt(document.getElementById("tClnFreq").value); // Frequency of toilet cleaning
+  dict["nGntsT"] = parseInt(document.getElementById("nGntsT").value) || 0; // Number of gents toilet
+  dict["nLdsT"] = parseInt(document.getElementById("nLdsT").value) || 0; // Number of ladies toilet
+  dict["tClnFreq"] = parseInt(document.getElementById("tClnFreq").value) || 0; // Frequency of toilet cleaning
   dict["spPrsnt"] = parseInt(document.querySelector('input[name="spPrsnt"]:checked').value); // Soap dispensed in toilet
   dict["noHT"] = parseInt(document.querySelector('input[name="noHT"]:checked').value); // No hand towel policy
-  dict["freqCln"] = parseInt(document.getElementById("freqCln").value); // Frequency of cleaning
-  dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value); // Number of housekeeping staff
+  dict["freqCln"] = parseInt(document.getElementById("freqCln").value) || 0; // Frequency of cleaning
+  dict["nHskpngStff"] = parseInt(document.getElementById("nHskpngStff").value) || 0; // Number of housekeeping staff
   dict["typeSanitation"] = parseInt(document.querySelector('input[name="typeSanitation"]:checked').value); //  Type of sanitation
-  dict["nDinf"] = parseInt(document.getElementById("nDinf").value); // Number of disinfection activity per week
+  dict["nDinf"] = parseInt(document.getElementById("nDinf").value) || 0; // Number of disinfection activity per week
   dict["typeDisinfect"] = parseInt(document.querySelector('input[name="typeDisinfect"]:checked').value); //  Type of disinfection activity
 
   // Company Provided Transport
   dict["tempScreeningVhcl"] = parseInt(document.querySelector('input[name="tempScreeningVhcl"]:checked').value); // Temperature screening before journey
-  dict["bsCpctAct"] = parseInt(document.getElementById("bsCpctAct").value); // Actual Bus capacity
-  dict["bsCpctCur"] = parseInt(document.getElementById("bsCpctCur").value); // Current Bus capacity
-  dict["mnBsCpctAct"] = parseInt(document.getElementById("mnBsCpctAct").value); // Actual Mini bus capacity 
-  dict["mnBsCpctCur"] = parseInt(document.getElementById("mnBsCpctCur").value); // Current Mini bus capacity 
-  dict["vnCpctAct"] = parseInt(document.getElementById("vnCpctAct").value); // Actual Van capacity 
-  dict["vnCpctCur"] = parseInt(document.getElementById("vnCpctCur").value); // Current Van capacity 
-  dict["svCpctAct"] = parseInt(document.getElementById("svCpctAct").value); // Actual SUV capacity 
-  dict["svCpctCur"] = parseInt(document.getElementById("svCpctCur").value); // Current SUV capacity 
-  dict["crCpctAct"] = parseInt(document.getElementById("crCpctAct").value); // Actual Car capacity
-  dict["crCpctCur"] = parseInt(document.getElementById("crCpctCur").value); // Current Car capacity
+  dict["bsCpctAct"] = parseInt(document.getElementById("bsCpctAct").value) || 2; // Actual Bus capacity
+  dict["bsCpctCur"] = parseInt(document.getElementById("bsCpctCur").value) || 1; // Current Bus capacity
+  dict["mnBsCpctAct"] = parseInt(document.getElementById("mnBsCpctAct").value) || 2; // Actual Mini bus capacity 
+  dict["mnBsCpctCur"] = parseInt(document.getElementById("mnBsCpctCur").value) || 1; // Current Mini bus capacity 
+  dict["vnCpctAct"] = parseInt(document.getElementById("vnCpctAct").value) || 2; // Actual Van capacity 
+  dict["vnCpctCur"] = parseInt(document.getElementById("vnCpctCur").value) || 1; // Current Van capacity 
+  dict["svCpctAct"] = parseInt(document.getElementById("svCpctAct").value) || 2; // Actual SUV capacity 
+  dict["svCpctCur"] = parseInt(document.getElementById("svCpctCur").value) || 1; // Current SUV capacity 
+  dict["crCpctAct"] = parseInt(document.getElementById("crCpctAct").value) || 2; // Actual Car capacity
+  dict["crCpctCur"] = parseInt(document.getElementById("crCpctCur").value) || 1; // Current Car capacity
   dict["mskMndt"] = parseInt(document.querySelector('input[name="mskMndt"]:checked').value); // Mask mandate
   dict["hsVhcl"] = parseInt(document.querySelector('input[name="hsVhcl"]:checked').value); // Hand sanitiser in vehicle
   dict["noACVhcl"] = parseInt(document.querySelector('input[name="noACVhcl"]:checked').value); // No AC use in vehicle
-  dict["nTrnsptSnt"] = parseInt(document.getElementById("nTrnsptSnt").value); // Number of times transport bay is sanitised
+  dict["nTrnsptSnt"] = parseInt(document.getElementById("nTrnsptSnt").value) || 0; // Number of times transport bay is sanitised
   dict["drvSrnd"] = parseInt(document.querySelector('input[name="drvSrnd"]:checked').value); // Drivers screened
   dict["vhclSnt"] = parseInt(document.querySelector('input[name="vhclSnt"]:checked').value); // Vehicles sanitised
-  dict["trvlr5K"] = parseInt(document.getElementById("trvlr5K").value); // Numbers travelling 0-5 km
-  dict["trvlr10K"] = parseInt(document.getElementById("trvlr10K").value); // Numbers travelling 5-10 km
-  dict["trvlr10Kplus"] = parseInt(document.getElementById("trvlr10Kplus").value); // Numbers travelling >10 km
+  dict["trvlr5K"] = parseInt(document.getElementById("trvlr5K").value) || 0; // Numbers travelling 0-5 km
+  dict["trvlr10K"] = parseInt(document.getElementById("trvlr10K").value) || 0; // Numbers travelling 5-10 km
+  dict["trvlr10Kplus"] = parseInt(document.getElementById("trvlr10Kplus").value) || 0; // Numbers travelling >10 km
 
   // Self-owned vehicle transport
   dict["noPlnR"] = parseInt(document.querySelector('input[name="noPlnR"]:checked').value); // No pillion riders
   dict["no2plusTrvl"] = parseInt(document.querySelector('input[name="no2plusTrvl"]:checked').value); // No 2 plus travel in car
   dict["hsLbb"] = parseInt(document.querySelector('input[name="hsLbb"]:checked').value); // Hand sanitiser in the lobby
   dict["mskCar"] = parseInt(document.querySelector('input[name="mskCar"]:checked').value); // Mask in car
-  dict["trvlr5Kslf"] = parseInt(document.getElementById("trvlr5Kslf").value); // Numbers travelling 0-5 km private vehicle
-  dict["trvlr10Kslf"] = parseInt(document.getElementById("trvlr10Kslf").value); // Numbers travelling 5-10 km private vehicle
-  dict["trvlr10Kplusslf"] = parseInt(document.getElementById("trvlr10Kplusslf").value); // Numbers travelling >10 km private vehicle
+  dict["trvlr5Kslf"] = parseInt(document.getElementById("trvlr5Kslf").value) || 0; // Numbers travelling 0-5 km private vehicle
+  dict["trvlr10Kslf"] = parseInt(document.getElementById("trvlr10Kslf").value) || 0; // Numbers travelling 5-10 km private vehicle
+  dict["trvlr10Kplusslf"] = parseInt(document.getElementById("trvlr10Kplusslf").value) || 0; // Numbers travelling >10 km private vehicle
 
   // Walking 
-  dict["nWlk"] = parseInt(document.getElementById("nWlk").value); // Number of employees who walk to work
+  dict["nWlk"] = parseInt(document.getElementById("nWlk").value) || 0; // Number of employees who walk to work
   dict["mskWlk"] = parseInt(document.querySelector('input[name="mskWlk"]:checked').value); // Mask while walking
 
   // Public Transport
   dict["mskPub"] = parseInt(document.querySelector('input[name="mskPub"]:checked').value); // Mask while in public transport
-  dict["trvlr5Kpub"] = parseInt(document.getElementById("trvlr5Kpub").value); // Numbers travelling 0-5 km private vehicle
-  dict["trvlr10Kpub"] = parseInt(document.getElementById("trvlr10Kpub").value); // Numbers travelling 5-10 km private vehicle
-  dict["trvlr10Kpluspub"] = parseInt(document.getElementById("trvlr10Kpluspub").value); // Numbers travelling >10 km private vehicle
+  dict["trvlr5Kpub"] = parseInt(document.getElementById("trvlr5Kpub").value) || 0; // Numbers travelling 0-5 km public transport
+  dict["trvlr10Kpub"] = parseInt(document.getElementById("trvlr10Kpub").value) || 0; // Numbers travelling 5-10 km public transport
+  dict["trvlr10Kpluspub"] = parseInt(document.getElementById("trvlr10Kpluspub").value) || 0; // Numbers travelling >10 km public transport
 
   // Time to reach office
-  dict["n30Min"] = parseInt(document.getElementById("n30Min").value); // Number of employees taking 0-30 minutes
-  dict["n60Min"] = parseInt(document.getElementById("n60Min").value); // Number of employees taking 30-60 minutes
-  dict["n60plusMin"] = parseInt(document.getElementById("n60plusMin").value); // Number of employees taking >60 minutes
+  dict["n30Min"] = parseInt(document.getElementById("n30Min").value) || 0; // Number of employees taking 0-30 minutes
+  dict["n60Min"] = parseInt(document.getElementById("n60Min").value) || 0; // Number of employees taking 30-60 minutes
+  dict["n60plusMin"] = parseInt(document.getElementById("n60plusMin").value) || 0; // Number of employees taking >60 minutes
 
   // Company contact information
   dict["cmpName"] = document.getElementById("cmpName").value; // Company Name
@@ -328,7 +328,11 @@ function calcScore () {
   var stairsElev = 0.5 * inputs["nFloors"] * (1 + inputs["eleCpct"]/2 * (1-0.1*inputs["advSclDis"]))/2 * 4 * Math.max( (1 - 0.1*Math.min( inputs["nStrCln"], inputs["nEleDinf"] )), 0.5);
   var bmFlag = ((inputs["baDoor"] >= 1) ? 1 : 0);
   var accessContacts = 4 * ( 1 - 0.1*((bmFlag * inputs["sntBio"]) + inputs["mntrCCTV"] + ((inputs["rfidDoor"]>0) ? 1 : 0) ) ) * bmFlag;
-  var shiftDelta = ( (inputs["tGapShift"] < 1) ? 1 : 0);
+  var shiftDelta = 0;
+  // Consider shiftDelta only if nShifts > 1
+  if (inputs["nShifts"] > 1) {
+    shiftDelta = ( (inputs["tGapShift"] < 1) ? 1 : 0);
+  }
   var ac_factor = (inputs["percAC"]/100) * (inputs["centralAC"]? 2:1);
   var non_ac_factor = (1-inputs["percAC"]/100) * inputs["ntrlSlAr"] / 2;
   var premisesContacts = 0;

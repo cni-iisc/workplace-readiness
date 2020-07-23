@@ -1,7 +1,7 @@
 function check_capacity(vehicle_type){
     var variable_act = '#'+vehicle_type+'CpctAct';
     var variable_cur = '#'+vehicle_type+'CpctCur';
-    var actual_capacity = parseInt($(variable_act).val());
+    var actual_capacity = parseInt($(variable_act).val()) || 1;
     if (actual_capacity==0){
         $(variable_cur).val(0);
         $(variable_cur).prop("readonly", true);
@@ -14,7 +14,7 @@ function check_capacity(vehicle_type){
 function meal_capacity(meal_type){
     var meal_number = '#n'+meal_type;
     var meal_duration = '#d'+meal_type;
-    var count = parseInt($(meal_number).val());
+    var count = parseInt($(meal_number).val()) || 0;
     if (count==0){
         $(meal_duration).val(0);
         $(meal_duration).prop("readonly", true);
@@ -153,7 +153,7 @@ $(document).ready(function(){
             }
         }
         prev_value = Math.max(prev_value, 0);
-        var count_cal = parseInt($("#nShifts").val());
+        var count_cal = parseInt($("#nShifts").val()) || 1;
         count_cal = Math.min(count_cal, $('#nShifts').attr('max'));
         count_cal = Math.max(count_cal, $('#nShifts').attr('min'));
         $("#nShifts").val(count_cal);
@@ -189,7 +189,7 @@ $(document).ready(function(){
 
     // If elevator flag = false, disable elevetor capacity input.
     $("#nEle").on("input", function() {
-         var elevator_counts = parseInt($("#nEle").val());
+         var elevator_counts = parseInt($("#nEle").val()) || 0;
          if (elevator_counts==0){
               $("#eleCpct").val(0);
               $("#eleCpct_vsbl").slideUp();
@@ -294,7 +294,10 @@ $(document).ready(function(){
 
     // Company Owned Transportation
     $('input.cmpOwnd').on("input", function () {
-        var cmpnTrnsprtUsrs = parseInt($("#trvlr5K").val()) + parseInt($("#trvlr10K").val()) + parseInt($("#trvlr10Kplus").val());
+        var trvlr5K = parseInt($("#trvlr5K").val()) || 0;
+        var trvlr10K = parseInt($("#trvlr10K").val()) || 0;
+        var trvlr10Kplus = parseInt($("#trvlr10Kplus").val()) || 0;
+        var cmpnTrnsprtUsrs = trvlr5K + trvlr10K + trvlr10Kplus;
         if (cmpnTrnsprtUsrs==0){
             $("#cmpTrvl_title").slideUp();
             $("#cmpTrvl_info").slideUp();
@@ -307,7 +310,10 @@ $(document).ready(function(){
     
      // Self Owned Vehicles
      $('input.slfOwnd').on("input", function () {
-        var slfTrnsprtUsrs = parseInt($("#trvlr5Kslf").val()) + parseInt($("#trvlr10Kslf").val()) + parseInt($("#trvlr10Kplusslf").val());
+        var trvlr5Kslf= parseInt($("#trvlr5Kslf").val()) || 0;
+        var trvlr10Kslf = parseInt($("#trvlr10Kslf").val()) || 0;
+        var trvlr10Kplusslf = parseInt($("#trvlr10Kplusslf").val()) || 0;
+        var slfTrnsprtUsrs = trvlr5Kslf + trvlr10Kslf + trvlr10Kplusslf;
         if (slfTrnsprtUsrs==0){
             $("#slfTrvl_info").slideUp();
         }
@@ -318,7 +324,7 @@ $(document).ready(function(){
 
      // Walkers
      $('input.wlkrs').on("input", function () {
-        var nWlk = parseInt($("#nWlk").val());
+        var nWlk = parseInt($("#nWlk").val()) || 0;
         if (nWlk==0){
             $("#wlkr_info").slideUp();
         }
@@ -329,7 +335,10 @@ $(document).ready(function(){
 
      // Public Transport Users
      $('input.pubTrnsprt').on("input", function () {
-        var pubTrnsprtUsrs = parseInt($("#trvlr5Kpub").val()) + parseInt($("#trvlr10Kpub").val()) + parseInt($("#trvlr10Kpluspub").val());
+        var trvlr5Kpub = parseInt($("#trvlr5Kpub").val()) || 0; 
+        var trvlr10Kpub = parseInt($("#trvlr10Kpub").val()) || 0; 
+        var trvlr10Kpluspub = parseInt($("#trvlr10Kpluspub").val()) || 0;
+        var pubTrnsprtUsrs = trvlr5Kpub + trvlr10Kpub + trvlr10Kpluspub;
         if (pubTrnsprtUsrs==0){
             $("#pubTrvl_info").slideUp();
         }
@@ -361,7 +370,7 @@ $(document).ready(function(){
 
     // Air conditioning
     $("#percAC").on("input", function() {
-        var percAc = parseInt($("#percAC").val());
+        var percAc = parseInt($("#percAC").val()) || 0;
         if (percAc==0){
             $("#centralAC_Q").slideUp();
             $("#tempAC_Q").slideUp();

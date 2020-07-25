@@ -44,29 +44,38 @@ def number_of_users(start_time, end_time, NOE, score_category, print_statement, 
     active_user_today = dates_filter_query(field = 'date', start_time = start_time, end_time = end_time)
     new_temp_df = pd.json_normalize(list(new_user_today))
     active_temp_df = pd.json_normalize(list(active_user_today)) 
-    percentages = np.array([len(active_temp_df), len(new_temp_df)]) * 100 / (len(active_temp_df)+len(new_temp_df))
-    labels = ['Active User', 'New User']
-    file_name = "User_distibution_"+timeframe+".png"
-    plot_title = "User distribution of "+timeframe
-    pie_chart(percentages, labels, file_name, plot_title, (0, 0.1), 0)
+    #total_users_count = len(list(active_user_today))
+    total_users_count = len(active_temp_df)
+    print("Total users: " + str(total_users_count)) 
+    print(active_temp_df)
+
+    # prepare pie-charts only if the number of users is > 0
+    if ( (len(active_temp_df) + len(new_temp_df)) > 0):
+        percentages = np.array([len(active_temp_df), len(new_temp_df)]) * 100 / (len(active_temp_df)+len(new_temp_df))
+        labels = ['Active User', 'New User']
+        file_name = "User_distibution_"+timeframe+".png"
+        plot_title = "User distribution of "+timeframe
+        pie_chart(percentages, labels, file_name, plot_title, (0, 0.1), 0)
      
-    #print (print_statement, len(temp_df))
-    
     percentages = []
     labels = []
-    
-    for key in NOE.keys():
-        NOE_filtered_rows = active_temp_df[active_temp_df['inputs.NOE']==int(key)]
-        if (len(NOE_filtered_rows)):
-            percentages.append(len(NOE_filtered_rows))
-            labels.append(NOE[key])
-        #print (NOE[key], ': ', len(NOE_filtered_rows), ' Mean score: ', mean_score) 
+        
+    # prepare pie-charts only if the number of users is > 0
+    if ( len(active_temp_df) > 0):
+        for key in NOE.keys():
+            NOE_filtered_rows = active_temp_df[active_temp_df['inputs.NOE']==int(key)]
+            if (len(NOE_filtered_rows)):
+                percentages.append(len(NOE_filtered_rows))
+                labels.append(NOE[key])
+            #print (NOE[key], ': ', len(NOE_filtered_rows), ' Mean score: ', mean_score) 
 
     percentages = np.array(percentages) * 100 / np.sum(percentages)
     print (percentages)
     file_name = "User_distibution_"+timeframe+"_(Category_wise)"
-    plot_title = "User distribution of "+timeframe+" (Category_wise)"
+    plot_title = "Category-wise user distribution "+timeframe+" (Total users: " + str(total_users_count) + ")"
+    #plot_title = "User distribution of "+timeframe+" (Category_wise)"
     pie_chart(percentages, labels, file_name, plot_title, (-0.1, 1.1), 90) 
+
     return (True) 
 
 def score_by_category(key, NOE, df, score_category):

@@ -51,6 +51,7 @@ function populate_field(key, db_value){
 function get_data(uuid_field){
     $.ajax({
       type: "POST",
+      //url: "https://workplacereadinesscalculator.xyz/api/retrieve",
       url: window.location.href+"api/retrieve",
       data: "data="+JSON.stringify({'uuid': uuid_field}),
       success: function(data){
@@ -106,10 +107,12 @@ $(document).ready(function(){
         if (selected_value==1) {
             $(".uuid_field").slideDown();
             $(".uuid_status_info").slideDown();
+            $(".newsession_field").slideUp();
         }
         else {
             $(".uuid_field").slideUp();
             $(".uuid_status_info").slideUp();
+            $(".newsession_field").slideDown();
         }
     });
 

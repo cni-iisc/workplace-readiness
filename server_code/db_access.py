@@ -30,6 +30,12 @@ def insert_row(data, new_uuid):
         returned_value = collection.replace_one({"uuid" : data['uuid']}, data)
     return (True)
 
+def update_inputs(data):
+    collection = get_mongo_client(db_name = db_json, collection_name = "json_logs")
+    returned_value = collection.update_one({"uuid" : data['uuid']}, {"$set": {"inputs": data["inputs"], "date": data["date"], "input_mod": True}})
+    return (returned_value)
+
+
 def get_row(uuid_field):
     collection = get_mongo_client(db_name = db_json, collection_name = "json_logs")
     returned_value = collection.find({"uuid" : uuid_field}, {"_id":0, "outputs":0, "suggestions":0, "date":0}).sort([('$natural',  -1)]).limit(1) #latest record
@@ -91,7 +97,6 @@ def visitor_count_percentile(NOE, score):
     week_count = 0
 
     for row in all_rows:
-        #gen_time = row['date'].astimezone(timezone('Asia/Kolkata'))
         gen_time = row['_id'].generation_time.astimezone(timezone('Asia/Kolkata'))
         if (gen_time > week_before):
             week_count += 1
@@ -105,4 +110,3 @@ def visitor_count_percentile(NOE, score):
             temp_df['ranks'] = temp_df.Total.rank(pct=True)*100
             percentile_score = temp_df['ranks'][temp_df.loc[temp_df['Total'] == score].index[0]]
     return ([total_count, week_count, percentile_score])
-

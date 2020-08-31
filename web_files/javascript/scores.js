@@ -16,12 +16,14 @@ function preventFormSubmit() {
 }
 window.addEventListener('load', preventFormSubmit);    
 
+var widgetIdCreate;
 var widgetIdCalc;
 var widgetIdFB;
 
 
 //To enable multiple captchas on a site
 var CaptchaCallback = function() {
+    widgetIdCreate = grecaptcha.render('captchaFieldCreate', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
     widgetIdCalc = grecaptcha.render('captchaFieldCalc', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
     widgetIdFB = grecaptcha.render('captchaFieldFB', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
 };
@@ -35,6 +37,15 @@ function get_field_value(field_value, default_value){
   var return_value = parseInt(field_value) || default_value;
   return return_value;
 }
+
+function getContacts(){
+  var dict = new Object();
+  // Company contact information
+  dict["cmpName"] = document.getElementById("cmpName").value; // Company Name
+  dict["emailAddr"] = document.getElementById("emailAddr").value; // Company Email
+  return dict;
+}
+  
 
 function getValues(){
   var dict = new Object();
@@ -284,10 +295,9 @@ function set_uuid(){
   return (uuid_field);
 }
 
-function calcScore () {
-  
-  inputs = getValues(); //Read values from html page...
 
+function calcScore () {
+  inputs = getValues(); //Read values from html page
   mskWeight = 0.4;
   var number_of_suggestions = 3;
   var suggestion = "";
@@ -881,7 +891,7 @@ function calcScore () {
   suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
-  log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse(widgetIdCalc)});
+  var log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse(widgetIdCalc)});
   window['logData'] = log_json;
   if (post_function(log_json) < 0) {
     return -1;
@@ -938,6 +948,63 @@ function post_function(log_json)
   return result;
 }
 
+function create_session(log_json) {
+  //var orgName = document.getElementById("cmpName").value;
+  //$("#orgName").text("Organisation name: " + orgName);
+  var result = 1; 
+  $.ajax({
+    'async':false,
+    type: "POST",
+    url: window.location.href+"api/create",
+    //url: "https://workplacereadinesscalculator.xyz/api/create",
+    data: "data="+log_json,
+    success: function(data){
+        if('uuid' in data) {
+          $("#uuid").val(data['uuid']);  
+          $("#uuid").prop("readonly", true);
+          $("#uuid_status").val("Valid UUID");
+        }
+      result = 1;
+      grecaptcha.reset(widgetIdCreate);
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+      if(XMLHttpRequest.responseText == 'recaptcha_failed') {
+        alert("Please validate the captcha before proceeding.");
+        result = -1;
+      }
+      else {
+        alert("Server connection unavailable. Please try again.");
+        result = -1;
+      }
+    }
+  });
+  return result;
+}
+
+function save_session(log_json) {
+  var result = -1; 
+  $.ajax({
+    'async':false,
+    type: "POST",
+    url: window.location.href+"api/saveInputs",
+    //url: "https://workplacereadinesscalculator.xyz/api/saveInputs",
+    data: "data="+log_json,
+    success: function(data){
+        if('status' in data) {
+          if(data['status'] == 'success') {
+            window.alert("Form inputs saved successfully");
+            result = 1;
+          }
+        }
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown) {
+        window.alert("Server connection unavailable. Your data update may not be saved.");
+        result = -1;
+    }
+  });
+  return result;
+}
+
 function openPage(pageName, elmnt, color) {
   // Hide all elements with class="tabcontent" by default */
   var i, tabcontent, tablinks;
@@ -973,11 +1040,42 @@ function handleFormSubmit(formObject) {
   $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
+// Function to create a UUID on server, with only cmpName and emailAddr as inputs
+function newSession() {
+  var input_contacts = getContacts(); //Read values from html page
+  //Mandate org name and email
+  if (!input_contacts["emailAddr"] || !input_contacts["cmpName"]) {
+    window.alert("Please provide organisation name and email to proceed")
+    return -1;
+  }
+  var log_json = JSON.stringify({'uuid': '', 'inputs': input_contacts, 'recaptcha': grecaptcha.getResponse(widgetIdCreate)});
+  if (create_session(log_json) < 0) {
+    return;
+  }
+  window.alert("Success. Your session ID is " + set_uuid());
+}
+
+// Function to save the input data, without calculating scores
+function saveSession() {
+  var inputs = getValues(); //Read values from html page
+  // Save data only if valid UUID
+  var uuid_cur = set_uuid();
+  if (uuid_cur.length == 0) {
+    window.alert("Please create a session first before saving inputs");
+    return -1;
+  }
+  var log_json = JSON.stringify({'uuid': uuid_cur, 'inputs': inputs});
+  if (save_session(log_json) < 0) {
+    return;
+  }
+}
+
 function reEnter() {
 	openPage('Qn', document.getElementById("QnTab"), '#2c4268')
   $('html, body').animate({ scrollTop: 0 }, 'fast');
 }
 
+// This function is not used anymore
 function submitForm() {
   var resOK = calcScore();
   if (resOK < 0 ) { return; }

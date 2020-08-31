@@ -68,6 +68,11 @@ body, html {
   background-color: #006494;
 }
 
+.session-card{
+  text-align: left;
+  background-color: #006494;
+}
+
 /* Style tab links */
 .tablink {
   background-color: #555;

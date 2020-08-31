@@ -91,33 +91,66 @@ SPDX-License-Identifier: Apache-2.0-->
         <div class="container">
             <div class="row">
                 <div class="w-100">
-                  Welcome to the COVID-19 Readiness Indicator tool. To assess your organization's 
-                  readiness, please answer the questions under each heading below, and then generate 
+                  Welcome to the COVID-19 Readiness Indicator tool. Please answer the questions under
+                  each heading below, and then generate 
                   the Readiness Report by clicking on 'Calculate score' button at the bottom of this page.<br>
-                  <em>Please note that the data entered by you is not saved until the Readiness Report 
-                    is generated successfully.</em><br><br>
-                    <form id="myForm" onsubmit="handleFormSubmit(this)">
-                         <div class="form-row w-100">
-                              <div class="form-group col-md-12">
-                                   <label for="uuidQ_flag">Do you want to start afresh or continue with an old session?</label>
-                                   <div class="form-check">
-                                   <input class="form-check-input" type="radio" name="uuidQ" id="uuidQ_0" value="0" checked>
-                                   <label class="form-check-label" for="uuidQ_0">Start afresh</label>
-                                   </div>
-                                   <div class="form-check">
-                                   <input class="form-check-input" type="radio" name="uuidQ" id="uuidQ_1" value="1">
-                                   <label class="form-check-label" for="uuidQ_1">Retrieve an old session</label>
-                                   </div>
+                  <em>At any stage, you may choose to save the entered data by clicking on 'Save' button,
+                  and resuming the session by entering the session ID received by email.
+                  The session ID is also displayed in the readiness report.</em><br><br>
+                    <form id="myForm" >
+                         <div class="form-row">
+
+                          <div class="form-group col-md-12">
+                             <label for="uuidQ_flag">Do you wish to continue with an old session or create a new session?</label>
+                             <div class="form-check">
+                               <input class="form-check-input" type="radio" name="uuidQ" id="uuidQ_1" value="1">
+                               <label class="form-check-label" for="uuidQ_1">Resume a previous session</label>
+                             </div>
+                             <div class="form-row card-body">
+                               <div class="form-group col-md-6 uuid_field" style="display: none;">
+                                    <label for="uuid">Paste the previous session's submission ID</label>
+                                    <input class="form-control" type="text" name="uuid" id="uuid" maxlength="36">
+                               </div>
+                               <div class="form-group col-md-6 uuid_status_info" style="display: none;">
+                                    <label for="uuid_status">Status</label>
+                                    <input class="form-control" type="text" name="uuid_status" id="uuid_status" maxlength="12" placeholder="Not Entered" readonly>
+                               </div>
+                             </div>
+
+                             <div class="form-check">
+                               <input class="form-check-input" type="radio" name="uuidQ" id="uuidQ_0" value="0" checked>
+                               <label class="form-check-label" for="uuidQ_0">New session (please provide the organisation name and a correct Email ID. The Email ID will be used for communicating the session ID needed for data/report retrieval/updates).</label>
+                             </div>
+                             <div class="row t-2 newsession_field">
+                               <div class="col-md-6 p-2">
+                                 <button type="submit" class="sub-btn btn-primary btn-block" id="newsessionBtn" name="action" value="createSession" onclick="newSession()">Create session</button>
+                               </div>
+                                   <div class="col-md-6">
+			                               <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldCreate"></div>
+                             </div>
+                          </div>
+
+                          </div>
+                        </div>
+
+                              <div class="card-body">
+                                  <div class="form-row">
+                                       <div class="form-group col-md-12">
+                                            <label for="cmpName">Organisation Name:</label>
+                                            <input type="text" class="form-control" name="cmpName" id="cmpName" minlength="2" maxlength="150" placeholder="Organisation Name">
+                                       </div>
+                                       <div class="form-group col-md-12">
+                                            <label for="emailAddr">Email Address:</label>
+                                            <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4"  maxlength="60" placeholder="Email Address">
+                                       </div>
+                                  </div>
                               </div>
-                              <div class="form-group col-md-8 uuid_field" style="display: none;">
-                                   <label for="uuid">Paste the previous session submission ID</label>
-                                   <input class="form-control" type="text" name="uuid" id="uuid" maxlength="36">
-                              </div>
-                              <div class="form-group col-md-4 uuid_status_info" style="display: none;">
-                                   <label for="uuid_status">Status</label>
-                                   <input class="form-control" type="text" name="uuid_status" id="uuid_status" maxlength="12" placeholder="Not Entered" readonly>
-                              </div>
-                         </div>
+
+                          <div class="form-row">
+                               <div class="col-md-12 p-2">
+                                 <button type="submit" class="sub-btn btn-primary btn-block" id="saveBtn" name="action" value="saveSession" onclick="saveSession()">Save inputs</button>
+                               </div>
+                          </div>
 
                          <div class="accordion" id="accordionExample">
                               <div class="card">   
@@ -1466,31 +1499,9 @@ SPDX-License-Identifier: Apache-2.0-->
                                    </div>
                               </div> 
                               
-                              <p style="margin-bottom:0.1cm;"></p>
-                              <div class="card"> 
-                                   <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                        <button type="button" class="btn" data-toggle="collapse" data-target="#collapseEleven">11. Organisation Contact Information</button>									
-                                        </h2>
-                                   </div>
-                                   <div id="collapseEleven" class="collapse" aria-labelledby="headingEleven" data-parent="#accordionExample">
-                                        <div class="card-body">
-                                             <div class="form-row">
-                                                  <div class="form-group col-md-12">
-                                                       <label for="cmpName">Organisation Name:</label>
-                                                       <input type="text" class="form-control" name="cmpName" id="cmpName" minlength="2" maxlength="150" placeholder="Organisation Name">
-                                                  </div>
-                                                  <div class="form-group col-md-12">
-                                                       <label for="emailAddr">Email Address:</label>
-                                                       <input type="email" class="form-control" name="emailAddr" id="emailAddr" minlength="4"  maxlength="60" placeholder="Email Address">
-                                                  </div>
-                                             </div>
-                                        </div>
-                                   </div>
-                              </div>  
                          </div>
                          <p style="margin-bottom:0.5cm;"> </p>
-                         <button type="submit" class="sub-btn btn-primary btn-block">Calculate score</button>
+                         <button type="submit" class="sub-btn btn-primary btn-block" onclick="handleFormSubmit(this)">Calculate score</button>
                          <p style="margin-bottom:0.5cm;"> </p>
                          <div class="row justify-content-center">
                            <div class="col-md-6">

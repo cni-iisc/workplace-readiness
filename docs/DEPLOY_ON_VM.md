@@ -13,6 +13,12 @@ It keeps deployment items in conventional places:
 
 The GitHub deploy key should be read-only.
 
+The staging deployment used during handoff is:
+
+- staging domain: `wp-readiness-staging.artpark.ai`
+- staging mode: HTTPS, reCAPTCHA disabled, email disabled
+- production domain: `covid.readiness.in`
+
 ## 1. Install Base OS Packages
 
 On the VM:
@@ -168,7 +174,7 @@ CAPTCHA_PRIVATE=""
 RECAPTCHA_SITE_KEY=""
 DB_JSON="production_db"
 DB_FEEDBACK="production_fb_db"
-HTTP_ORIGIN="http://wp-readiness-staging.artpark.ai"
+HTTP_ORIGIN="https://wp-readiness-staging.artpark.ai"
 MONGO_URI="mongodb://localhost:27017"
 STATIC_ROOT="/opt/workplace-readiness/app/web_files"
 RECAPTCHA_ENABLED="false"
@@ -177,9 +183,10 @@ ADMIN_EMAIL=""
 REPORT_RECIPIENTS=""
 ```
 
-The staging config disables reCAPTCHA in both the backend and frontend. This
-avoids failures from the production reCAPTCHA site key being restricted to
-`covid.readiness.in`.
+The staging config disables reCAPTCHA in both the backend and frontend, and
+disables email so session creation does not depend on Gmail SMTP. This avoids
+failures from the production reCAPTCHA site key being restricted to
+`covid.readiness.in` and keeps staging safe for test submissions.
 
 Do not commit this file.
 
@@ -279,6 +286,17 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+After DNS points at the VM, issue a staging certificate:
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d wp-readiness-staging.artpark.ai
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+When prompted by Certbot, choose the redirect-to-HTTPS option.
+
 For production before TLS:
 
 ```bash
@@ -297,12 +315,22 @@ curl -I http://127.0.0.1/
 curl http://127.0.0.1/health
 ```
 
-For staging, after DNS points at the VM:
+For staging:
 
 ```bash
-curl -I http://wp-readiness-staging.artpark.ai/
-curl http://wp-readiness-staging.artpark.ai/health
+curl -I https://wp-readiness-staging.artpark.ai/
+curl https://wp-readiness-staging.artpark.ai/health
 ```
+
+Staging validation checklist:
+
+- The homepage loads over HTTPS.
+- A new session can be created without reCAPTCHA.
+- The generated submission ID appears in the form.
+- Inputs can be saved against the submission ID.
+- A saved submission ID can be retrieved.
+- A score can be calculated.
+- No errors appear in `sudo journalctl -u workplace-readiness -n 80 --no-pager`.
 
 For production, after DNS points at the VM and certbot has issued certs:
 
@@ -320,6 +348,18 @@ Then:
 ```bash
 curl https://covid.readiness.in/health
 ```
+
+Production cutover needs:
+
+- DNS for `covid.readiness.in` points to the new VM.
+- AWS security group allows inbound TCP `80` and `443`.
+- Production reCAPTCHA site key and secret are available and allow
+  `covid.readiness.in`.
+- Gmail/app-password credentials are available if production email should be
+  enabled.
+- `HTTP_ORIGIN` is set to `https://covid.readiness.in`.
+- `RECAPTCHA_ENABLED` and `EMAIL_ENABLED` are explicitly set for production.
+- The restored MongoDB counts match the captured backup before cutover.
 
 ## 11. Pull-Based Deploy
 
@@ -356,6 +396,28 @@ Restart app:
 
 ```bash
 sudo systemctl restart workplace-readiness
+```
+
+Check the deployed environment values without printing secrets:
+
+```bash
+sudo grep -E 'HTTP_ORIGIN|RECAPTCHA_ENABLED|EMAIL_ENABLED|DB_JSON|DB_FEEDBACK|MONGO_URI|STATIC_ROOT' \
+  /etc/workplace-readiness/workplace-readiness.env
+```
+
+Collect VM version details for the deployment notes:
+
+```bash
+lsb_release -a
+uname -a
+nginx -v
+uv --version
+/opt/workplace-readiness/app/.venv/bin/python --version
+/opt/workplace-readiness/app/.venv/bin/gunicorn --version
+mongod --version
+mongorestore --version
+git -C /opt/workplace-readiness/app rev-parse --abbrev-ref HEAD
+git -C /opt/workplace-readiness/app rev-parse --short HEAD
 ```
 
 Check nginx:

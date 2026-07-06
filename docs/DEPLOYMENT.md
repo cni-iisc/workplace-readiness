@@ -3,18 +3,16 @@
 This branch keeps the legacy static frontend and API contract, but replaces the
 old ad hoc Flask scripts with a small app-factory service managed by `uv`.
 
+For the current VM deployment runbook, use
+[Deploy On Ubuntu VM](DEPLOY_ON_VM.md). This file is retained as background
+context from the modernization work.
+
 ## Production Data
 
 The production backup was copied locally and verified with SHA-256:
 
 ```text
 6793bf2647d88a20e087cbed60a604b5e988cab88b84296d25d55b82d4049e10
-```
-
-Local backup path:
-
-```text
-/Users/snehas/Documents/work/artpark/code/cni-iisc/covid_readiness_backup_20260706_082648.tar.gz
 ```
 
 The backup contains:
@@ -122,6 +120,6 @@ location /api {
 }
 ```
 
-For the new deployment, keep that same shape or serve static files from Flask
-for this low-traffic service. The direct nginx static path is still preferred
-because it matches the known-good deployment.
+For the new deployment, nginx serves static files directly from
+`/opt/workplace-readiness/app/web_files` and proxies `/api` and `/health` to
+Gunicorn on `127.0.0.1:5000`.

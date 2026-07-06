@@ -52,7 +52,7 @@ function get_data(uuid_field){
     $.ajax({
       type: "POST",
       //url: "https://workplacereadinesscalculator.xyz/api/retrieve",
-      url: window.location.href+"api/retrieve",
+      url: window.location.origin + "/api/retrieve",
       data: "data="+JSON.stringify({'uuid': uuid_field}),
       success: function(data){
         if (data.length != 0){

@@ -203,6 +203,50 @@ Do not commit this file.
 
 ## 7. Restore MongoDB Data
 
+The migration backup artifact should be retained on the VM at:
+
+```text
+/var/backups/workplace-readiness/covid_readiness_backup_20260706_082648.tar.gz
+```
+
+The verified SHA-256 checksum is:
+
+```text
+6793bf2647d88a20e087cbed60a604b5e988cab88b84296d25d55b82d4049e10
+```
+
+The top-level backup archive contains:
+
+```text
+mongo_dump/
+mongo_dump/production_db/
+mongo_dump/production_db/json_logs.bson
+mongo_dump/production_db/json_logs.metadata.json
+mongo_dump/production_fb_db/
+mongo_dump/production_fb_db/fb_logs.bson
+mongo_dump/production_fb_db/fb_logs.metadata.json
+covid_19_wrc_files.tar.gz
+system_config/
+system_config/nginx/
+system_config/nginx/sites-available/
+system_config/nginx/sites-available/default
+system_config/nginx/sites-available/workplace-readiness
+system_config/nginx/sites-enabled/
+system_config/nginx/sites-enabled/default
+system_config/nginx/sites-enabled/workplace-readiness
+system_config/cron/
+system_config/cron/root.crontab
+system_config/cron/ubuntu.crontab
+system_config/systemd/
+system_config/systemd/gunicorn_server.service
+system_info.txt
+env.redacted
+```
+
+`covid_19_wrc_files.tar.gz` contains the legacy application files copied from
+the old server. The large generated `Daily_Reports` folder was intentionally
+excluded from that inner file archive during backup creation.
+
 Copy the verified backup tarball to the VM, for example:
 
 ```bash
@@ -210,7 +254,15 @@ scp covid_readiness_backup_20260706_082648.tar.gz \
   ubuntu@<server>:/var/backups/workplace-readiness/
 ```
 
-On the VM:
+On the VM, verify the backup before restoring:
+
+```bash
+cd /var/backups/workplace-readiness
+sha256sum covid_readiness_backup_20260706_082648.tar.gz
+tar -tzf covid_readiness_backup_20260706_082648.tar.gz | head -80
+```
+
+Then extract and restore MongoDB:
 
 ```bash
 cd /var/backups/workplace-readiness

@@ -13,23 +13,16 @@ It keeps deployment items in conventional places:
 
 The GitHub deploy key should be read-only.
 
-## 1. Install OS Packages
+## 1. Install Base OS Packages
 
 On the VM:
 
 ```bash
 sudo apt update
-sudo apt install -y git curl nginx
+sudo apt install -y ca-certificates curl gnupg git nginx
 ```
 
-Install/start MongoDB and the MongoDB Database Tools using the package source
-appropriate for the Ubuntu version on the VM, then confirm:
-
-```bash
-mongod --version
-mongorestore --version
-sudo systemctl status mongod --no-pager
-```
+## 2. Install uv
 
 Install `uv` for the deploy user:
 
@@ -40,7 +33,71 @@ export PATH="$HOME/.local/bin:$PATH"
 uv --version
 ```
 
-## 2. Create Directories
+If `uv` is not found after a new SSH login, run:
+
+```bash
+source ~/.bashrc
+uv --version
+```
+
+## 3. Install MongoDB
+
+Use MongoDB's apt repository so the VM has both the database server and the
+`mongorestore` tool needed to restore the captured backup.
+
+First check the Ubuntu codename:
+
+```bash
+. /etc/os-release
+echo "$VERSION_CODENAME"
+```
+
+The commands below support the usual new-VM codenames, including `jammy`
+Ubuntu 22.04 and `noble` Ubuntu 24.04:
+
+```bash
+. /etc/os-release
+UBUNTU_CODENAME="$VERSION_CODENAME"
+
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc \
+  | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu ${UBUNTU_CODENAME}/mongodb-org/8.0 multiverse" \
+  | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
+
+sudo apt update
+sudo apt install -y mongodb-org mongodb-database-tools
+```
+
+Start and enable MongoDB:
+
+```bash
+sudo systemctl enable mongod
+sudo systemctl start mongod
+```
+
+Confirm:
+
+```bash
+mongod --version
+mongorestore --version
+sudo systemctl status mongod --no-pager
+```
+
+If `apt update` fails with a MongoDB repository error, the VM's Ubuntu codename
+is probably not supported by the MongoDB version above. In that case, use the
+closest supported MongoDB version from MongoDB's official Ubuntu install docs,
+then continue once these commands work:
+
+```bash
+mongod --version
+mongorestore --version
+```
+
+The captured production dump came from MongoDB 4.2.25. Restoring into a newer
+MongoDB is acceptable for this handoff deployment.
+
+## 4. Create Directories
 
 ```bash
 sudo mkdir -p /opt/workplace-readiness
@@ -50,7 +107,7 @@ sudo chown -R ubuntu:ubuntu /opt/workplace-readiness
 sudo chown -R ubuntu:ubuntu /var/backups/workplace-readiness
 ```
 
-## 3. Clone From GitHub
+## 5. Clone From GitHub
 
 This assumes `~/.ssh/config` already has the GitHub deploy-key host:
 
@@ -74,7 +131,7 @@ git checkout modernize-maintainable-flask
 After the PR is merged, switch the branch in `scripts/deploy_vm.sh` or run it
 with `BRANCH=master`.
 
-## 4. Configure Environment
+## 6. Configure Environment
 
 Create the server-only environment file:
 
@@ -103,7 +160,7 @@ REPORT_RECIPIENTS=""
 
 Do not commit this file.
 
-## 5. Restore MongoDB Data
+## 7. Restore MongoDB Data
 
 Copy the verified backup tarball to the VM, for example:
 
@@ -140,7 +197,7 @@ Expected from the captured backup:
 - `json_logs`: 178
 - `fb_logs`: 12
 
-## 6. Install Python Dependencies
+## 8. Install Python Dependencies
 
 ```bash
 cd /opt/workplace-readiness/app
@@ -154,7 +211,7 @@ UV_CACHE_DIR=/tmp/uv-cache uv run pytest
 UV_CACHE_DIR=/tmp/uv-cache uv run ruff check .
 ```
 
-## 7. Install systemd Unit
+## 9. Install systemd Unit
 
 ```bash
 sudo cp /opt/workplace-readiness/app/config/systemd/workplace-readiness.service \
@@ -177,7 +234,7 @@ Expected:
 {"status":"ok"}
 ```
 
-## 8. Install nginx Site
+## 10. Install nginx Site
 
 If TLS certificates are not present yet, issue them before enabling the HTTPS
 server block, or temporarily adapt the nginx config to serve HTTP only.
@@ -206,7 +263,7 @@ After DNS points at the VM and TLS is in place:
 curl https://covid.readiness.in/health
 ```
 
-## 9. Pull-Based Deploy
+## 11. Pull-Based Deploy
 
 The deploy script is intentionally boring:
 
@@ -229,7 +286,7 @@ Use a different branch:
 BRANCH=master /opt/workplace-readiness/app/scripts/deploy_vm.sh
 ```
 
-## 10. Useful Operations
+## 12. Useful Operations
 
 View app logs:
 

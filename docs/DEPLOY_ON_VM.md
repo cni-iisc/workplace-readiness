@@ -201,14 +201,14 @@ Expected from the captured backup:
 
 ```bash
 cd /opt/workplace-readiness/app
-UV_CACHE_DIR=/tmp/uv-cache uv sync --frozen
+uv sync --frozen
 ```
 
 Sanity check:
 
 ```bash
-UV_CACHE_DIR=/tmp/uv-cache uv run pytest
-UV_CACHE_DIR=/tmp/uv-cache uv run ruff check .
+uv run pytest
+uv run ruff check .
 ```
 
 ## 9. Install systemd Unit

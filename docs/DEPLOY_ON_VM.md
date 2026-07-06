@@ -147,6 +147,7 @@ Use this shape:
 SENDER_EMAIL="readiness.in@gmail.com"
 SENDER_PASSWORD="<secret>"
 CAPTCHA_PRIVATE="<secret>"
+RECAPTCHA_SITE_KEY="<site-key>"
 DB_JSON="production_db"
 DB_FEEDBACK="production_fb_db"
 HTTP_ORIGIN="https://covid.readiness.in"
@@ -157,6 +158,28 @@ EMAIL_ENABLED="true"
 ADMIN_EMAIL=""
 REPORT_RECIPIENTS=""
 ```
+
+For staging at `wp-readiness-staging.artpark.ai`, use:
+
+```dotenv
+SENDER_EMAIL="readiness.in@gmail.com"
+SENDER_PASSWORD="<secret-or-empty>"
+CAPTCHA_PRIVATE=""
+RECAPTCHA_SITE_KEY=""
+DB_JSON="production_db"
+DB_FEEDBACK="production_fb_db"
+HTTP_ORIGIN="http://wp-readiness-staging.artpark.ai"
+MONGO_URI="mongodb://localhost:27017"
+STATIC_ROOT="/opt/workplace-readiness/app/web_files"
+RECAPTCHA_ENABLED="false"
+EMAIL_ENABLED="false"
+ADMIN_EMAIL=""
+REPORT_RECIPIENTS=""
+```
+
+The staging config disables reCAPTCHA in both the backend and frontend. This
+avoids failures from the production reCAPTCHA site key being restricted to
+`covid.readiness.in`.
 
 Do not commit this file.
 
@@ -236,13 +259,30 @@ Expected:
 
 ## 10. Install nginx Site
 
-If TLS certificates are not present yet, issue them before enabling the HTTPS
-server block, or temporarily adapt the nginx config to serve HTTP only.
+The checked-in nginx configs are split by environment:
 
-Install the checked-in config:
+- `config/nginx/workplace-readiness.staging.http.conf`
+- `config/nginx/workplace-readiness.production.http.conf`
+- `config/nginx/workplace-readiness.production.https.conf`
+
+Start with an HTTP config. Do not install an HTTPS config until the certificate
+files exist.
+
+For staging:
 
 ```bash
-sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.conf \
+sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.staging.http.conf \
+  /etc/nginx/sites-available/workplace-readiness
+sudo ln -sfn /etc/nginx/sites-available/workplace-readiness \
+  /etc/nginx/sites-enabled/workplace-readiness
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+For production before TLS:
+
+```bash
+sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.production.http.conf \
   /etc/nginx/sites-available/workplace-readiness
 sudo ln -sfn /etc/nginx/sites-available/workplace-readiness \
   /etc/nginx/sites-enabled/workplace-readiness
@@ -257,7 +297,25 @@ curl -I http://127.0.0.1/
 curl http://127.0.0.1/health
 ```
 
-After DNS points at the VM and TLS is in place:
+For staging, after DNS points at the VM:
+
+```bash
+curl -I http://wp-readiness-staging.artpark.ai/
+curl http://wp-readiness-staging.artpark.ai/health
+```
+
+For production, after DNS points at the VM and certbot has issued certs:
+
+```bash
+sudo apt install -y certbot python3-certbot-nginx
+sudo certbot certonly --webroot -w /var/www/html -d covid.readiness.in
+sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.production.https.conf \
+  /etc/nginx/sites-available/workplace-readiness
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Then:
 
 ```bash
 curl https://covid.readiness.in/health

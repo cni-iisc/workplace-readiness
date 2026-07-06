@@ -37,6 +37,19 @@ def create_app(
     def health() -> dict[str, str]:
         return {"status": "ok"}
 
+    @app.get("/api/client-config.js")
+    def client_config() -> Response:
+        config = {
+            "recaptchaEnabled": settings.recaptcha_enabled,
+            "recaptchaSiteKey": settings.recaptcha_site_key,
+        }
+        body = (
+            "window.WRC_CONFIG = Object.assign({}, window.WRC_CONFIG || {}, "
+            f"{json.dumps(config)}"
+            ");"
+        )
+        return Response(body, status=200, mimetype="application/javascript")
+
     @app.get("/")
     def index() -> Any:
         return app.send_static_file("index.html")

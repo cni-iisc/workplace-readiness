@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     sender_email: str = Field(default="", alias="SENDER_EMAIL")
     sender_password: str = Field(default="", alias="SENDER_PASSWORD")
     captcha_private: str = Field(default="", alias="CAPTCHA_PRIVATE")
+    recaptcha_site_key: str = Field(default="", alias="RECAPTCHA_SITE_KEY")
     db_json: str = Field(default="production_db", alias="DB_JSON")
     db_feedback: str = Field(default="production_fb_db", alias="DB_FEEDBACK")
     http_origin: str = Field(default="", alias="HTTP_ORIGIN")

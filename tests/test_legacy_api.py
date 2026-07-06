@@ -179,3 +179,25 @@ def test_origin_is_required_when_configured() -> None:
 
     assert response.status_code == 200
     assert response.get_data(as_text=True) == "Undone"
+
+
+def test_client_config_reflects_recaptcha_settings() -> None:
+    app = create_app(
+        Settings(
+            HTTP_ORIGIN="",
+            RECAPTCHA_ENABLED=False,
+            RECAPTCHA_SITE_KEY="staging-key",
+            EMAIL_ENABLED=False,
+        ),
+        store=FakeStore(),  # type: ignore[arg-type]
+        mailer=FakeMailer(),  # type: ignore[arg-type]
+        recaptcha=FakeRecaptcha(),  # type: ignore[arg-type]
+    )
+    app.testing = True
+
+    response = app.test_client().get("/api/client-config.js")
+
+    assert response.status_code == 200
+    assert "recaptchaEnabled" in response.get_data(as_text=True)
+    assert "false" in response.get_data(as_text=True)
+    assert "staging-key" in response.get_data(as_text=True)

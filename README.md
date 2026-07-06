@@ -17,7 +17,35 @@ There are ten specific readiness indices, one for each  sub-heading. Some of the
 The software tool is comprised of two parts: 
 
 1. The static website (including the client-side javascript code) in `web_files` directory: these files, served by a webserver, take care of rendering the questionnaire, user input validation, and readiness score calculation. The tool can work stand-alone without the server-side component (although with limited functionality).
-2. The server-side code in `server_code` directory: example python WSGI code to implement the REST API for storing the submitted inputs in a database and retrieving a specific user submission based on a unique session key.
+2. The server-side code. The legacy scripts remain in `server_code`, while the maintained backend lives in `src/workplace_readiness_service` and preserves the existing `/api/*` contract.
+
+### Maintained backend
+
+The maintained backend uses Flask, MongoDB, and `uv`.
+
+```bash
+cp .env.example .env
+uv sync
+uv run gunicorn --workers 3 --bind 127.0.0.1:5000 wsgi:app
+```
+
+Health check:
+
+```bash
+curl http://127.0.0.1:5000/health
+```
+
+For local testing without reCAPTCHA or email:
+
+```bash
+RECAPTCHA_ENABLED=false EMAIL_ENABLED=false uv run flask --app workplace_readiness_service.app:create_app run
+```
+
+See:
+
+- `docs/DEPLOYMENT.md` for backup/restore and deployment notes
+- `docs/DATA_CONTRACT.md` for the legacy API and MongoDB document shape
+- `docs/PRODUCTION_INSPECTION.md` for the captured production environment summary
 
 ### Instructions for hosting the Readiness Indicator
 

@@ -1,0 +1,21 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+src/*.egg-info/
+
+# Local production backups and restored data should never be committed.
+backup-inspect/
+mongo_dump/
+*.tar
+*.tar.gz
+*.bson

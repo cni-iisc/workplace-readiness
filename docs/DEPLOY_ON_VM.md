@@ -19,6 +19,17 @@ The staging deployment used during handoff is:
 - staging mode: HTTPS, reCAPTCHA disabled, email disabled
 - production domain: `covid.readiness.in`
 
+Observed staging VM versions on 2026-07-06:
+
+- Ubuntu 24.04.4 LTS (`noble`)
+- Linux `6.17.0-1010-aws` on `x86_64`
+- nginx 1.24.0
+- uv 0.11.26
+- Python 3.12.3
+- Gunicorn 26.0.0
+- MongoDB 8.0.26
+- MongoDB Database Tools / `mongorestore` 100.17.0
+
 ## 1. Install Base OS Packages
 
 On the VM:

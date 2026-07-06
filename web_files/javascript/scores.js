@@ -44,6 +44,10 @@ function resetRecaptcha(widgetId) {
     }
 }
 
+function apiPath(path) {
+    return window.location.origin + path;
+}
+
 
 //To enable multiple captchas on a site
 var CaptchaCallback = function() {
@@ -938,7 +942,7 @@ function post_function(log_json)
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/update",
+    url: apiPath("/api/update"),
     //url: "https://workplacereadinesscalculator.xyz/api/update",
     data: "data="+log_json,
     success: function(data){
@@ -984,7 +988,7 @@ function create_session(log_json) {
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/create",
+    url: apiPath("/api/create"),
     //url: "https://workplacereadinesscalculator.xyz/api/create",
     data: "data="+log_json,
     success: function(data){
@@ -1015,7 +1019,7 @@ function save_session(log_json) {
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/saveInputs",
+    url: apiPath("/api/saveInputs"),
     //url: "https://workplacereadinesscalculator.xyz/api/saveInputs",
     data: "data="+log_json,
     success: function(data){
@@ -1153,7 +1157,7 @@ function fbSubmit(formObject) {
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/feedbackSubmit",
+    url: apiPath("/api/feedbackSubmit"),
     //url: "https://workplacereadinesscalculator.xyz/api/feedbackSubmit",
     data: "data="+fb_json,
     success: function(data){

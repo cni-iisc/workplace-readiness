@@ -28,7 +28,7 @@ function recaptchaSiteKey() {
     if (window.WRC_CONFIG && window.WRC_CONFIG.recaptchaSiteKey) {
         return window.WRC_CONFIG.recaptchaSiteKey;
     }
-    return "6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW";
+    return "6LeXnkgtAAAAANyx7Trpp0SPK0CDdBjwDVUi5Ycl";
 }
 
 function recaptchaResponse(widgetId) {

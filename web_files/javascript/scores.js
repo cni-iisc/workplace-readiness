@@ -20,12 +20,49 @@ var widgetIdCreate;
 var widgetIdCalc;
 var widgetIdFB;
 
+function recaptchaEnabled() {
+    return !(window.WRC_CONFIG && window.WRC_CONFIG.recaptchaEnabled === false);
+}
+
+function recaptchaSiteKey() {
+    if (window.WRC_CONFIG && window.WRC_CONFIG.recaptchaSiteKey) {
+        return window.WRC_CONFIG.recaptchaSiteKey;
+    }
+    return "";
+}
+
+function recaptchaResponse(widgetId) {
+    if (!recaptchaEnabled() || typeof grecaptcha === "undefined" || typeof widgetId === "undefined") {
+        return "";
+    }
+    return grecaptcha.getResponse(widgetId);
+}
+
+function resetRecaptcha(widgetId) {
+    if (recaptchaEnabled() && typeof grecaptcha !== "undefined") {
+        grecaptcha.reset(widgetId);
+    }
+}
+
+function apiPath(path) {
+    return window.location.origin + path;
+}
+
 
 //To enable multiple captchas on a site
 var CaptchaCallback = function() {
-    widgetIdCreate = grecaptcha.render('captchaFieldCreate', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
-    widgetIdCalc = grecaptcha.render('captchaFieldCalc', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
-    widgetIdFB = grecaptcha.render('captchaFieldFB', {'sitekey' : '6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW'});
+    if (!recaptchaEnabled()) {
+        $(".g-recaptcha").hide();
+        return;
+    }
+    var siteKey = recaptchaSiteKey();
+    if (!siteKey) {
+        console.error("reCAPTCHA is enabled but no site key is configured.");
+        return;
+    }
+    widgetIdCreate = grecaptcha.render('captchaFieldCreate', {'sitekey' : siteKey});
+    widgetIdCalc = grecaptcha.render('captchaFieldCalc', {'sitekey' : siteKey});
+    widgetIdFB = grecaptcha.render('captchaFieldFB', {'sitekey' : siteKey});
 };
 
 function onSuccess (scoreMsg) {
@@ -891,7 +928,7 @@ function calcScore () {
   suggestions["Canteen/pantry"] = sg_cafeteria;
   suggestions["Hygiene and sanitation"] = sg_sanitation;
 
-  var log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': grecaptcha.getResponse(widgetIdCalc)});
+  var log_json = JSON.stringify({'uuid': set_uuid(), 'inputs': inputs, 'outputs': outputs, 'suggestions': suggestions, 'recaptcha': recaptchaResponse(widgetIdCalc)});
   window['logData'] = log_json;
   if (post_function(log_json) < 0) {
     return -1;
@@ -909,7 +946,7 @@ function post_function(log_json)
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/update",
+    url: apiPath("/api/update"),
     //url: "https://workplacereadinesscalculator.xyz/api/update",
     data: "data="+log_json,
     success: function(data){
@@ -933,7 +970,7 @@ function post_function(log_json)
           $("#week_counter").show();
         }
       result = 1;
-      grecaptcha.reset(widgetIdCalc);
+      resetRecaptcha(widgetIdCalc);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       if(XMLHttpRequest.responseText == 'recaptcha_failed') {
@@ -955,7 +992,7 @@ function create_session(log_json) {
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/create",
+    url: apiPath("/api/create"),
     //url: "https://workplacereadinesscalculator.xyz/api/create",
     data: "data="+log_json,
     success: function(data){
@@ -965,7 +1002,7 @@ function create_session(log_json) {
           $("#uuid_status").val("Valid UUID");
         }
       result = 1;
-      grecaptcha.reset(widgetIdCreate);
+      resetRecaptcha(widgetIdCreate);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       if(XMLHttpRequest.responseText == 'recaptcha_failed') {
@@ -986,7 +1023,7 @@ function save_session(log_json) {
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/saveInputs",
+    url: apiPath("/api/saveInputs"),
     //url: "https://workplacereadinesscalculator.xyz/api/saveInputs",
     data: "data="+log_json,
     success: function(data){
@@ -1048,7 +1085,7 @@ function newSession() {
     window.alert("Please provide organisation name and email to proceed")
     return -1;
   }
-  var log_json = JSON.stringify({'uuid': '', 'inputs': input_contacts, 'recaptcha': grecaptcha.getResponse(widgetIdCreate)});
+  var log_json = JSON.stringify({'uuid': '', 'inputs': input_contacts, 'recaptcha': recaptchaResponse(widgetIdCreate)});
   if (create_session(log_json) < 0) {
     return;
   }
@@ -1117,20 +1154,20 @@ function fbSubmit(formObject) {
   var fbName = document.getElementById("fbName").value;
   var fbEmail = document.getElementById("fbEmail").value;
   var fbText = document.getElementById("fbText").value;
-  fb_json = JSON.stringify({'fbName': fbName, 'fbEmail': fbEmail, 'fbText': fbText, 'recaptcha': grecaptcha.getResponse(widgetIdFB)});
+  fb_json = JSON.stringify({'fbName': fbName, 'fbEmail': fbEmail, 'fbText': fbText, 'recaptcha': recaptchaResponse(widgetIdFB)});
   //fb_json = JSON.stringify({'fbName': fbName, 'fbEmail': fbEmail, 'fbText': fbText});
   //console.log(fb_json);
   var result = 1; 
   $.ajax({
     'async':false,
     type: "POST",
-    url: window.location.href+"api/feedbackSubmit",
+    url: apiPath("/api/feedbackSubmit"),
     //url: "https://workplacereadinesscalculator.xyz/api/feedbackSubmit",
     data: "data="+fb_json,
     success: function(data){
       alert("Thank you for providing your feedback," + fbName);
       document.getElementById("fbForm").reset();
-      grecaptcha.reset(widgetIdFB);
+      resetRecaptcha(widgetIdFB);
     },
     error: function(XMLHttpRequest, textStatus, errorThrown) {
       if(XMLHttpRequest.responseText == 'recaptcha_failed') {
@@ -1143,4 +1180,3 @@ function fbSubmit(formObject) {
     }
   });
 }
-

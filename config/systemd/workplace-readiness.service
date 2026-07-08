@@ -1,0 +1,22 @@
+[Unit]
+Description=COVID-19 Workplace Readiness backend
+After=network.target mongod.service
+
+[Service]
+Type=simple
+User=ubuntu
+Group=www-data
+WorkingDirectory=/opt/workplace-readiness/app
+EnvironmentFile=/etc/workplace-readiness/workplace-readiness.env
+ExecStart=/opt/workplace-readiness/app/.venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 wsgi:app
+Restart=on-failure
+RestartSec=5
+
+# The service should not need write access to the repository.
+ProtectSystem=full
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+

@@ -16,6 +16,13 @@ SPDX-License-Identifier: Apache-2.0-->
         
           gtag('config', 'UA-164131064-2');
         </script>
+        <script>
+          window.WRC_CONFIG = window.WRC_CONFIG || {
+            recaptchaEnabled: true,
+            recaptchaSiteKey: ""
+          };
+        </script>
+        <script src="api/client-config.js"></script>
 	      <script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
         <script src="javascript/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="javascript/dynamicUI.js"></script>
@@ -126,7 +133,7 @@ SPDX-License-Identifier: Apache-2.0-->
                                  <button type="submit" class="sub-btn btn-primary btn-block" id="newsessionBtn" name="action" value="createSession" onclick="newSession()">Create session</button>
                                </div>
                                    <div class="col-md-6">
-			                               <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldCreate"></div>
+			                               <div class="g-recaptcha" id="captchaFieldCreate"></div>
                              </div>
                           </div>
 
@@ -1505,7 +1512,7 @@ SPDX-License-Identifier: Apache-2.0-->
                          <p style="margin-bottom:0.5cm;"> </p>
                          <div class="row justify-content-center">
                            <div class="col-md-6">
-			                       <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldCalc"></div>
+			                       <div class="g-recaptcha" id="captchaFieldCalc"></div>
                            </div>
                          </div>
                     </form>
@@ -1631,7 +1638,7 @@ SPDX-License-Identifier: Apache-2.0-->
                          <button type="submit" class="sub-btn btn-primary btn-block">Submit</button>
                        </div>
                        <div class="col-md-4">
-			                     <div class="g-recaptcha" data-sitekey="6Ld6HPcUAAAAANMse5PylT4Eda2UGToHfgLpOzrW" id="captchaFieldFB"></div>
+			                     <div class="g-recaptcha" id="captchaFieldFB"></div>
                        </div>
                      </div>
                      </fieldset>
@@ -1726,4 +1733,3 @@ SPDX-License-Identifier: Apache-2.0-->
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
   </body>
 </html>
-

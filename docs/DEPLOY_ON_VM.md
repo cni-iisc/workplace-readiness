@@ -142,11 +142,8 @@ Clone:
 git clone git@github-workplace-readiness:cni-iisc/workplace-readiness.git \
   /opt/workplace-readiness/app
 cd /opt/workplace-readiness/app
-git checkout modernize-maintainable-flask
+git checkout main
 ```
-
-After the PR is merged, switch the branch in `scripts/deploy_vm.sh` or run it
-with `BRANCH=master`.
 
 ## 6. Configure Environment
 
@@ -437,14 +434,14 @@ It runs:
 ```bash
 git fetch
 git reset --hard origin/<branch>
-uv sync --frozen
+uv sync --locked
 systemctl restart workplace-readiness
 ```
 
 Use a different branch:
 
 ```bash
-BRANCH=master /opt/workplace-readiness/app/scripts/deploy_vm.sh
+BRANCH=<branch-name> /opt/workplace-readiness/app/scripts/deploy_vm.sh
 ```
 
 ## 12. Useful Operations
@@ -502,4 +499,3 @@ sudo systemctl status mongod --no-pager
 - Confirm whether MongoDB is local or external.
 - Confirm installed `uv` path.
 - Confirm DNS and TLS/certbot steps.
-- Confirm final branch name after merge.

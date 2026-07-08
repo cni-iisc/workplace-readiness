@@ -13,13 +13,13 @@ It keeps deployment items in conventional places:
 
 The GitHub deploy key should be read-only.
 
-The staging deployment used during handoff is:
+Production deployment:
 
-- staging domain: `wp-readiness-staging.artpark.ai`
-- staging mode: HTTPS, reCAPTCHA disabled, email disabled
 - production domain: `covid.readiness.in`
+- HTTPS certificate: Let's Encrypt via Certbot
+- certificate renewal: official `certbot.timer` systemd timer
 
-Observed staging VM versions on 2026-07-06:
+Observed production VM versions on 2026-07-06:
 
 - Ubuntu 24.04.4 LTS (`noble`)
 - Linux `6.17.0-1010-aws` on `x86_64`
@@ -173,29 +173,6 @@ ADMIN_EMAIL=""
 REPORT_RECIPIENTS=""
 ```
 
-For staging at `wp-readiness-staging.artpark.ai`, use:
-
-```dotenv
-SENDER_EMAIL="readiness.in@gmail.com"
-SENDER_PASSWORD="<secret-or-empty>"
-CAPTCHA_PRIVATE=""
-RECAPTCHA_SITE_KEY=""
-DB_JSON="production_db"
-DB_FEEDBACK="production_fb_db"
-HTTP_ORIGIN="https://wp-readiness-staging.artpark.ai"
-MONGO_URI="mongodb://localhost:27017"
-STATIC_ROOT="/opt/workplace-readiness/app/web_files"
-RECAPTCHA_ENABLED="false"
-EMAIL_ENABLED="false"
-ADMIN_EMAIL=""
-REPORT_RECIPIENTS=""
-```
-
-The staging config disables reCAPTCHA in both the backend and frontend, and
-disables email so session creation does not depend on Gmail SMTP. This avoids
-failures from the production reCAPTCHA site key being restricted to
-`covid.readiness.in` and keeps staging safe for test submissions.
-
 Do not commit this file.
 
 ## 7. Restore MongoDB Data
@@ -291,14 +268,14 @@ Expected from the captured backup:
 
 ```bash
 cd /opt/workplace-readiness/app
-uv sync --frozen
+uv sync --locked
 ```
 
 Sanity check:
 
 ```bash
-uv run pytest
-uv run ruff check .
+uv run --no-sync --frozen pytest
+uv run --no-sync --frozen ruff check .
 ```
 
 ## 9. Install systemd Unit
@@ -326,36 +303,13 @@ Expected:
 
 ## 10. Install nginx Site
 
-The checked-in nginx configs are split by environment:
+The checked-in nginx configs are split by TLS state:
 
-- `config/nginx/workplace-readiness.staging.http.conf`
 - `config/nginx/workplace-readiness.production.http.conf`
 - `config/nginx/workplace-readiness.production.https.conf`
 
 Start with an HTTP config. Do not install an HTTPS config until the certificate
 files exist.
-
-For staging:
-
-```bash
-sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.staging.http.conf \
-  /etc/nginx/sites-available/workplace-readiness
-sudo ln -sfn /etc/nginx/sites-available/workplace-readiness \
-  /etc/nginx/sites-enabled/workplace-readiness
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-After DNS points at the VM, issue a staging certificate:
-
-```bash
-sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d wp-readiness-staging.artpark.ai
-sudo nginx -t
-sudo systemctl reload nginx
-```
-
-When prompted by Certbot, choose the redirect-to-HTTPS option.
 
 For production before TLS:
 
@@ -375,23 +329,6 @@ curl -I http://127.0.0.1/
 curl http://127.0.0.1/health
 ```
 
-For staging:
-
-```bash
-curl -I https://wp-readiness-staging.artpark.ai/
-curl https://wp-readiness-staging.artpark.ai/health
-```
-
-Staging validation checklist:
-
-- The homepage loads over HTTPS.
-- A new session can be created without reCAPTCHA.
-- The generated submission ID appears in the form.
-- Inputs can be saved against the submission ID.
-- A saved submission ID can be retrieved.
-- A score can be calculated.
-- No errors appear in `sudo journalctl -u workplace-readiness -n 80 --no-pager`.
-
 For production, after DNS points at the VM and certbot has issued certs:
 
 ```bash
@@ -401,6 +338,24 @@ sudo cp /opt/workplace-readiness/app/config/nginx/workplace-readiness.production
   /etc/nginx/sites-available/workplace-readiness
 sudo nginx -t
 sudo systemctl reload nginx
+```
+
+Certbot installs an official systemd timer on Ubuntu. Confirm it is present:
+
+```bash
+systemctl list-timers | grep certbot
+```
+
+Expected shape:
+
+```text
+certbot.timer                  certbot.service
+```
+
+Test renewal without changing the active certificate:
+
+```bash
+sudo certbot renew --dry-run
 ```
 
 Then:

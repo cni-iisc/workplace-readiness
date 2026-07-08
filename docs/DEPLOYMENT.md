@@ -78,7 +78,7 @@ fresh or intentionally replaceable MongoDB instance.
 Install dependencies:
 
 ```bash
-uv sync --frozen
+uv sync --locked
 ```
 
 Run locally:

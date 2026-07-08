@@ -14,7 +14,7 @@ managed by `uv`, Gunicorn, systemd, nginx, and MongoDB.
 - `src/workplace_readiness_service/` contains the maintained Flask backend.
 - `server_code/` is retained as legacy reference code.
 - `config/systemd/` contains the systemd unit used on the VM.
-- `config/nginx/` contains separate nginx configs for staging and production.
+- `config/nginx/` contains HTTP and HTTPS nginx configs for production.
 - `scripts/deploy_vm.sh` is the pull-based VM deploy script.
 
 The backend intentionally preserves the legacy endpoints used by the frontend:
@@ -41,7 +41,7 @@ Related notes:
 
 ```bash
 cp .env.example .env
-uv sync
+uv sync --locked
 RECAPTCHA_ENABLED=false EMAIL_ENABLED=false \
   uv run flask --app workplace_readiness_service.app:create_app run
 ```
@@ -55,8 +55,8 @@ curl http://127.0.0.1:5000/health
 Run checks:
 
 ```bash
-uv run pytest
-uv run ruff check .
+uv run --no-sync --frozen pytest
+uv run --no-sync --frozen ruff check .
 ```
 
 ## Copyright and License

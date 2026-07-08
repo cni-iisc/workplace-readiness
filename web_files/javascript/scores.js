@@ -28,11 +28,11 @@ function recaptchaSiteKey() {
     if (window.WRC_CONFIG && window.WRC_CONFIG.recaptchaSiteKey) {
         return window.WRC_CONFIG.recaptchaSiteKey;
     }
-    return "6LeXnkgtAAAAANyx7Trpp0SPK0CDdBjwDVUi5Ycl";
+    return "";
 }
 
 function recaptchaResponse(widgetId) {
-    if (!recaptchaEnabled() || typeof grecaptcha === "undefined") {
+    if (!recaptchaEnabled() || typeof grecaptcha === "undefined" || typeof widgetId === "undefined") {
         return "";
     }
     return grecaptcha.getResponse(widgetId);
@@ -56,6 +56,10 @@ var CaptchaCallback = function() {
         return;
     }
     var siteKey = recaptchaSiteKey();
+    if (!siteKey) {
+        console.error("reCAPTCHA is enabled but no site key is configured.");
+        return;
+    }
     widgetIdCreate = grecaptcha.render('captchaFieldCreate', {'sitekey' : siteKey});
     widgetIdCalc = grecaptcha.render('captchaFieldCalc', {'sitekey' : siteKey});
     widgetIdFB = grecaptcha.render('captchaFieldFB', {'sitekey' : siteKey});
